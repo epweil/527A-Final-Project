@@ -77,6 +77,8 @@ class DialogueSimulator:
         self._step = 0
         self.select_next_speaker = selection_function
 
+    def voidStep(self):
+        self._step +=1
     def reset(self):
         for agent in self.agents:
             agent.reset()
@@ -87,6 +89,7 @@ class DialogueSimulator:
         self._step += 1
 
     def step(self) -> tuple[str, str]:
+            
         speaker_idx = self.select_next_speaker(self._step, self.agents)
         speaker = self.agents[speaker_idx]
         message = speaker.send()
@@ -124,12 +127,17 @@ names = {
     "AI negative": ["gpt-3.5-turbo"],
 }
 descriptions= {
-      "AI affirm": "Your job is to fight that the opinion you are given is correct",
+    "AI affirm": "Your job is to fight that the opinion you are given is correct",
     "AI negative": "Your job is to fight that the opinion you are given is wrong",
 }
 situation = "You are in a room with a 5 different sized doors and want to find which has the best room behind it. What do you do first?"
 word_limit = 50  # word limit for task brainstorming
 tempeture = 0.1
+negativeFirst = False
+
+
+
+
 
 conversation_description = f"""Here is the situation at hand: {situation}
 The participants are: {', '.join(names.keys())}"""
@@ -137,12 +145,15 @@ The participants are: {', '.join(names.keys())}"""
 
 
 
-
+firstAgent = "AI positive"
+if(negativeFirst):
+    firstAgent = "AI negative"
 topic_specifier_prompt = [
     HumanMessage(
         content=f"""
         You are trying to decide what the best move in the following situation is {situation}
-        Come up with your decision and then speak with the participants: AI affirm, AI negative to get their opinions on your choice."""
+        Come up with your decision and then speak with the participants: AI affirm, AI negative to get their opinions on your choice.
+        You will hear from {firstAgent} first"""
     ),
 ]
 
@@ -196,6 +207,8 @@ n = 0
 simulator = DialogueSimulator(moderatorAgent,agents=agents, selection_function=select_next_speaker)
 simulator.reset()
 name, message = simulator.start()
+if(negativeFirst):
+    simulator.voidStep()
 print(f"{name} : {message}")
 print("\n")
 
