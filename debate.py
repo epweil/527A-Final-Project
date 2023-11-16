@@ -130,10 +130,16 @@ descriptions= {
     "AI affirm": "Your job is to fight that the opinion you are given is correct",
     "AI negative": "Your job is to fight that the opinion you are given is wrong",
 }
+
+
+# Hyper Paramaters 
+
 situation = "You are in a room with a 5 different sized doors and want to find which has the best room behind it. What do you do first?"
-word_limit = 50  # word limit for task brainstorming
 tempeture = 0.1
 negativeFirst = False
+max_iters = 2
+
+#
 
 
 
@@ -201,7 +207,7 @@ def select_next_speaker(step: int, agents: List[DialogueAgent]) -> int:
         return idx
 
 
-max_iters = 2
+
 n = 0
 
 simulator = DialogueSimulator(moderatorAgent,agents=agents, selection_function=select_next_speaker)
