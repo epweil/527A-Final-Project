@@ -1,4 +1,6 @@
-
+##Ethan Weilheimer 
+##CSE 527A LLM Agent Paper 
+##Code adapted from Cobus Greyling (https://cobusgreyling.medium.com/two-llm-based-autonomous-agents-debate-each-other-e13e0a54429b)
 from typing import List, Dict, Callable
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
