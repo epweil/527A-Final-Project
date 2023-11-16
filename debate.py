@@ -1,17 +1,11 @@
-from langchain.agents import ZeroShotAgent, Tool, AgentExecutor
-from langchain import OpenAI, SerpAPIWrapper, LLMChain
 
 from typing import List, Dict, Callable
-from langchain.chains import ConversationChain
 from langchain.chat_models import ChatOpenAI
-from langchain.llms import OpenAI
 from langchain.memory import ConversationBufferMemory
-from langchain.prompts.prompt import PromptTemplate
 from langchain.schema import (
     AIMessage,
     HumanMessage,
     SystemMessage,
-    BaseMessage,
 )
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
@@ -122,24 +116,6 @@ class DialogueSimulator:
         return speaker.name, message
     
 
-class DialogueAgentWithTools(DialogueAgent):
-        def __init__(self,name: str,system_message: SystemMessage,model: ChatOpenAI,) -> None:
-                super().__init__(name, system_message, model)
-
-
-        def send(self) -> str:
-                agent_chain = initialize_agent(
-                [],
-                self.model,
-                agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
-                verbose=True,
-                memory=ConversationBufferMemory(
-                        memory_key="chat_history", return_messages=True
-                ),
-                )
-                message = AIMessage(content=agent_chain.run(input="\n".join([self.system_message.content] + self.message_history + [self.prefix])))
-
-                return message.content
 
 names = {
     "AI affirm": ["gpt-3.5-turbo"],
