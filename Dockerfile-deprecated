@@ -1,0 +1,80 @@
+# Use an official Linux distribution as a base image
+FROM python:3.7
+
+# Set the working directory inside the container
+WORKDIR /527proj
+
+# Install git and other dependencies
+RUN apt-get update && \
+    apt-get install -y git python3-pip && \
+    apt-get install -y git cmake
+
+# Clone the necessary repositories and install Python packages
+RUN pip install https://github.com/MarcCote/downward/archive/faster_replan.zip && \
+    pip install https://github.com/MarcCote/TextWorld/archive/handcoded_expert_integration.zip && \
+    git clone https://github.com/alfworld/alfworld.git alfworld && \
+    git clone https://github.com/ysymyth/ReAct.git ReAct && \
+    cd alfworld && \
+    pip install -r requirements.txt && \
+    pip install . && \
+    cd .. && \
+    pip install openai
+
+# Set environment variable
+ENV ALFWORLD_ROOT /527proj/alfworld
+ENV ALFWORLD_DATA /527proj/alfworld_data_storage
+ENV REACT_ROOT /527proj/ReAct
+
+# Copy the local "main.py" file into the container's /527proj directory
+COPY main.py /527proj/
+
+# Run the alfworld-download command and keep the container running
+CMD ["bash", "-c", "alfworld-download && tail -f /dev/null"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # Use an official Linux distribution as a base image
+# FROM python:3.6
+
+# # Set the working directory inside the container
+# WORKDIR /app
+
+# # Install git and other dependencies
+# RUN apt-get update && \
+#     apt-get install -y git python3-pip && \
+#     apt-get install -y git cmake
+
+# # Clone the necessary repositories and install Python packages
+# RUN pip install https://github.com/MarcCote/downward/archive/faster_replan.zip && \
+#     pip install https://github.com/MarcCote/TextWorld/archive/handcoded_expert_integration.zip && \
+#     git clone https://github.com/alfworld/alfworld.git alfworld && \
+#     cd alfworld && \
+#     pip install -r requirements.txt && \
+#     pip install . && \
+#     cd ..
+
+# # Set environment variable
+# ENV ALFWORLD_DATA /app/alfworld_data_storage
+
+# # Run the alfworld-download command and keep the container running
+# CMD ["bash", "-c", "alfworld-download && tail -f /dev/null"]
