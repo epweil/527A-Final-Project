@@ -8,7 +8,7 @@ import os
 
 class Simulator():
 
-    MAX_STEPS = 50
+    MAX_STEPS = 10
     MAX_RESETS = 134
 
     alfworld_root = os.environ['ALFWORLD_ROOT']
@@ -19,6 +19,7 @@ class Simulator():
 
     total_steps = 0
     total_resets = 0
+    finished = False
     env = None
     example_prompts = None
 
@@ -53,6 +54,7 @@ class Simulator():
 
     def init_env(self):
         Simulator.total_resets = 0
+        Simulator.finished = False
 
         with open(f'{Simulator.react_root}base_config.yaml') as reader:
             config = yaml.safe_load(reader)
@@ -109,10 +111,13 @@ class Simulator():
         if Simulator.total_steps >= Simulator.MAX_STEPS:
             done = True
 
+        if done:
+            Simulator.finished = True
+
         return observation, reward, done
     
     def is_finished(self):
-        return Simulator.total_steps >= Simulator.MAX_STEPS
+        return Simulator.finished
 
 
 
