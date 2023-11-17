@@ -27,19 +27,27 @@
 
 2. From your command line, navigate to the root of the repo (i.e., the same directory that Dockerfile is in)
 
-3. Create the image: ```docker build -t 527_debate .```
+3. Create the image: ```docker build -t 527_debate .``` ONLY DO THIS ONCE.
 
     a. ```-t 527_debate``` tags the image with the name 527_debate
     
     b. ```.``` means docker should look for a file called "Dockerfile" in the current directory
 
-4. Start the container: ```docker run -it -p 8000:8000 527_debate```
+4. Create the container: ```docker run -it --name 527_debate_container -p 8000:8000 527_debate``` ONLY DO THIS ONCE.
 
     a. ```-it``` tells docker to connect to expose an interactive terminal from the container so we can interact with it via the command line
-    
-    b. ```-p 8000:8000``` forwards port 8000 so that localhost:8000 on your computer connects to port 8000 within the docker container
 
-    c. ```527_debate``` means the container is created off of the image named 527_debate which you created above
+    b. ```--name 527_debate_container``` names the conatiner 527_debate_container.
+    
+    c. ```-p 8000:8000``` forwards port 8000 so that localhost:8000 on your computer connects to port 8000 within the docker container
+
+    d. ```527_debate``` means the container is created off of the image named 527_debate which you created above
+
+5. Stopping and starting the container. Once you have created the image, and used that to create the container (and run it), you might want to stop it, and then start it later on. Here is how to do that:
+
+    a. In docker desktop, you can click the stop button for the container. Or I think you can hit CTRL-d
+
+    a. To start the container (which is different from creating it), you can run ```docker start -ai 527_debate_container```
 
 ### Other notes
 
