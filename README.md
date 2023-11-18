@@ -58,6 +58,11 @@
 - It's easy to test the API in Postman. Make sure to set the url as `http://localhost:8000` (i.e., use http not https). Also make sure for the POST endpoints you are sending JSON in the body (i.e., select "raw" then "JSON" from the dropdown menu)
 
 
+## Anaconda environment
+
+In the project root, run `conda env create -f environment.yml`, then run `conda activate 527_debate_env`
+
+
 ## Simulator API
 
 The docker container runs the simulator API. The simulator API has some endpoints that allows anyone to interact with ALFWorld. 

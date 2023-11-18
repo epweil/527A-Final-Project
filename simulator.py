@@ -83,6 +83,7 @@ class Simulator():
 
         Simulator.total_steps = 0
         Simulator.total_resets += 1
+        Simulator.finished = False
 
         ob, info = Simulator.env.reset()
         ob = '\n'.join(ob[0].split('\n\n')[1:])
@@ -166,40 +167,40 @@ class Handler(BaseHTTPRequestHandler):
                 }
                 response_data = json.dumps(response_data)
                 self.wfile.write(response_data.encode('utf-8'))
-
-
-            content_length = int(self.headers['Content-Length'])
-            post_data = self.rfile.read(content_length)
-            data = json.loads(post_data.decode('utf-8'))
-
-            action = data.get('action', None)
-
-            if action is not None:
-                observation, reward, done = Handler.simulator.step(action)
-
-                response_data = {
-                    'observation': observation,
-                    'reward': reward,
-                    'done': done,
-                    'message': None,
-                }
-                response_data = json.dumps(response_data)
-                if done and not reward:
-                    self.send_response(400)
-                else:
-                    self.send_response(200)
-
-                self.send_header('Content-type', 'application/json')
-                self.end_headers()
-
-                self.wfile.write(response_data.encode('utf-8'))
             else:
-                self.send_response(400)
-                self.send_header('Content-type', 'text/plain')
-                self.end_headers()
 
-                response = '400 Bad Request: Missing "action" parameter'
-                self.wfile.write(response.encode('utf-8'))
+                content_length = int(self.headers['Content-Length'])
+                post_data = self.rfile.read(content_length)
+                data = json.loads(post_data.decode('utf-8'))
+
+                action = data.get('action', None)
+
+                if action is not None:
+                    observation, reward, done = Handler.simulator.step(action)
+
+                    response_data = {
+                        'observation': observation,
+                        'reward': reward,
+                        'done': done,
+                        'message': None,
+                    }
+                    response_data = json.dumps(response_data)
+                    if done and not reward:
+                        self.send_response(400)
+                    else:
+                        self.send_response(200)
+
+                    self.send_header('Content-type', 'application/json')
+                    self.end_headers()
+
+                    self.wfile.write(response_data.encode('utf-8'))
+                else:
+                    self.send_response(400)
+                    self.send_header('Content-type', 'text/plain')
+                    self.end_headers()
+
+                    response = '400 Bad Request: Missing "action" parameter'
+                    self.wfile.write(response.encode('utf-8'))
         else:
             self.send_response(404)
             self.send_header('Content-type', 'text/plain')

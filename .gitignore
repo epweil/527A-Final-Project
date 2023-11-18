@@ -1,0 +1,5 @@
+# we don't want these files in our repo
+**/.DS_store
+**/.idea
+**/.ipynb_checkpoints
+**/__pycache__
