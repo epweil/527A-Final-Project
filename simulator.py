@@ -134,11 +134,12 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
 
             prompt, ob, prompt_and_ob = Handler.simulator.reset()
-            response_data = json.dumps({
+            response_data = {
                 "prompt": prompt,
                 "observation": ob,
                 "prompt_and_observation": prompt_and_ob
-            })
+            }
+            response_data = json.dumps(response_data)
             self.wfile.write(response_data.encode('utf-8'))
         else:
             self.send_response(404)
@@ -163,6 +164,7 @@ class Handler(BaseHTTPRequestHandler):
                     'done': None,
                     'message': 'You have exceeded the maximum number of allowed steps. Please try a new task.',
                 }
+                response_data = json.dumps(response_data)
                 self.wfile.write(response_data.encode('utf-8'))
 
 
@@ -181,8 +183,7 @@ class Handler(BaseHTTPRequestHandler):
                     'done': done,
                     'message': None,
                 }
-
-
+                response_data = json.dumps(response_data)
                 if done and not reward:
                     self.send_response(400)
                 else:
@@ -191,7 +192,6 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header('Content-type', 'application/json')
                 self.end_headers()
 
-                response_data = json.dumps(response_data)
                 self.wfile.write(response_data.encode('utf-8'))
             else:
                 self.send_response(400)
