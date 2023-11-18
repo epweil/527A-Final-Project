@@ -12,6 +12,10 @@ from langchain.schema import (
 from langchain.agents import initialize_agent
 from langchain.agents import AgentType
 from langchain.llms import OpenAI
+from typing import Optional, Type
+from langchain.tools import BaseTool
+
+from pydantic import BaseModel, BaseSettings, Field
 
 class DialogueAgent:
         def __init__(self,name: str,system_message: SystemMessage,model: ChatOpenAI,) -> None:
@@ -36,6 +40,8 @@ class DialogueAgent:
         def receive(self, name: str, message: str) -> None:
                 self.message_history.append(f"{name}: {message}")
 
+
+
 class ModeratorDialogueAgent():
         def __init__(self,name: str,system_message: SystemMessage,model: ChatOpenAI,situation) -> None:
                 self.name = name
@@ -46,7 +52,7 @@ class ModeratorDialogueAgent():
                 
 
         def reset(self):
-                self.message_history = ["Situation: " + situation]
+                self.message_history = ["Situation: " + self.situation]
 
         def start(self) -> str:
                 message = self.model(
@@ -59,7 +65,7 @@ class ModeratorDialogueAgent():
         def end(self) -> str:
                 message = self.model(
                 [
-                SystemMessage(content="Given the following message history, you the moderator will give your final decison on what to do"),
+                SystemMessage(content="Given the following message history, you the moderator will give your final decison on what to do. \n Just state what your final idea is, do not state any reasoning"),
                 HumanMessage(content="\n".join(self.message_history) + "\n Moderator:"),
                 ]
                 )
@@ -122,46 +128,7 @@ class DialogueSimulator:
     
 
 
-names = {
-    "AI affirm": ["gpt-3.5-turbo"],
-    "AI negative": ["gpt-3.5-turbo"],
-}
-descriptions= {
-    "AI affirm": "Your job is to fight that the opinion you are given is correct",
-    "AI negative": "Your job is to fight that the opinion you are given is wrong",
-}
 
-
-# Hyper Paramaters 
-
-situation = "You are in a room with a 5 different sized doors and want to find which has the best room behind it. What do you do first?"
-tempeture = 0.1
-negativeFirst = False
-max_iters = 2
-
-#
-
-
-
-
-
-conversation_description = f"""Here is the situation at hand: {situation}
-The participants are: {', '.join(names.keys())}"""
-
-
-
-
-firstAgent = "AI positive"
-if(negativeFirst):
-    firstAgent = "AI negative"
-topic_specifier_prompt = [
-    HumanMessage(
-        content=f"""
-        You are trying to decide what the best move in the following situation is {situation}
-        Come up with your decision and then speak with the participants: AI affirm, AI negative to get their opinions on your choice.
-        You will hear from {firstAgent} first"""
-    ),
-]
 
 
 
@@ -181,50 +148,85 @@ def generate_system_message(name, description):
                 Stop speaking the moment you finish speaking from your perspective.
                 """
 
-
-agent_system_messages = {
-    name: generate_system_message(name, descriptions[name])
-    for name in names
-}
-
-moderatorAgent = ModeratorDialogueAgent("Moderator",topic_specifier_prompt,ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1),situation)
-
-agents = [
-    DialogueAgent(
-        name="AI affirm",
-        system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
-        model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
-    ),
-    DialogueAgent(
-        name="AI negative",
-        system_message=SystemMessage(content=agent_system_messages["AI negative"]),
-        model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=0.1)
-    )
-]
-
 def select_next_speaker(step: int, agents: List[DialogueAgent]) -> int:
         idx = (step) % len(agents)
         return idx
 
 
 
-n = 0
+    
 
-simulator = DialogueSimulator(moderatorAgent,agents=agents, selection_function=select_next_speaker)
-simulator.reset()
-name, message = simulator.start()
-if(negativeFirst):
-    simulator.voidStep()
-print(f"{name} : {message}")
-print("\n")
+def run(situation):
+    negativeFirst = False
+    max_iters = 2
+    temperature = 0.1
+    names = {
+        "AI affirm": ["gpt-3.5-turbo"],
+        "AI negative": ["gpt-3.5-turbo"],
+    }
+    descriptions= {
+        "AI affirm": "Your job is to fight that the opinion you are given is correct",
+        "AI negative": "Your job is to fight that the opinion you are given is wrong",
+    }
 
-while n < max_iters:
-    name, message = simulator.step()
-    print(f"{name} : {message}")
-    print("\n")
-    n += 1
 
-name, message = simulator.end()
-print(f"{name} : {message}")
+    conversation_description = f"""Here is the situation at hand: {situation}
+        The participants are: {', '.join(names.keys())}"""    
+    firstAgent = "AI positive"
+    if(negativeFirst):
+        firstAgent = "AI negative"
+
+    
+
+    topic_specifier_prompt = [
+        HumanMessage(
+            content=f"""
+            You are trying to decide what the best move in the following situation is {situation}
+            Come up with your decision and then speak with the participants: AI affirm, AI negative to get their opinions on your choice.
+            You will hear from {firstAgent} first"""
+        ),
+    ]
+
+
+
+    agent_system_messages = {
+        name: generate_system_message(name, descriptions[name])
+        for name in names
+    }
+
+    
+    agents = [
+        DialogueAgent(
+            name="AI affirm",
+            system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
+            model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature)
+        ),
+        DialogueAgent(
+            name="AI negative",
+            system_message=SystemMessage(content=agent_system_messages["AI negative"]),
+            model=ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature)
+        )
+    ]
+
+
+    moderatorAgent = ModeratorDialogueAgent("Moderator",topic_specifier_prompt,ChatOpenAI(model_name="gpt-3.5-turbo", temperature=temperature),situation)
+    n = 0
+    history = []
+    simulator = DialogueSimulator(moderatorAgent,agents=agents, selection_function=select_next_speaker)
+    simulator.reset()
+    name, message = simulator.start()
+    history.append((f"{name} : {message}"))
+    if(negativeFirst):
+        simulator.voidStep()
+
+    while n < max_iters:
+        name, message = simulator.step()
+        n += 1
+        history.append((f"{name} : {message}"))
+
+    name, message = simulator.end()
+    history.append((f"{name} : {message}"))
+    return "\n".join(history)
+    
 
 
