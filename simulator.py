@@ -145,7 +145,8 @@ class Handler(BaseHTTPRequestHandler):
             examples, task = Handler.simulator.reset(max_steps=max_steps)
             response_data = {
                 "examples": examples,
-                "task": task
+                "task": task,
+                "task_index": Handler.simulator.total_resets
             }
             response_data = json.dumps(response_data)
             self.wfile.write(response_data.encode('utf-8'))

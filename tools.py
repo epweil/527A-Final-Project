@@ -1,4 +1,5 @@
 import requests
+from utils import SUCCESS_OBSERVATION, FAIL_OBSERVATION
 
 
 def take_environment_action(action: str) -> float:
@@ -16,8 +17,8 @@ def take_environment_action(action: str) -> float:
 
     if done:
         if reward:
-            observation = f"{observation} You have successfully completed the task. Please inform the user of this as your Final Answer in your next action."
+            observation = f"{observation} {SUCCESS_OBSERVATION}"
         else:
-            observation = f"{observation} You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer in your next action."
+            observation = f"{observation} {FAIL_OBSERVATION}"
 
     return observation

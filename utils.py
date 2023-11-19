@@ -23,6 +23,7 @@ def get_next_task(max_steps):
     json_response = response.json()
     examples = json_response.get("examples")
     task = json_response.get("task")
+    task_index = json_response.get("task_index")
 
     formatted_examples = [format_prompt(ex) for ex in examples]
     formatted_task = format_prompt(task)
@@ -31,7 +32,7 @@ def get_next_task(max_steps):
     final_append = f'{SUCCESS_OBSERVATION}\nThought: {SUCCESS_THOUGHT}\nAction: {format_action("Final Answer", SUCCESS_ACTION)}'
     formatted_examples = [f'{fex} {final_append}' for fex in formatted_examples]
 
-    return formatted_examples, formatted_task
+    return formatted_examples, formatted_task, task_index
 
 
 

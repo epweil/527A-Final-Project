@@ -1,0 +1,55 @@
+The "view_debate" tool can be useful if you are unsure about which action is best. Here are a 2 examples of how the "view_debate" tool could have been used in the examples above:
+
+Debate Example 1:
+... (previous thoughts/actions/observations) ...
+Thought: Now I take a pen (2). Next, I need to find a desklamp. A desklamp is more likely to appear in dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I am unsure about which location to check first and would like to view a debate.
+Action: 
+```
+{{
+  "tool": "view_debate",
+  "tool_input": {{
+    "problem": "I am looking for a desklamp in one of dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I would like to find it as quickly as possible.",
+    "proposed_solution": "I am thinking of checking dresser 1 first, because dressers are often by desks." 
+  }}
+}}
+```
+Observation:AI affirm: I understand that you are looking for a desklamp and you want to find it as quickly as possible. Your proposed solution is to check dresser 1 first, because dressers are often by desks. This is a logical approach because dressers are commonly placed near desks in many setups. By checking dresser 1 first, you increase the likelihood of finding the desklamp without wasting time searching in other locations. Additionally, if the desklamp is not in dresser 1, you can then move on to other locations with a more systematic approach. This method saves time and increases the efficiency of your search.
+
+AI negative: While checking dresser 1 first may seem like a logical approach, there is a better solution to finding the desklamp as quickly as possible. Instead of assuming that the desklamp is in dresser 1 because dressers are often placed near desks, a more efficient approach would be to start by checking the most likely location for the desklamp. For example, if you frequently use the desklamp while working at your desk, it is more likely to be on the desk itself rather than in a dresser. By starting with the most probable location, you can quickly find the desklamp without wasting time searching in other areas. If the desklamp is not in the most likely location, then you can proceed to check other areas such as the dresser. This method ensures that you prioritize the most probable location first, increasing the chances of finding the desklamp quickly.
+Thought: I agree with AI affirm that my proposed solution is the best possible solution.
+Action: 
+```
+{{
+  "tool": "take_environment_action",
+  "tool_input": {{
+    "action": "go to dresser 1"
+  }}
+}}
+```
+
+Debate Example 2:
+... (previous thoughts/actions/observations) ...
+Thought: I am looking at a closed drawer 1. I believe there is a pen inside the drawer.
+Action: 
+```
+{{
+  "tool": "view_debate",
+  "tool_input": {{
+    "problem": "I am looking at a closed drawer 1 and I believe there is a pen inside of it. I want to check if there is a pen inside of it.",
+    "proposed_solution": "I am thinking about taking the pen from drawer 1" 
+  }}
+}}
+```
+Observation:The proposed solution of taking the pen from drawer 1 is indeed the best possible solution for your problem. By physically taking the pen from the drawer, you will be able to confirm whether or not it is inside. This solution is practical and straightforward, as it directly addresses your goal of checking for the pen.
+
+AI negative: While taking the pen from drawer 1 may seem like a reasonable solution, there is a better alternative. Instead of immediately taking the pen, you could first try to gather more information about its presence in the drawer. For example, you could ask someone who might have knowledge about the pen's whereabouts or use a tool such as a flashlight to peer inside the drawer without physically removing the pen. By exploring these options, you can potentially save time and effort, especially if the pen is not actually in drawer 1. Additionally, taking the pen without confirming its presence may lead to unnecessary disruption or disorganization if it turns out to be in a different location. Therefore, it is advisable to consider alternative methods of gathering information before resorting to physically taking the pen from drawer 1.
+Thought: I agree with AI negative that I should first confirm the presence of the pen in the drawer. I will first open the drawer, and then take the pen if it there.
+Action: 
+```
+{{
+  "tool": "take_environment_action",
+  "tool_input": {{
+    "action": "open drawer 1"
+  }}
+}}
+```
