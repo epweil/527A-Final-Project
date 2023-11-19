@@ -4,9 +4,10 @@ import json
 
 SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer in your next action.'
 FAIL_OBSERVATION = 'You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer in your next action.'
-
-SUCCESS_ANSWER = 'I have successfully completed the task.'
-FAIL_ANSWER = 'I have failed to complete the task.'
+SUCCESS_ACTION = 'I have successfully completed the task.'
+FAIL_ACTION = 'I have failed to complete the task.'
+SUCCESS_THOUGHT = SUCCESS_ACTION + ' I need to inform the user of this fact.'
+FAIL_THOUGHT = FAIL_ACTION + ' I need to inform the user of this fact.'
 
 ENVIRONMENT_ACTION_NAME = 'take_environment_action'
 ENVIRONMENT_ACTION_PARAM1 = 'action'
@@ -15,8 +16,8 @@ DEBATE_ACTION_NAME = 'view_debate'
 
 
 
-def get_next_task():
-    url = 'http://localhost:8000/get_next_task'
+def get_next_task(max_steps):
+    url = f'http://localhost:8000/get_next_task?max_steps={max_steps}'
 
     response = requests.get(url)
     json_response = response.json()
@@ -27,7 +28,7 @@ def get_next_task():
     formatted_task = format_prompt(task)
 
     # add the success observations, along with agent response.
-    final_append = f'{SUCCESS_OBSERVATION}\nAction: {format_action("Final Answer", SUCCESS_ANSWER)}'
+    final_append = f'{SUCCESS_OBSERVATION}\nThought: {SUCCESS_THOUGHT}\nAction: {format_action("Final Answer", SUCCESS_ACTION)}'
     formatted_examples = [f'{fex} {final_append}' for fex in formatted_examples]
 
     return formatted_examples, formatted_task

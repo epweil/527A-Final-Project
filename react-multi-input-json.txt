@@ -1,14 +1,14 @@
 Use a json blob to specify a tool by providing an tool key (tool name) and an tool_input key (tool input).
 
-Valid "tool" values: "Final Answer" or {tool_names}
+Valid "tool" values: {tool_names}
 
 Provide only ONE tool per $JSON_BLOB, as shown:
 
 ```
-{
+{{
   "tool": $TOOL_NAME,
   "tool_input": $INPUT
-}
+}}
 ```
 
 Follow this format:
@@ -23,8 +23,8 @@ Observation: action result
 Thought: I know what to respond
 Action:
 ```
-{
+{{
   "tool": "Final Answer",
   "tool_input": "Final response to human"
-}
+}}
 ```

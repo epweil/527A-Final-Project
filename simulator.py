@@ -4,6 +4,7 @@ import yaml
 import alfworld
 import alfworld.agents.environment
 import os
+from urllib.parse import urlparse, parse_qs
 #!/opt/conda/bin/python
 
 class Simulator():
@@ -76,7 +77,7 @@ class Simulator():
             ob = ob[ob.find('. ')+2:]    
         return ob
     
-    def reset(self):
+    def reset(self, max_steps):
 
         if Simulator.total_resets >= Simulator.MAX_RESETS:
             self.init_env()
@@ -84,6 +85,7 @@ class Simulator():
         Simulator.total_steps = 0
         Simulator.total_resets += 1
         Simulator.finished = False
+        Simulator.MAX_STEPS = max_steps
 
         ob, info = Simulator.env.reset()
         ob = '\n'.join(ob[0].split('\n\n')[1:])
@@ -128,18 +130,27 @@ class Handler(BaseHTTPRequestHandler):
     simulator = Simulator()
 
     def do_GET(self):
-        if self.path == '/get_next_task':
+
+        parsed_url = urlparse(self.path)
+        query_params = parse_qs(parsed_url.query)
+
+        if parsed_url.path == '/get_next_task':
+
+            max_steps = int(query_params.get('max_steps', [10])[0])
+
             self.send_response(200)
             self.send_header('Content-type', 'application/json')
             self.end_headers()
 
-            examples, task = Handler.simulator.reset()
+            examples, task = Handler.simulator.reset(max_steps=max_steps)
             response_data = {
                 "examples": examples,
                 "task": task
             }
             response_data = json.dumps(response_data)
             self.wfile.write(response_data.encode('utf-8'))
+
+            print(f'Task: {task}')
         else:
             self.send_response(404)
             self.send_header('Content-type', 'text/plain')
@@ -192,6 +203,9 @@ class Handler(BaseHTTPRequestHandler):
                     self.end_headers()
 
                     self.wfile.write(response_data.encode('utf-8'))
+
+                    print(f'Action: {action}')
+                    print(f'Observation: {observation}')
                 else:
                     self.send_response(400)
                     self.send_header('Content-type', 'text/plain')
