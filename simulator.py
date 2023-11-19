@@ -88,17 +88,16 @@ class Simulator():
         ob, info = Simulator.env.reset()
         ob = '\n'.join(ob[0].split('\n\n')[1:])
         name = '/'.join(info['extra.gamefile'][0].split('/')[-3:-1])
-        prompt = ''
+        examples = []
         for _, (k, v) in enumerate(Simulator.prefixes.items()):
             if name.startswith(k):
-                prompt = 'Interact with a household to solve a task. Here are two examples.\n' \
-                        + Simulator.example_prompts[f'react_{v}_1'] \
-                        + Simulator.example_prompts[f'react_{v}_0'] + '\nHere is the task.\n'
+                examples = [
+                    Simulator.example_prompts[f'react_{v}_1'],
+                    Simulator.example_prompts[f'react_{v}_0']
+                ]
                 break
-
-        prompt_and_ob = prompt + ob + '\n>'
         
-        return prompt, ob, prompt_and_ob
+        return examples, ob
 
     def step(self, action):
 
@@ -134,11 +133,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-type', 'application/json')
             self.end_headers()
 
-            prompt, ob, prompt_and_ob = Handler.simulator.reset()
+            examples, task = Handler.simulator.reset()
             response_data = {
-                "prompt": prompt,
-                "observation": ob,
-                "prompt_and_observation": prompt_and_ob
+                "examples": examples,
+                "task": task
             }
             response_data = json.dumps(response_data)
             self.wfile.write(response_data.encode('utf-8'))
