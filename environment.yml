@@ -1,0 +1,11 @@
+name: 527_debate_env
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy
+  - matplotlib
+  - openai
+  - pip
+  - pip:
+    - langchain==0.0.337
