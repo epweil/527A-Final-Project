@@ -1,0 +1,10 @@
+module: src.client.agents.HTTPAgent
+parameters:
+  url: http://127.0.0.1:6000/predict # URL of your Flask server
+  headers:
+    Content-Type: application/json
+  body:
+    temperature: 0 # Any other parameters your model accepts
+  prompter:
+    name: prompt_string
+  return_format: "{response[0][generated_text]}"
