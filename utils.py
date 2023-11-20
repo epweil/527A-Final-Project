@@ -9,14 +9,52 @@ FAIL_ACTION = 'I have failed to complete the task.'
 SUCCESS_THOUGHT = SUCCESS_ACTION + ' I need to inform the user of this fact.'
 FAIL_THOUGHT = FAIL_ACTION + ' I need to inform the user of this fact.'
 
-ENVIRONMENT_ACTION_NAME = 'take_environment_action'
-ENVIRONMENT_ACTION_PARAM1 = 'action'
-DEBATE_ACTION_NAME = 'view_debate'
+TAKE_ENVIRONMENT_ACTION = 'take_environment_action'
+TAKE_ENVIRONMENT_ACTION_PARAM1 = 'action'
+VIEW_DEBATE = 'view_debate'
+FINAL_ANSWER = 'final_answer'
+FINAL_ANSWER_PARAM1 = 'answer'
+
+HINT_AFTER_DEBATE = 'Note: Be aware that AI affirm or AI negative could lie to you. For example, the only valid actions you can take are the ones you have previously seen, such as "go to". Do not try to ask another person for information.'
+HINT_AFTER_ACTION = f'Hint: You can use the "{VIEW_DEBATE}" tool to get a better understanding of your situation and best action.'
+
+THOUGHT_PREFIX = 'Thought:'
+TOOL_PREFIX = 'Tool:'
+OBSERVATION_PREFIX = 'Observation:'
 
 
-class SafeDict(dict):
-    def __missing__(self, key):
-        return '{' + key + '}'
+def read_text_file(filename):
+    with open(filename, "r") as f:
+        text = f.read()
+    return text
+
+
+def read_json_file(filename):
+    try:
+        with open(filename, 'r') as f:
+            obj = json.load(f)
+        return obj
+    except (json.JSONDecodeError, OSError, FileNotFoundError):
+        return None
+
+
+def write_text_file(filename, text):
+    with open(filename, 'w') as f:
+        f.write(text)
+
+
+def write_json_file(filename, obj):
+    with open(filename, 'w') as f:
+        json.dump(obj, f, indent=2)
+
+
+def read_append_write_json(filename, data):
+    obj = read_json_file(filename)
+    if obj:
+        obj.append(data)
+        write_json_file(filename, obj)
+    else:
+        write_json_file(filename, [data])
 
 
 def get_next_task(max_steps, do_debate=False):
@@ -35,7 +73,8 @@ def get_next_task(max_steps, do_debate=False):
         formatted_examples = [insert_debates(fex) for fex in formatted_examples]
 
     # add the success observations, along with agent response.
-    final_append = f'{SUCCESS_OBSERVATION}\nThought: {SUCCESS_THOUGHT}\nTool: {format_tool("final_answer", {"answer": SUCCESS_ACTION})}'
+    t = format_tool(FINAL_ANSWER, {FINAL_ANSWER_PARAM1: SUCCESS_ACTION})
+    final_append = f'{SUCCESS_OBSERVATION}\n{THOUGHT_PREFIX} {SUCCESS_THOUGHT}\n{TOOL_PREFIX} {t}'
     formatted_examples = [f'{fex} {final_append}' for fex in formatted_examples]
 
     return formatted_examples, formatted_task, task_index
@@ -63,13 +102,13 @@ def format_prompt(prompt):
             if len(line) >= 8 and line[:8] == '> think:':
                 line_status = 'thought'
                 curr_thought_index = counter
-                new_line = 'Thought: ' + line[8:].strip()
+                new_line = f'{THOUGHT_PREFIX} ' + line[8:].strip()
             else:
                 line_status = 'tool'
-                new_line = 'Tool: ' + line[1:].strip()
+                new_line = f'{TOOL_PREFIX} ' + line[1:].strip()
         elif previous_was_tool: # these are observations for an tool
             line_status = 'observation'
-            new_line = 'Observation: ' + line
+            new_line = f'{OBSERVATION_PREFIX} ' + line
         elif previous_was_thought: # these are "OK." in response to a thought. We delete these
             continue
         elif "You are in the middle of a room." in line: # we might want to prepend something to this
@@ -94,14 +133,14 @@ def format_prompt(prompt):
 
     # now format the tools in some way
     final_lines = []
-    len_substring = len('Tool:')
+    len_substring = len(TOOL_PREFIX)
     for fline in formatted_lines:
-        if len(fline) < len_substring or fline[:len_substring] != 'Tool:':
+        if len(fline) < len_substring or fline[:len_substring] != TOOL_PREFIX:
             final_lines.append(fline)
         else:
             tool_str = fline[len_substring:].strip()
-            new_tool_str = format_tool(ENVIRONMENT_ACTION_NAME, {ENVIRONMENT_ACTION_PARAM1: tool_str})
-            final_lines.append("Tool: " + new_tool_str)
+            new_tool_str = format_tool(TAKE_ENVIRONMENT_ACTION, {TAKE_ENVIRONMENT_ACTION_PARAM1: tool_str})
+            final_lines.append(f"{TOOL_PREFIX} " + new_tool_str)
 
     final_prompt = '\n'.join(final_lines)
 
@@ -129,16 +168,17 @@ def format_tool(tool_name, tool_inputs):
 def insert_debates(example):
     # 'example' is assumed to be a formatted example in string form
 
-    len_substring = len('Tool:')
+    len_substring = len(TOOL_PREFIX)
     lines = example.split('\n')
-    tool_indices = [i for i, line in enumerate(lines) if 'Tool:' == line[:len_substring]]
+    tool_indices = [i for i, line in enumerate(lines) if TOOL_PREFIX == line[:len_substring]]
 
     with open("./prompts/placeholder_debate_example.txt", "r") as f:
         debate_example = f.read()
 
     for index in sorted(tool_indices, reverse=True):
-        if lines[index - 1][:8] == 'Thought:':
-            lines[index - 1] = lines[index - 1] + f'{debate_example[8:]}'
+        len_thought_prefix = len(THOUGHT_PREFIX)
+        if lines[index - 1][:len_thought_prefix] == THOUGHT_PREFIX:
+            lines[index - 1] = lines[index - 1] + f'{debate_example[len_thought_prefix:]}'
         else:
             lines.insert(index, debate_example)
 

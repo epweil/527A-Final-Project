@@ -9,6 +9,7 @@ from langchain.schema import (
 )
 from pydantic import BaseModel, Field
 from langchain.tools import tool
+from utils import read_json_file, VIEW_DEBATE
 
 
 class DialogueAgent:
@@ -103,13 +104,14 @@ class ViewDebate(BaseModel):
 
 def view_debate_wrapper(action_history):
 
-    @tool("view_debate", args_schema=ViewDebate)
+    @tool(VIEW_DEBATE, args_schema=ViewDebate)
     def view_debate(problem, proposed_solution):
         """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
 
-        from main import generation_observation_history
+        generation_observation_history_filename = 'generation_observation_history.json'
+        generation_observation_history = read_json_file(generation_observation_history_filename)
 
-        previous_actions = '\n'.join(generation_observation_history['value'])
+        previous_actions = '\n'.join(generation_observation_history)
         # return "Your action is not the best action."
         situation = f"Previous Actions:{previous_actions}\nProblem: {problem}\nProposed Solution: {proposed_solution}"
 

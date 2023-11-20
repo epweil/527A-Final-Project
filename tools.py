@@ -2,6 +2,7 @@ import requests
 from utils import SUCCESS_OBSERVATION, FAIL_OBSERVATION
 from langchain.tools import tool
 from pydantic import BaseModel, Field
+from utils import TAKE_ENVIRONMENT_ACTION, FINAL_ANSWER
 
 
 
@@ -9,7 +10,7 @@ class TakeEnvironmentAction(BaseModel):
     action: str = Field(description="The action to take.")
 
 
-@tool('take_environment_action', args_schema=TakeEnvironmentAction)
+@tool(TAKE_ENVIRONMENT_ACTION, args_schema=TakeEnvironmentAction)
 def take_environment_action(action: str) -> float:
     """Useful for when you want to take an action in the household environment."""
     url = 'http://localhost:8000/take_action'
@@ -36,7 +37,7 @@ class FinalAnswer(BaseModel):
     answer: str = Field(description="Your final answer.")
 
 
-@tool("final_answer", args_schema=FinalAnswer)
+@tool(FINAL_ANSWER, args_schema=FinalAnswer)
 def final_answer(answer: str) -> None:
     """Use this tool to output your final answer to the human."""
     pass
