@@ -16,11 +16,20 @@ from tools import take_environment_action
 from debate import view_debate
 from langchain.callbacks import FileCallbackHandler
 from loguru import logger
+import logging
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from datetime import datetime
 
 
 
+
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+debug_output_filename = f'./logs/debug_output_{timestamp}.log'
+output_filename = f'./logs/output_{timestamp}.log'
+
+logging.basicConfig(filename=output_filename, level=logging.INFO)
+log_count = 0
 
 class CustomPromptTemplate(StringPromptTemplate):
     # The template to use
@@ -29,9 +38,22 @@ class CustomPromptTemplate(StringPromptTemplate):
     tools: List[Tool]
 
     def format(self, **kwargs) -> str:
+        global log_count
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
+        logging.info(kwargs)
         intermediate_steps = kwargs.pop("intermediate_steps")
+        if log_count == 0:
+            logging.info(f"Step {log_count}:")
+            logging.info(kwargs.get('input'))
+        else:
+            a, o = intermediate_steps[-1]
+            logging.info(f"Step {log_count}:")
+            logging.info(f'Action:\n{a.log}')
+            logging.info(f'Observation:\n{o}')
+
+        log_count += 1
+
         history = ""
         for action, observation in intermediate_steps:
             history += action.log
@@ -87,25 +109,24 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
+logger.add(debug_output_filename, colorize=True, enqueue=True)
+handler = FileCallbackHandler(debug_output_filename)
 
-
-
-logfile = 'output.log'
-logger.add(logfile, colorize=True, enqueue=True)
-handler = FileCallbackHandler(logfile)
-
-api_key = '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'
+api_key = 'key here'
 os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = False
+log_debug_outputs = False
 log_outputs = True
 do_debate = True
-MAX_STEPS = 10
+MAX_STEPS = 4
+
+if not log_outputs:
+    logging.getLogger().setLevel(logging.WARNING)
 
 results = []
-num_tasks = 2 # 134
+num_tasks = 1 # 134
 
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 for _ in range(num_tasks):
 
 
@@ -183,8 +204,8 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
 {'{agent_scratchpad}'}
 """
     
-
-
+    logging.info(timestamp)
+    logging.info(f'Template - task {task_index}: {template}')
 
 
 
@@ -209,7 +230,7 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
     llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
 
     callbacks = None
-    if log_outputs: 
+    if log_debug_outputs: 
         callbacks = [handler]
     llm_chain = LLMChain(
         llm=llm, 
@@ -225,10 +246,9 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
         allowed_tools=tool_names
     )
 
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=MAX_STEPS + 1 + 10) # the +1 is for the final answer
-    agent_iterator = AgentExecutorIterator(agent_executor=agent_executor, inputs=task)
-
-
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=2*MAX_STEPS + 1)
+    # agent_iterator = AgentExecutorIterator(agent_executor=agent_executor, inputs=task)
+    agent_iterator = agent_executor.iter(inputs=task)
 
 
 
