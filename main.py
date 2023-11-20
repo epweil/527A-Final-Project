@@ -24,12 +24,34 @@ from datetime import datetime
 
 
 timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+os.makedirs(f'./logs/{timestamp}', exist_ok=True)
+info_filename = f'./logs/{timestamp}/info.log'
+debug_filename = f'./logs/{timestamp}/debug.log'
 
-debug_output_filename = f'./logs/debug_output_{timestamp}.log'
-output_filename = f'./logs/output_{timestamp}.log'
+logging.basicConfig(level=logging.NOTSET, handlers=[logging.NullHandler()])
+info_logger = logging.getLogger('info_logger')
 
-logging.basicConfig(filename=output_filename, level=logging.INFO)
+# Create an INFO file handler
+file_handler_info = logging.FileHandler(info_filename)
+file_handler_info.setLevel(logging.INFO)
+
+# Create formatters and set them for the file handlers
+formatter_info = logging.Formatter('%(message)s')
+file_handler_info.setFormatter(formatter_info)
+
+# Add the file handlers to the logger
+info_logger.addHandler(file_handler_info)
+
+# Example usage:
+log_levels = {
+    'none': logging.CRITICAL,
+    'all': logging.INFO,
+}
+
+
+
 log_count = 0
+agent_executor = None
 
 class CustomPromptTemplate(StringPromptTemplate):
     # The template to use
@@ -39,20 +61,10 @@ class CustomPromptTemplate(StringPromptTemplate):
 
     def format(self, **kwargs) -> str:
         global log_count
+        global agent_executor
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
-        logging.info(kwargs)
         intermediate_steps = kwargs.pop("intermediate_steps")
-        if log_count == 0:
-            logging.info(f"Step {log_count}:")
-            logging.info(kwargs.get('input'))
-        else:
-            a, o = intermediate_steps[-1]
-            logging.info(f"Step {log_count}:")
-            logging.info(f'Action:\n{a.log}')
-            logging.info(f'Observation:\n{o}')
-
-        log_count += 1
 
         history = ""
         for action, observation in intermediate_steps:
@@ -64,14 +76,25 @@ class CustomPromptTemplate(StringPromptTemplate):
         kwargs["tools"] = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
         # Create a list of tool names for the tools provided
         kwargs["tool_names"] = " or ".join([tool.name for tool in self.tools])
-        return self.template.format(**kwargs)
+        p = self.template.format(**kwargs)
+        if log_count == 0:
+            info_logger.info(f"Step {log_count} ===")
+            info_logger.info(p)
+        else:
+            a, o = intermediate_steps[-1]
+            info_logger.info(f"\nStep {log_count} ===")
+            info_logger.info(f'Generation ---\n{a.log}')
+            info_logger.info(f'Observation ---\n{o}')
+        log_count += 1
+        return p
 
 
 
 class CustomOutputParser(AgentOutputParser):
 
+
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        
+
         # if "Final Answer" in llm_output:
         #     return AgentFinish(
         #             return_values={'output': "Task finished."},
@@ -109,27 +132,24 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
-logger.add(debug_output_filename, colorize=True, enqueue=True)
-handler = FileCallbackHandler(debug_output_filename)
 
 api_key = 'key here'
 os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = False
-log_debug_outputs = False
-log_outputs = True
+log_level = log_levels['all']
+langchain_logging = False
 do_debate = True
-MAX_STEPS = 4
+MAX_STEPS = 10
 
-if not log_outputs:
-    logging.getLogger().setLevel(logging.WARNING)
+info_logger.setLevel(log_level)
+if langchain_logging:
+    handler = FileCallbackHandler(debug_filename)
 
 results = []
 num_tasks = 1 # 134
 
 for _ in range(num_tasks):
-
-
 
     #####################################
     #####################################
@@ -204,8 +224,8 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
 {'{agent_scratchpad}'}
 """
     
-    logging.info(timestamp)
-    logging.info(f'Template - task {task_index}: {template}')
+    # logging.info(timestamp)
+    # logging.info(f'Template - task {task_index}: {template}')
 
 
 
@@ -230,7 +250,7 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
     llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
 
     callbacks = None
-    if log_debug_outputs: 
+    if langchain_logging:
         callbacks = [handler]
     llm_chain = LLMChain(
         llm=llm, 
