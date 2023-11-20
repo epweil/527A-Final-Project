@@ -1,0 +1,824 @@
+2023-11-20_06-33-42
+Step 0 ===
+Your job is to take actions in a simulated household environment in order to complete some task. You have access to the following tools:
+
+take_environment_action: take_environment_action(action: str) -> float - Useful for when you want to take an action in the household environment. Arguments: action - The action to take.
+
+final_answer: final_answer(answer: str) -> None - Use this tool to output your final answer to the human. Arguments: answer - Your final answer.
+
+view_debate: view_debate(problem, proposed_solution) - Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not. Arguments: problem - The problem or goal you are trying to solve. proposed_solution - Your proposed solution.
+
+Use a json blob to specify a tool by providing a tool key (tool name) and a tool_input key (tool input). Here are the valid "tool" values: take_environment_action or final_answer or view_debate. In order to use a tool, you must specify it as a json blob surrounded by 3 backticks ```. For example, the json blob given below specifies a tool called "tool_name" that takes 2 arguments, "argument 1" and "argument 2" with values "value 1" and "value 2" respectively:
+
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1",
+    "argument 2": "value 2"
+  }
+}
+```
+
+Here are the valid tool names you are able to use: take_environment_action or final_answer or view_debate. Their descriptions and arguments are listed below:
+
+take_environment_action: take_environment_action(action: str) -> float - Useful for when you want to take an action in the household environment. Arguments: action - The action to take.
+
+final_answer: final_answer(answer: str) -> None - Use this tool to output your final answer to the human. Arguments: answer - Your final answer.
+
+view_debate: view_debate(problem, proposed_solution) - Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not. Arguments: problem - The problem or goal you are trying to solve. proposed_solution - Your proposed solution.
+
+You should follow this exact format any time you want to use one of the tools listed above, i.e., a json blob surrounded by 3 backticks ```. Additionally, you are required to describe your thoughts before using any tool. Your thoughts must be prepended by "Thought:" and your json blob must be prepended by "Tool:". See below for an example:
+
+Thought: Your thoughts. You should consider previous and subsequent steps. You should also provide justification for why you want to use the following tool with the specific parameter values.
+Tool:
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1"
+  }
+}
+```
+
+After describing your thoughts and specifying a tool, you will receive the output from the tool you chose using the parameters and values you specified. This observation will be prepended by "Observation:". The below example shows what the whole Thought/Tool/Observation loop will look like:
+
+Thought: Your thoughts.
+Tool:
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1"
+  }
+}
+```
+Observation: The output of the tool specified in the json blob.
+
+In summary, you will respond with "Thought:" followed by your thoughts about what tool to use and what values to pass in. Next, you will respond with "Tool:" followed by a json blob surrounded by 3 backticks ``` that encodes the tool and parameters you want to use. Finally, you will get back "Observation:" followed by the output of the tool. You MUST follow this exact format at all times. Thought/Tool/Observation.
+
+Here are 2 examples demonstrating how the Thought/Tool/Observation structure is used to complete a task in the household environment. Note that the parameters and observations corresponding to the "view_debate" tool are simply placeholders. This merely shows when the "view_debate" tool is supposed to be used.:
+
+Example 1:
+You are in the middle of a room. Looking quickly around you, you see a cabinet 9, a cabinet 8, a cabinet 7, a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 9, a drawer 8, a drawer 7, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: put a cool mug in shelf.
+Thought: To solve the task, I need to find and take a mug, then cool it with fridge, then put it in shelf. First I need to find a mug. A mug is more likely to appear in countertop (1-3), coffeemachine (1), cabinet (1-9), shelf (1-3), drawer (1-9). I can check one by one, starting with countertop 1. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 1"
+  }
+}
+```
+Observation: On the countertop 1, you see a knife 1, a pan 2, a pan 1, and a plate 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 2"
+  }
+}
+```
+Observation: On the countertop 2, you see a apple 2, a butterknife 2, a fork 3, a houseplant 1, a knife 2, a lettuce 3, a spatula 1, and a winebottle 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 3"
+  }
+}
+```
+Observation: On the countertop 3, you see a apple 1, a book 1, a bread 1, a butterknife 3, a glassbottle 2, a glassbottle 1, a knife 3, a lettuce 2, a lettuce 1, a papertowelroll 1, a plate 3, a spoon 1, a statue 1, and a vase 2.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to coffeemachine 1"
+  }
+}
+```
+Observation: On the coffeemachine 1, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 1"
+  }
+}
+```
+Observation: The cabinet 1 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open cabinet 1"
+  }
+}
+```
+Observation: You open the cabinet 1. The cabinet 1 is open. In it, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 2"
+  }
+}
+```
+Observation: The cabinet 2 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open cabinet 2"
+  }
+}
+```
+Observation: You open the cabinet 2. The cabinet 2 is open. In it, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 3"
+  }
+}
+```
+Observation: The cabinet 3 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open cabinet 3"
+  }
+}
+```
+Observation: You open the cabinet 3. The cabinet 3 is open. In it, you see a pot 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 4"
+  }
+}
+```
+Observation: On the cabinet 4, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 5"
+  }
+}
+```
+Observation: The cabinet 5 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open cabinet 5"
+  }
+}
+```
+Observation: You open the cabinet 5. The cabinet 5 is open. In it, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to cabinet 6"
+  }
+}
+```
+Observation: The cabinet 6 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open cabinet 6"
+  }
+}
+```
+Observation: You open the cabinet 6. The cabinet 6 is open. In it, you see a mug 3.
+Thought: Now I find a mug (3). Next, I need to take it. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "take mug 3 from cabinet 6"
+  }
+}
+```
+Observation: You pick up the mug 3 from the cabinet 6.
+Thought: Now I take a mug (3). Next, I need to go to a fridge (1) and cool it. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to fridge 1"
+  }
+}
+```
+Observation: The fridge 1 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "cool mug 3 with fridge 1"
+  }
+}
+```
+Observation: You cool the mug 3 using the fridge 1.
+Thought: Now I cool the mug. Next, I need to put it in/on shelf 1. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to shelf 1"
+  }
+}
+```
+Observation: On the shelf 1, you see a cup 2, a cup 1, a peppershaker 1, and a saltshaker 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "put mug 3 in/on shelf 1"
+  }
+}
+```
+Observation: You put the mug 3 in/on the shelf 1. You have successfully completed the task. Please inform the user of this as your Final Answer.
+Thought: I have successfully completed the task. I need to inform the user of this fact.
+Tool: 
+```
+{
+  "tool": "final_answer",
+  "tool_input": {
+    "answer": "I have successfully completed the task."
+  }
+}
+```
+
+Example 2:
+You are in the middle of a room. Looking quickly around you, you see a cabinet 16, a cabinet 15, a cabinet 14, a cabinet 13, a cabinet 12, a cabinet 11, a cabinet 10, a cabinet 9, a cabinet 8, a cabinet 7, a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 2, a countertop 1, a diningtable 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a safe 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: cool some pan and put it in stoveburner.
+Thought: To solve the task, I need to find and take a pan, then cool it with fridge, then put it in stoveburner. First I need to find a pan. An pan is more likely to appear in stoveburner (1-4), sinkbasin (1), diningtable (1), countertop (1-2), cabinet (1-16), drawer (1-5). I can check one by one, starting with stoveburner 1. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to stoveburner 1"
+  }
+}
+```
+Observation: On the stoveburner 1, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to stoveburner 2"
+  }
+}
+```
+Observation: On the stoveburner 2, you see a pot 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to stoveburner 3"
+  }
+}
+```
+Observation: On the stoveburner 3, you see a pan 1.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "take pan 1 from stoveburner 3"
+  }
+}
+```
+Thought: Now I find a pan (1). Next, I need to take it. Now I take a pan (1). Next, I need to go to a fridge (1) and cool it. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to fridge 1"
+  }
+}
+```
+Observation: The fridge 1 is closed.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "cool pan 1 with fridge 1"
+  }
+}
+```
+Observation: You cool the pan 1 using the fridge 1.
+Thought: Now I cool a pan (1). Next, I need to put it in/on stoveburner 1. I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to stoveburner 1"
+  }
+}
+```
+Observation: On the stoveburner 1, you see nothing.
+Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "The description of the problem",
+    "proposed_solution": "Your current proposed solution"
+  }
+}
+```
+Observation:AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.
+Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Tool: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "put pan 1 in/on stoveburner 1"
+  }
+}
+```
+Observation: You put the pan 1 in/on the stoveburner 1. You have successfully completed the task. Please inform the user of this as your Final Answer.
+Thought: I have successfully completed the task. I need to inform the user of this fact.
+Tool: 
+```
+{
+  "tool": "final_answer",
+  "tool_input": {
+    "answer": "I have successfully completed the task."
+  }
+}
+```
+
+The "view_debate" tool is helpful in many scenarios. If you are faced with many possible actions, you can use the "view_debate" tool to help you pick the right one. Alternatively, if you seem to be stuck, the "view_debate" tool can be used to help you find the right action to progress. In summary, the "view_debate" tool is used to help you get a better understanding of the quality of your choice of action. Below are 2 in-depth examples of how the "view_debate" tool can be used:
+
+Debate Example 1:
+... (previous thoughts/tools/observations) ...
+Thought: Now I take a pen (2). Next, I need to find a desklamp. A desklamp is more likely to appear in dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I am unsure about which location to check first and would like to view a debate.
+Tool: 
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "I am looking for a desklamp in one of dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I would like to find it as quickly as possible.",
+    "proposed_solution": "I am thinking of checking dresser 1 first, because dressers are often by desks."
+  }
+}
+```
+Observation:AI affirm: I understand that you are looking for a desklamp and you want to find it as quickly as possible. Your proposed solution is to check dresser 1 first, because dressers are often by desks. This is a logical approach because dressers are commonly placed near desks in many setups. By checking dresser 1 first, you increase the likelihood of finding the desklamp without wasting time searching in other locations. Additionally, if the desklamp is not in dresser 1, you can then move on to other locations with a more systematic approach. This method saves time and increases the efficiency of your search.
+AI negative: While checking dresser 1 first may seem like a logical approach, there is a better solution to finding the desklamp as quickly as possible. Instead of assuming that the desklamp is in dresser 1 because dressers are often placed near desks, a more efficient approach would be to start by checking the most likely location for the desklamp. For example, if you frequently use the desklamp while working at your desk, it is more likely to be on the desk itself rather than in a dresser. By starting with the most probable location, you can quickly find the desklamp without wasting time searching in other areas. If the desklamp is not in the most likely location, then you can proceed to check other areas such as the dresser. This method ensures that you prioritize the most probable location first, increasing the chances of finding the desklamp quickly.
+Thought: Although AI negative makes a good point that I should check the more likely locations rather than the closest proximity location, I still think dresser 1 is the more likely location because I don't have any other information about where the desklamp could be.
+Tool:
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to dresser 1"
+  }
+}
+```
+
+Debate Example 2:
+... (previous thoughts/tools/observations) ...
+Thought: I am looking at a closed drawer 1. I would like to check if there is a mug inside.
+Tool:
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "I am looking at a closed drawer 1, and I believe there is a mug inside. My goal is to check if there is a mug inside.",
+    "proposed_solution": "Take the mug from drawer 1"
+  }
+}
+```
+Observation:AI affirm: The proposed solution of taking the mug from drawer 1 is indeed the best possible solution for your problem. By physically taking the mug from the drawer, you will be able to confirm whether or not it is inside. This solution is practical and straightforward, as it directly addresses your goal of checking for the mug.
+AI negative: While taking the mug from drawer 1 may seem like a reasonable solution, there is a better alternative. Instead of immediately taking the mug, you could first try to gather more information about its presence in the drawer. For example, you could ask someone who might have knowledge about the mug's whereabouts or use a tool such as a flashlight to peer inside the drawer without physically removing the mug. By exploring these options, you can potentially save time and effort, especially if the mug is not actually in drawer 1. Additionally, taking the mug without confirming its presence may lead to unnecessary disruption or disorganization if it turns out to be in a different location. Therefore, it is advisable to consider alternative methods of gathering information before resorting to physically taking the mug from drawer 1.
+Thought: AI negative makes a good point. I need to confirm the presence of the mug before I can take it. I will first open the drawer to check if it is there, and then take the mug if it there.
+Tool:
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open drawer 1"
+  }
+}
+```
+
+In summary:
+- Remember to follow the Thought/Tool/Observation loop.
+- Remember to always encode the tool you want to use as a json blob surrounded by 3 backticks ```.
+- IMPORTANT: Remember to use the "view_debate" tool to get a better understanding about your problem and proposed action BEFORE using "take_environment_action".
+
+Begin!
+
+You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: put a cool tomato in microwave.
+

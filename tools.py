@@ -1,9 +1,17 @@
 import requests
 from utils import SUCCESS_OBSERVATION, FAIL_OBSERVATION
+from langchain.tools import tool
+from pydantic import BaseModel, Field
 
 
+
+class TakeEnvironmentAction(BaseModel):
+    action: str = Field(description="The action to take.")
+
+
+@tool('take_environment_action', args_schema=TakeEnvironmentAction)
 def take_environment_action(action: str) -> float:
-    """Take an action within the household environment."""
+    """Useful for when you want to take an action in the household environment."""
     url = 'http://localhost:8000/take_action'
     data = {
         "action": action
@@ -22,3 +30,13 @@ def take_environment_action(action: str) -> float:
             observation = f"{observation} {FAIL_OBSERVATION}"
 
     return observation
+
+
+class FinalAnswer(BaseModel):
+    answer: str = Field(description="Your final answer.")
+
+
+@tool("final_answer", args_schema=FinalAnswer)
+def final_answer(answer: str) -> None:
+    """Use this tool to output your final answer to the human."""
+    pass
