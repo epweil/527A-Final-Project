@@ -1,0 +1,490 @@
+Step 0 ===
+Your job is to take actions in a simulated household environment in order to complete some task. You have access to the following tools:
+
+take_environment_action: Useful for when you want to take an action in the household environment. It takes 1 parameter called 'action'
+Final Answer: Use this tool to output your final answer to the human. It takes 1 parameter called 'output'
+view_debate: Use this tool to view a debate on whether your action is the best or not. You should use this tool when you are unsure about what action is best. You should pass this tool as arguments the current problem or sub-goal you are trying to achieve, as well as your current best solution. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not.
+Parameters: problem --- the problem you are trying to solve, proposed_solution --- the action you currently think is best.
+
+Use the following format for your output:
+
+Use a json blob to specify a tool by providing an tool key (tool name) and an tool_input key (tool input).
+
+Valid "tool" values: take_environment_action or Final Answer or view_debate
+
+Provide only ONE tool per $JSON_BLOB, as shown:
+
+```
+{
+  "tool": $TOOL_NAME,
+  "tool_input": $INPUT
+}
+```
+
+Follow this format:
+
+Thought: consider previous and subsequent steps
+Action:
+```
+$JSON_BLOB
+```
+Observation: action result
+... (repeat Thought/Action/Observation N times)
+Thought: I know what to respond
+Action:
+```
+{
+  "tool": "Final Answer",
+  "tool_input": "Final response to human"
+}
+```
+
+Here are 2 examples of completing a task in the simulated household environment:
+
+Example 1:
+You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 1, a diningtable 3, a diningtable 2, a diningtable 1, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a sidetable 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: clean some apple and put it in sidetable.
+Thought: To solve the task, I need to find and take an apple, then clean it with sinkbasin, then put it in sidetable. First I need to find an apple. An apple is more likely to appear in fridges (1), diningtable (1-3), sidetable (1), countertop (1), sinkbasin (1), garbagecan (1). I can check one by one, starting with fridge 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to fridge 1"
+  }
+}
+```
+Observation: The fridge 1 is closed.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open fridge 1"
+  }
+}
+```
+Observation: You open the fridge 1. The fridge 1 is open. In it, you see a lettuce 2, a mug 2, a potato 2, and a tomato 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to diningtable 1"
+  }
+}
+```
+Observation: On the diningtable 1, you see nothing.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to diningtable 2"
+  }
+}
+```
+Observation: On the diningtable 2, you see a pineapple 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to diningtable 3"
+  }
+}
+```
+Observation: On the diningtable 3, you see a bowl 2, a bowl 1, a bread 2, and a bread 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sidetable 1"
+  }
+}
+```
+Observation: On the sidetable 1, you see a cup 1, a lettuce 1, a peppershaker 3, a potato 1, and a saltshaker 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 1"
+  }
+}
+```
+Observation: On the countertop 1, you see a butterknife 1, a dishsponge 1, and a soapbottle 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sinkbasin 1"
+  }
+}
+```
+Observation: On the sinkbasin 1, you see a cup 2, a egg 1, a mug 1, and a potato 3.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to garbagecan 1"
+  }
+}
+```
+Observation: On the garbagecan 1, you see a apple 3, and a egg 3.
+Thought: Now I find an apple (3). Next, I need to take it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "take apple 3 from garbagecan 1"
+  }
+}
+```
+Observation: You pick up the apple 3 from the garbagecan 1.
+Thought: Now I take an apple (3). Next, I need to go to sinkbasin (1) and clean it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sinkbasin 1"
+  }
+}
+```
+Observation: On the sinkbasin 1, you see a cup 2, a egg 1, a mug 1, and a potato 3.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "clean apple 3 with sinkbasin 1"
+  }
+}
+```
+Observation: You clean the apple 3 using the sinkbasin 1.
+Thought: Now I clean an apple (3). Next, I need to put it in/on sidetable 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sidetable 1"
+  }
+}
+```
+Observation: On the sidetable 1, you see a cup 1, a lettuce 1, a peppershaker 3, a potato 1, and a saltshaker 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "put apple 3 in/on sidetable 1"
+  }
+}
+```
+Observation: You put the apple 3 in/on the sidetable 1. You have successfully completed the task. Please inform the user of this as your Final Answer in your next action.
+Thought: I have successfully completed the task. I need to inform the user of this fact.
+Action: 
+```
+{
+  "tool": "Final Answer",
+  "tool_input": "I have successfully completed the task."
+}
+```
+
+Example 2:
+You are in the middle of a room. Looking quickly around you, you see a cabinet 13, a cabinet 12, a cabinet 11, a cabinet 10, a cabinet 9, a cabinet 8, a cabinet 7, a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 1, a diningtable 1, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: put a clean lettuce in diningtable.
+Thought: To solve the task, I need to find and take a lettuce, then clean it with sinkbasin, then put it in diningtable. First I need to find a lettuce. A lettuce is more likely to appear in fridge (1), diningtable (1), sinkbasin (1), stoveburner (1-3), cabinet (1-13). I can check one by one, starting with fridge 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to fridge 1"
+  }
+}
+```
+Observation: The fridge 1 is closed.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open fridge 1"
+  }
+}
+```
+Observation: You open the fridge 1. The fridge 1 is open. In it, you see a cup 3, a egg 2, a potato 3, and a potato 2.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to diningtable 1"
+  }
+}
+```
+Observation: On the diningtable 1, you see a apple 1, a bread 1, a butterknife 2, a cup 2, a fork 2, a knife 2, a knife 1, a ladle 1, a lettuce 1, a mug 2, a mug 1, a pan 2, a peppershaker 1, a spatula 3, a tomato 2, and a tomato 1.
+Thought: Now I find a lettuce (1). Next, I need to take it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "take lettuce 1 from diningtable 1"
+  }
+}
+```
+Observation: You pick up the lettuce 1 from the diningtable 1.
+Thought: Now I take a lettuce (1). Next, I need to go to sinkbasin (1) and clean it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sinkbasin 1"
+  }
+}
+```
+Observation: On the sinkbasin 1, you see a apple 2, a ladle 2, a spoon 1, and a tomato 3.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "clean lettuce 1 with sinkbasin 1"
+  }
+}
+```
+Observation: You clean the lettuce 1 using the sinkbasin 1.
+Thought: Now I clean a lettuce (1). Next, I need to put it in/on diningtable 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to diningtable 1"
+  }
+}
+```
+Observation: On the diningtable 1, you see a apple 1, a bread 1, a butterknife 2, a cup 2, a fork 2, a knife 2, a knife 1, a ladle 1, a mug 2, a mug 1, a pan 2, a peppershaker 1, a spatula 3, a tomato 2, and a tomato 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "put lettuce 1 in/on diningtable 1"
+  }
+}
+```
+Observation: You put the lettuce 1 in/on the diningtable 1. You have successfully completed the task. Please inform the user of this as your Final Answer in your next action.
+Thought: I have successfully completed the task. I need to inform the user of this fact.
+Action: 
+```
+{
+  "tool": "Final Answer",
+  "tool_input": "I have successfully completed the task."
+}
+```
+
+Here are 2 examples of what failure looks like (note, only the end of the execution is given):
+
+Failure Example 1:
+... (previous thoughts/actions/observations) ...
+Observation: You put the spraybottle 2 in/on the toilet 1. You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer in your next action.
+Thought: I have failed to complete task. I need to inform the user of this fact.
+Action: 
+```
+{
+  "tool": "Final Answer",
+  "tool_input": "I have failed to complete the task."
+}
+```
+
+Failure Example 2
+... (previous thoughts/actions/observations) ...
+Observation: You put the spraybottle 2 in/on the toilet 1. You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer in your next action.
+Thought: I have failed to complete the task. I need to inform the user of this fact.
+Action: 
+```
+{
+  "tool": "Final Answer",
+  "tool_input": "I have failed to complete the task."
+}
+```
+
+The "view_debate" tool can be useful if you are unsure about which action is best. Here are a 2 examples of how the "view_debate" tool could have been used in the examples above:
+
+Debate Example 1:
+... (previous thoughts/actions/observations) ...
+Thought: Now I take a pen (2). Next, I need to find a desklamp. A desklamp is more likely to appear in dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I am unsure about which location to check first and would like to view a debate.
+Action: 
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "I am looking for a desklamp in one of dresser (1), shelf (1-9), bed (1), garbagecan (1), drawer (1-10). I would like to find it as quickly as possible.",
+    "proposed_solution": "I am thinking of checking dresser 1 first, because dressers are often by desks." 
+  }
+}
+```
+Observation:AI affirm: I understand that you are looking for a desklamp and you want to find it as quickly as possible. Your proposed solution is to check dresser 1 first, because dressers are often by desks. This is a logical approach because dressers are commonly placed near desks in many setups. By checking dresser 1 first, you increase the likelihood of finding the desklamp without wasting time searching in other locations. Additionally, if the desklamp is not in dresser 1, you can then move on to other locations with a more systematic approach. This method saves time and increases the efficiency of your search.
+
+AI negative: While checking dresser 1 first may seem like a logical approach, there is a better solution to finding the desklamp as quickly as possible. Instead of assuming that the desklamp is in dresser 1 because dressers are often placed near desks, a more efficient approach would be to start by checking the most likely location for the desklamp. For example, if you frequently use the desklamp while working at your desk, it is more likely to be on the desk itself rather than in a dresser. By starting with the most probable location, you can quickly find the desklamp without wasting time searching in other areas. If the desklamp is not in the most likely location, then you can proceed to check other areas such as the dresser. This method ensures that you prioritize the most probable location first, increasing the chances of finding the desklamp quickly.
+Thought: I agree with AI affirm that my proposed solution is the best possible solution.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to dresser 1"
+  }
+}
+```
+
+Debate Example 2:
+... (previous thoughts/actions/observations) ...
+Thought: I am looking at a closed drawer 1. I believe there is a pen inside the drawer.
+Action: 
+```
+{
+  "tool": "view_debate",
+  "tool_input": {
+    "problem": "I am looking at a closed drawer 1 and I believe there is a pen inside of it. I want to check if there is a pen inside of it.",
+    "proposed_solution": "I am thinking about taking the pen from drawer 1" 
+  }
+}
+```
+Observation:The proposed solution of taking the pen from drawer 1 is indeed the best possible solution for your problem. By physically taking the pen from the drawer, you will be able to confirm whether or not it is inside. This solution is practical and straightforward, as it directly addresses your goal of checking for the pen.
+
+AI negative: While taking the pen from drawer 1 may seem like a reasonable solution, there is a better alternative. Instead of immediately taking the pen, you could first try to gather more information about its presence in the drawer. For example, you could ask someone who might have knowledge about the pen's whereabouts or use a tool such as a flashlight to peer inside the drawer without physically removing the pen. By exploring these options, you can potentially save time and effort, especially if the pen is not actually in drawer 1. Additionally, taking the pen without confirming its presence may lead to unnecessary disruption or disorganization if it turns out to be in a different location. Therefore, it is advisable to consider alternative methods of gathering information before resorting to physically taking the pen from drawer 1.
+Thought: I agree with AI negative that I should first confirm the presence of the pen in the drawer. I will first open the drawer, and then take the pen if it there.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "open drawer 1"
+  }
+}
+```
+
+Begin! Remember to ALWAYS respond with a valid json blob of a single tool. Format is Thought, Action:```$JSON_BLOB```, then Observation. 
+
+IMPORTANT: You should always strive to produce Thought's after every Observation. Additionally, you should always strive to use the "view_debate" tool before using "take_environment_action".
+
+You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.
+Your task is to: put a clean mug in coffeemachine.
+
+
+
+Step 1 ===
+Generation ---
+Thought: To solve the task, I need to find and take a mug, then clean it with sinkbasin, then put it in the coffeemachine. First I need to find a mug. A mug is more likely to appear in countertop (1-3), sinkbasin (1), diningtable (1), shelf (1-3), cabinet (1-6), drawer (1-3). I can check one by one, starting with countertop 1.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 1"
+  }
+}
+```
+Observation ---
+On the countertop 1, you see a creditcard 2.
+
+Step 2 ===
+Generation ---
+Thought: I did not find a mug on countertop 1. I should check the next location, which is countertop 2.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to countertop 2"
+  }
+}
+```
+Observation ---
+On the countertop 2, you see a apple 1, a cellphone 1, a dishsponge 1, a fork 3, a fork 1, a knife 1, a lettuce 2, a mug 1, a peppershaker 1, a pot 2, a soapbottle 2, and a tomato 1.
+
+Step 3 ===
+Generation ---
+Thought: I found a mug (1) on countertop 2. Next, I need to take it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "take mug 1 from countertop 2"
+  }
+}
+```
+Observation ---
+You pick up the mug 1 from the countertop 2.
+
+Step 4 ===
+Generation ---
+Thought: Now I have taken the mug (1). Next, I need to go to the sinkbasin (1) and clean it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to sinkbasin 1"
+  }
+}
+```
+Observation ---
+On the sinkbasin 1, you see a plate 3, a spatula 2, and a spatula 1.
+
+Step 5 ===
+Generation ---
+Thought: I am at the sinkbasin 1. Now I need to clean the mug (1).
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "clean mug 1 with sinkbasin 1"
+  }
+}
+```
+Observation ---
+You clean the mug 1 using the sinkbasin 1.
+
+Step 6 ===
+Generation ---
+Thought: Now I have cleaned the mug (1). Next, I need to put it in the coffeemachine.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "go to coffeemachine 1"
+  }
+}
+```
+Observation ---
+On the coffeemachine 1, you see nothing.
+
+Step 7 ===
+Generation ---
+Thought: I am at the coffeemachine 1. Now I need to put the clean mug (1) in it.
+Action: 
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "put mug 1 in/on coffeemachine 1"
+  }
+}
+```
+Observation ---
+You put the mug 1 in/on the coffeemachine 1. You have successfully completed the task. Please inform the user of this as your Final Answer in your next action.

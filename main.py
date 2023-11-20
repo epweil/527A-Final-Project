@@ -16,11 +16,42 @@ from tools import take_environment_action
 from debate import view_debate
 from langchain.callbacks import FileCallbackHandler
 from loguru import logger
+import logging
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from datetime import datetime
 
 
 
+
+timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+os.makedirs(f'./logs/{timestamp}', exist_ok=True)
+info_filename = f'./logs/{timestamp}/info.log'
+debug_filename = f'./logs/{timestamp}/debug.log'
+
+logging.basicConfig(level=logging.NOTSET, handlers=[logging.NullHandler()])
+info_logger = logging.getLogger('info_logger')
+
+# Create an INFO file handler
+file_handler_info = logging.FileHandler(info_filename)
+file_handler_info.setLevel(logging.INFO)
+
+# Create formatters and set them for the file handlers
+formatter_info = logging.Formatter('%(message)s')
+file_handler_info.setFormatter(formatter_info)
+
+# Add the file handlers to the logger
+info_logger.addHandler(file_handler_info)
+
+# Example usage:
+log_levels = {
+    'none': logging.CRITICAL,
+    'all': logging.INFO,
+}
+
+
+
+log_count = 0
+agent_executor = None
 
 class CustomPromptTemplate(StringPromptTemplate):
     # The template to use
@@ -29,9 +60,12 @@ class CustomPromptTemplate(StringPromptTemplate):
     tools: List[Tool]
 
     def format(self, **kwargs) -> str:
+        global log_count
+        global agent_executor
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
         intermediate_steps = kwargs.pop("intermediate_steps")
+
         history = ""
         for action, observation in intermediate_steps:
             history += action.log
@@ -42,14 +76,25 @@ class CustomPromptTemplate(StringPromptTemplate):
         kwargs["tools"] = "\n".join([f"{tool.name}: {tool.description}" for tool in self.tools])
         # Create a list of tool names for the tools provided
         kwargs["tool_names"] = " or ".join([tool.name for tool in self.tools])
-        return self.template.format(**kwargs)
+        p = self.template.format(**kwargs)
+        if log_count == 0:
+            info_logger.info(f"Step {log_count} ===")
+            info_logger.info(p)
+        else:
+            a, o = intermediate_steps[-1]
+            info_logger.info(f"\nStep {log_count} ===")
+            info_logger.info(f'Generation ---\n{a.log}')
+            info_logger.info(f'Observation ---\n{o}')
+        log_count += 1
+        return p
 
 
 
 class CustomOutputParser(AgentOutputParser):
 
+
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        
+
         # if "Final Answer" in llm_output:
         #     return AgentFinish(
         #             return_values={'output': "Task finished."},
@@ -88,27 +133,23 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
-
-
-logfile = 'output.log'
-logger.add(logfile, colorize=True, enqueue=True)
-handler = FileCallbackHandler(logfile)
-
-api_key = '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'
+api_key = 'key here'
 os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = False
-log_outputs = True
+log_level = log_levels['all']
+langchain_logging = False
 do_debate = True
 MAX_STEPS = 10
 
+info_logger.setLevel(log_level)
+if langchain_logging:
+    handler = FileCallbackHandler(debug_filename)
+
 results = []
-num_tasks = 2 # 134
+num_tasks = 1 # 134
 
-timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
 for _ in range(num_tasks):
-
-
 
     #####################################
     #####################################
@@ -183,8 +224,8 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
 {'{agent_scratchpad}'}
 """
     
-
-
+    # logging.info(timestamp)
+    # logging.info(f'Template - task {task_index}: {template}')
 
 
 
@@ -209,7 +250,7 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
     llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
 
     callbacks = None
-    if log_outputs: 
+    if langchain_logging:
         callbacks = [handler]
     llm_chain = LLMChain(
         llm=llm, 
@@ -225,10 +266,9 @@ IMPORTANT: You should always strive to produce Thought's after every Observation
         allowed_tools=tool_names
     )
 
-    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=MAX_STEPS + 1 + 10) # the +1 is for the final answer
-    agent_iterator = AgentExecutorIterator(agent_executor=agent_executor, inputs=task)
-
-
+    agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=2*MAX_STEPS + 1)
+    # agent_iterator = AgentExecutorIterator(agent_executor=agent_executor, inputs=task)
+    agent_iterator = agent_executor.iter(inputs=task)
 
 
 
