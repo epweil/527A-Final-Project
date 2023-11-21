@@ -1,0 +1,48 @@
+Use a json blob to specify a tool by providing a tool key (tool name) and a tool_input key (tool input). Here are the valid "tool" values: take_environment_action or final_answer or view_debate. In order to use a tool, you must specify it as a json blob surrounded by 3 backticks ```. For example, the json blob given below specifies a tool called "tool_name" that takes 2 arguments, "argument 1" and "argument 2" with values "value 1" and "value 2" respectively:
+
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1",
+    "argument 2": "value 2"
+  }
+}
+```
+
+Here are the valid tool names you are able to use: take_environment_action or final_answer or view_debate. Their descriptions and arguments are listed below:
+
+take_environment_action: take_environment_action(action: str) -> float - Useful for when you want to take an action in the household environment. Arguments: action - The action to take.
+final_answer: final_answer(answer: str) -> None - Use this tool to output your final answer to the human. Arguments: answer - Your final answer.
+view_debate: view_debate(problem, proposed_solution) - Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not. Arguments: problem - The problem or goal you are trying to solve. proposed_solution - Your proposed solution.
+
+You should follow this exact format any time you want to use one of the tools listed above, i.e., a json blob surrounded by 3 backticks ```. Additionally, you are required to describe your thoughts before using any tool. Your thoughts must be prepended by "Thought:" and your json blob must be prepended by "Tool:". See below for an example:
+
+Thought: Your thoughts. You should consider previous and subsequent steps. You should also provide justification for why you want to use the following tool with the specific parameter values.
+Tool:
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1"
+  }
+}
+```
+
+After describing your thoughts and specifying a tool, you will receive the output from the tool you chose using the parameters and values you specified. This observation will be prepended by "Observation:". The below example shows what the whole Thought/Tool/Observation loop will look like:
+
+Thought: Your thoughts.
+Tool:
+```
+{
+  "tool": "tool_name",
+  "tool_input": {
+    "argument 1": "value 1"
+  }
+}
+```
+Observation: The output of the tool specified in the json blob.
+
+In summary, you will respond with "Thought:" followed by your thoughts about what tool to use and what values to pass in. Next, you will respond with "Tool:" followed by a json blob surrounded by 3 backticks ``` that encodes the tool and parameters you want to use. Finally, you will get back "Observation:" followed by the output of the tool. You MUST follow this exact format at all times. Thought/Tool/Observation.
+
+Here are 2 examples demonstrating how the Thought/Tool/Observation structure is used to complete a task in the household environment. Note that the parameters and observations corresponding to the "view_debate" tool are simply placeholders. This merely shows when the "view_debate" tool is supposed to be used.:
