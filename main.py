@@ -278,8 +278,7 @@ for _ in range(num_tasks):
 
     # llm = ChatOpenAI(model='gpt-3.5-turbo-16k-0613', temperature=0)
 
-    PROJECT_ID = 'gen-lang-client-0382320190'
-    LOCATION = 'us-central1'
+  
     import vertexai
 
     vertexai.init(project=PROJECT_ID, location=LOCATION)
