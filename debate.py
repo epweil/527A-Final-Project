@@ -1,6 +1,7 @@
 ##Ethan Weilheimer 
 ##CSE 527A LLM Agent Paper 
 ##Code adapted from Cobus Greyling (https://cobusgreyling.medium.com/two-llm-based-autonomous-agents-debate-each-other-e13e0a54429b)
+import time
 from typing import List, Dict, Callable
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import (
@@ -24,14 +25,8 @@ class DialogueAgent:
         self.message_history = ["Here is the conversation so far."]
 
     def send(self) -> str:
-        message = self.model(
-            [
-                self.system_message,
-                HumanMessage(content="\n".join(self.message_history + [self.prefix]))
-            ],
-            stop=self.stop
-        )
-        return message.content
+        message = self.model(self.system_message + '\n' + "\n".join(self.message_history + [self.prefix]))
+        return message
 
     def receive(self, name: str, message: str) -> None:
         if name is None:
@@ -85,7 +80,7 @@ Your purpose is as follows: A human will present you with a "Problem" followed b
 
 If applicable, you should directly address the argument made by the other agent to show why it is not a strong argument. Provide rebuttals to their argument, or additional claims to your own.
 
-DO NOT use more than 1 paragraph of text.
+DO NOT use more than 3 sentences of text.
 DO NOT fabricate fake citations or claims.
 DO NOT restate the Problem or Proposed Solution. Get straight to the point.
 DO NOT add anything else.
@@ -115,14 +110,14 @@ def view_debate_wrapper(action_history):
         # return "Your action is not the best action."
         situation = f"Previous Actions:{previous_actions}\nProblem: {problem}\nProposed Solution: {proposed_solution}"
 
-        print('IN DEBATE:\n' + situation + '\nEND SITUATION')
+        # print('IN DEBATE:\n' + situation + '\nEND SITUATION')
 
         total_iters=2
         temperature=0
         negative_first = False
         names = {
-            "AI affirm": "gpt-3.5-turbo-16k",
-            "AI negative": "gpt-3.5-turbo-16k",
+            "AI affirm": "gpt-3.5-turbo-16k-0613",
+            "AI negative": "gpt-3.5-turbo-16k-0613",
         }
         descriptions= {
             "AI affirm": 'the best possible solution',
@@ -138,17 +133,21 @@ def view_debate_wrapper(action_history):
 
         stop = ['\n']
 
+        from langchain.llms import VertexAI
+
+        # llm = VertexAI(model_name='text-bison-32k', temperature=0)
+
         agents = [
             DialogueAgent(
                 name="AI affirm",
-                system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
-                model=ChatOpenAI(model_name=names["AI affirm"], temperature=temperature),
+                system_message=agent_system_messages["AI affirm"],
+                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
                 stop=stop
             ),
             DialogueAgent(
                 name="AI negative",
-                system_message=SystemMessage(content=agent_system_messages["AI negative"]),
-                model=ChatOpenAI(model_name=names["AI negative"], temperature=temperature),
+                system_message=agent_system_messages["AI negative"],
+                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
                 stop=stop
             )
         ]
@@ -169,6 +168,7 @@ def view_debate_wrapper(action_history):
 
         debate_history = []
         for _ in range(total_iters):
+            # time.sleep(5)
             print(_)
             name, message = simulator.step()
             debate_history.append(f"{name}: {message}".strip())

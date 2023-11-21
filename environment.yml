@@ -10,3 +10,5 @@ dependencies:
   - pip:
     - langchain==0.0.337
     - pydantic==1.10.13
+    - google-cloud-aiplatform
+    - google

@@ -1,0 +1,9 @@
+```
+{
+  "tool": "take_environment_action",
+  "tool_input": {
+    "action": "value"
+  }
+}
+```
+

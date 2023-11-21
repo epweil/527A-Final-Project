@@ -46,6 +46,7 @@ def write_text_file(filename, text):
 def write_json_file(filename, obj):
     with open(filename, 'w') as f:
         json.dump(obj, f, indent=2)
+        f.flush()
 
 
 def read_append_write_json(filename, data):

@@ -20,7 +20,10 @@ from loguru import logger
 import logging
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from datetime import datetime
+import time
 from pydantic import BaseModel, Field
+
+from langchain.llms import GooglePalm
 
 
 
@@ -65,6 +68,7 @@ class CustomPromptTemplate(StringPromptTemplate):
     def format(self, **kwargs) -> str:
         global log_count
         global agent_executor
+        global do_debate
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
         intermediate_steps = kwargs.pop("intermediate_steps")
@@ -79,14 +83,16 @@ class CustomPromptTemplate(StringPromptTemplate):
             last_observation = observation
 
         history = '\n'.join(history_lines)
+        system_hint = None
         if last_action and last_action.tool == TAKE_ENVIRONMENT_ACTION:
-            system_hint = HINT_AFTER_ACTION
-            history += '\n' + system_hint
+            if do_debate and action_count % 2 == 0:
+                system_hint = HINT_AFTER_ACTION
+                history += '\n' + system_hint
             read_append_write_json(
                 generation_observation_history_filename,
                 f'{OBSERVATION_PREFIX} {last_observation}'
             )
-        if last_action and last_action.tool == VIEW_DEBATE:
+        if do_debate and last_action and last_action.tool == VIEW_DEBATE:
             system_hint = HINT_AFTER_DEBATE
             history += '\n' + system_hint
         # Set the agent_scratchpad variable to that value
@@ -109,7 +115,8 @@ class CustomPromptTemplate(StringPromptTemplate):
             info_logger.info(f"\nStep {log_count} ===")
             info_logger.info(f'Generation ---\n{last_action.log}')
             info_logger.info(f'Observation ---\n{last_observation}')
-            info_logger.info(f'<only seen once by agent> {system_hint}')
+            if system_hint:
+                info_logger.info(f'<only seen once by agent> {system_hint}')
         log_count += 1
         return p
 
@@ -172,21 +179,21 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
-api_key = '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'
+api_key = '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'
 os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = True
 log_level = log_levels['all']
 langchain_logging = False
 do_debate = True
-MAX_STEPS = 4
+MAX_STEPS = 20
 
 info_logger.setLevel(log_level)
 if langchain_logging:
     handler = FileCallbackHandler(debug_filename)
 
 results = []
-num_tasks = 1 # 134
+num_tasks = 134 # 134
 
 for _ in range(num_tasks):
     log_count = 0
@@ -269,7 +276,20 @@ for _ in range(num_tasks):
         input_variables=["input", "intermediate_steps"]
     )
 
-    llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
+    # llm = ChatOpenAI(model='gpt-3.5-turbo-16k-0613', temperature=0)
+
+    PROJECT_ID = 'gen-lang-client-0382320190'
+    LOCATION = 'us-central1'
+    import vertexai
+
+    vertexai.init(project=PROJECT_ID, location=LOCATION)
+
+    from langchain.llms import VertexAI
+
+    llm = VertexAI(
+        model_name='text-bison-32k',
+        temperature=0,
+    )
 
     callbacks = None
     if langchain_logging:
@@ -314,6 +334,7 @@ for _ in range(num_tasks):
     result_dict['success'] = False
     total_steps = 0
     for step_num, step in enumerate(agent_iterator):
+        # time.sleep(5)
         step_num += 1
         total_steps += 1
         print(f'Task={task_index}, Step={step_num}')
@@ -335,6 +356,7 @@ for _ in range(num_tasks):
     write_json_file(filename, results)
     # with open(filename, 'w') as f:
     #     json.dump(results, f, indent=2)
+    print('here')
 
 
 

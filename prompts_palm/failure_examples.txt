@@ -1,0 +1,11 @@
+Failure Example 1:
+... (previous thoughts/tools/observations) ...
+Observation: You put the spraybottle 2 in/on the toilet 1. You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer.
+Thought: I have failed to complete task. I need to inform the user of this fact.
+Tool: Final Answer: I have failed to complete the task
+
+Failure Example 2
+... (previous thoughts/tool/observations) ...
+Observation: You put the spraybottle 2 in/on the toilet 1. You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer.
+Thought: I have failed to complete the task. I need to inform the user of this fact.
+Tool: Final Answer: I have failed to complete the task
