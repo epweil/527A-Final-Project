@@ -172,7 +172,7 @@ class CustomOutputParser(AgentOutputParser):
 
 
 
-api_key = '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'
+api_key = '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'
 os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = True
