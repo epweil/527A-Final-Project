@@ -7,6 +7,9 @@ from langchain.schema import (
     HumanMessage,
     SystemMessage,
 )
+from pydantic import BaseModel, Field
+from langchain.tools import tool
+from utils import read_json_file, VIEW_DEBATE
 
 
 class DialogueAgent:
@@ -95,66 +98,83 @@ def select_next_speaker(step: int, agents: List[DialogueAgent]) -> int:
     return idx
 
 
-def view_debate(problem, proposed_solution, history=None):
+class ViewDebate(BaseModel):
+    problem: str = Field(description="The problem or goal you are trying to solve.")
+    proposed_solution: str = Field(description="Your proposed solution.")
 
-    situation = f"Previous Actions:{history}\nProblem: {problem}\nProposed Solution: {proposed_solution}"
+def view_debate_wrapper(action_history):
 
-    total_iters=2
-    temperature=0
-    negative_first = False
-    names = {
-        "AI affirm": "gpt-3.5-turbo",
-        "AI negative": "gpt-3.5-turbo",
-    }
-    descriptions= {
-        "AI affirm": 'the best possible solution',
-        "AI negative": 'NOT the best possible solution (i.e., there exists a better solution)',
-    }
+    @tool(VIEW_DEBATE, args_schema=ViewDebate)
+    def view_debate(problem, proposed_solution):
+        """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
 
-    moderator_name = None
+        generation_observation_history_filename = 'generation_observation_history.json'
+        generation_observation_history = read_json_file(generation_observation_history_filename)
 
-    agent_system_messages = {
-        name: generate_system_message(name, descriptions[name])
-        for name in names
-    }
+        previous_actions = '\n'.join(generation_observation_history)
+        # return "Your action is not the best action."
+        situation = f"Previous Actions:{previous_actions}\nProblem: {problem}\nProposed Solution: {proposed_solution}"
 
-    stop = ['\n']
+        print('IN DEBATE:\n' + situation + '\nEND SITUATION')
 
-    agents = [
-        DialogueAgent(
-            name="AI affirm",
-            system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
-            model=ChatOpenAI(model_name=names["AI affirm"], temperature=temperature),
-            stop=stop
-        ),
-        DialogueAgent(
-            name="AI negative",
-            system_message=SystemMessage(content=agent_system_messages["AI negative"]),
-            model=ChatOpenAI(model_name=names["AI negative"], temperature=temperature),
-            stop=stop
+        total_iters=2
+        temperature=0
+        negative_first = False
+        names = {
+            "AI affirm": "gpt-3.5-turbo-16k",
+            "AI negative": "gpt-3.5-turbo-16k",
+        }
+        descriptions= {
+            "AI affirm": 'the best possible solution',
+            "AI negative": 'NOT the best possible solution (i.e., there exists a better solution)',
+        }
+
+        moderator_name = None
+
+        agent_system_messages = {
+            name: generate_system_message(name, descriptions[name])
+            for name in names
+        }
+
+        stop = ['\n']
+
+        agents = [
+            DialogueAgent(
+                name="AI affirm",
+                system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
+                model=ChatOpenAI(model_name=names["AI affirm"], temperature=temperature),
+                stop=stop
+            ),
+            DialogueAgent(
+                name="AI negative",
+                system_message=SystemMessage(content=agent_system_messages["AI negative"]),
+                model=ChatOpenAI(model_name=names["AI negative"], temperature=temperature),
+                stop=stop
+            )
+        ]
+
+        simulator = DialogueSimulator(
+            agents=agents,
+            moderator_name=moderator_name,
+            moderator_message=situation,
+            selection_function=select_next_speaker
         )
-    ]
+        simulator.reset()
+        # if moderator_name is None:
+        #     debate_history.append(situation)
+        # else:
+        #     debate_history.append(f"{moderator_name}: {situation}")
+        if negative_first:
+            simulator.void_step()
 
-    history = []
-    simulator = DialogueSimulator(
-        agents=agents, 
-        moderator_name=moderator_name,
-        moderator_message=situation, 
-        selection_function=select_next_speaker
-    )
-    simulator.reset()
-    if moderator_name is None:
-        history.append(situation)
-    else:
-        history.append(f"{moderator_name}: {situation}")
-    if negative_first:
-        simulator.void_step()
+        debate_history = []
+        for _ in range(total_iters):
+            print(_)
+            name, message = simulator.step()
+            debate_history.append(f"{name}: {message}".strip())
 
-    for _ in range(total_iters):
-        print(_)
-        name, message = simulator.step()
-        history.append((f"{name}: {message}"))
+        return "\n".join(debate_history)
 
-    return "\n\n".join(history)
+    return view_debate
     
 

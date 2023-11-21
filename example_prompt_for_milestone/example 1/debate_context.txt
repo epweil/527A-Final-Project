@@ -1,0 +1,23 @@
+[
+  "Task: You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some egg and put it in garbagecan.",
+  "Action: go to fridge 1",
+  "Observation: The fridge 1 is closed.",
+  "Action: open fridge 1",
+  "Observation: You open the fridge 1. The fridge 1 is open. In it, you see a apple 2, a apple 1, a bowl 2, a bread 2, a cup 1, a lettuce 1, a mug 1, and a tomato 1.",
+  "Action: inspect items in fridge 1",
+  "Observation: Nothing happens.",
+  "Action: go to cabinet 6",
+  "Observation: The cabinet 6 is closed.",
+  "Action: inspect items in fridge 1",
+  "Observation: Nothing happens.",
+  "Action: ask someone if they have an egg or know where I can find one",
+  "Observation: Nothing happens.",
+  "Action: go to cabinet 5",
+  "Observation: The cabinet 5 is closed.",
+  "Action: ask someone if they have an egg or know where I can find one",
+  "Observation: Nothing happens.",
+  "Action: go to grocery store or market to buy an egg",
+  "Observation: Nothing happens.",
+  "Action: search all possible areas in the room for an egg",
+  "Observation: Nothing happens. You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer. Use the \"final_answer\" tool."
+]
