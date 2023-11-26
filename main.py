@@ -121,7 +121,7 @@ class CustomPromptTemplate(StringPromptTemplate):
                 s = f"{tool.name}: {tool.description}"
                 params = [f'{param} - {info["description"]}' for param, info in tool.args.items()]
                 s += ' Arguments: ' + ' '.join(params)
-                tool_strings.append(s
+                tool_strings.append(s)
         kwargs["tools"] = "\n".join(tool_strings)
         # Create a list of tool names for the tools provided
         kwargs["tool_names"] = " or ".join([tool.name for tool in self.tools])
