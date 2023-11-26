@@ -265,7 +265,7 @@ for _ in range(num_tasks):
     # choose the language model
     # llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
     import vertexai
-    PROJECT_ID = 'gen-lang-client-0382320190'
+    PROJECT_ID = 'your project id'
     LOCATION = 'us-central1'
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     from langchain.llms import VertexAI
