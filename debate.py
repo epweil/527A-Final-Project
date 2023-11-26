@@ -102,11 +102,13 @@ class ViewDebate(BaseModel):
     problem: str = Field(description="The problem or goal you are trying to solve.")
     proposed_solution: str = Field(description="Your proposed solution.")
 
-def view_debate_wrapper(action_history):
+def view_debate_wrapper(_context):
 
     @tool(VIEW_DEBATE, args_schema=ViewDebate)
     def view_debate(problem, proposed_solution):
         """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
+
+        context = _context
 
         generation_observation_history_filename = 'generation_observation_history.json'
         generation_observation_history = read_json_file(generation_observation_history_filename)

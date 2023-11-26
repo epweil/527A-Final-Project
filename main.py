@@ -51,10 +51,15 @@ log_levels = {
 }
 
 info_logger.info(timestamp)
-generation_observation_history_filename = 'generation_observation_history.json'
-log_count = 0
-action_count = 0
-agent_executor = None
+# generation_observation_history_filename = 'generation_observation_history.json'
+# log_count = 0
+# action_count = 0
+# agent_executor = None
+
+
+class Context:
+    pass
+
 
 class CustomPromptTemplate(StringPromptTemplate):
     # The template to use
@@ -63,8 +68,6 @@ class CustomPromptTemplate(StringPromptTemplate):
     tools: List[Tool]
 
     def format(self, **kwargs) -> str:
-        global log_count
-        global agent_executor
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
         intermediate_steps = kwargs.pop("intermediate_steps")
@@ -189,42 +192,32 @@ results = []
 num_tasks = 1 # 134
 
 for _ in range(num_tasks):
-    log_count = 0
-    action_count = 0
-    write_text_file(generation_observation_history_filename, '')
 
+    # set up the context to pass around
+    context = Context()
+    context.generation_observation_history_filename = 'generation_observation_history.json'
+    write_text_file(context.generation_observation_history_filename, '')
+    context.log_count = 0
+    context.action_count = 0
 
-
-    #####################################
-    #####################################
-    ## GET THE TASK AND SETUP TEMPLATE ##
-    #####################################
-    #####################################
-
+    # set up the available tools
     tools = [
         take_environment_action,
         final_answer
     ]
-
-    action_history = 'None'
     if do_debate:
-        tools.append(view_debate_wrapper(action_history))
+        tools.append(view_debate_wrapper(context))
 
-    # load the examples and task
+    # load the examples and task from ALFWorld
     examples, task, task_index = get_next_task(MAX_STEPS, do_debate=do_debate)
-    # examples = examples[:1]
     examples_str = '\n\n'.join([f'Example {i+1}:\n{ex}' for i, ex in enumerate(examples)])
     examples_str = examples_str.replace('{', '{{').replace('}', '}}')
 
     # load the prompt that tells how to format the actions
     formatting = read_text_file("./prompts/action_formatting.txt")
-    # with open("./prompts/action_formatting.txt", "r") as f:
-    #     formatting = f.read()
 
     # load the examples of failures
     failure_examples_str = read_text_file("./prompts/failure_examples.txt")
-    # with open("./prompts/failure_examples.txt", "r") as f:
-    #     failure_examples_str = f.read()
 
     debate_examples_str = ''
     debate_msg_1 = ''
@@ -233,32 +226,17 @@ for _ in range(num_tasks):
         debate_msg_1 = f'. Note that the parameters and observations corresponding to the "{VIEW_DEBATE}" tool are simply placeholders. This merely shows when the "{VIEW_DEBATE}" tool is supposed to be used.'
         debate_msg_2 = f'\n- IMPORTANT: Remember to use the "{VIEW_DEBATE}" tool to get a better understanding about your problem and proposed action BEFORE using "{TAKE_ENVIRONMENT_ACTION}".'
         debate_examples_str = '\n\n' + read_text_file("./prompts/debate_examples.txt")
-        # with open("./prompts/debate_examples.txt", "r") as f:
-        #     debate_examples_str = '\n\n' + f.read()
 
     template = read_text_file("prompts/prompt_template.txt")
-    # with open("prompts/prompt_template.txt", "r") as f:
-    #     template = f.read()
 
     template = template.format(
         formatting=formatting,
         success_examples=examples_str,
         failure_examples=failure_examples_str,
         debate_examples=debate_examples_str,
-        debate_msg_1 = debate_msg_1,
-        debate_msg_2 = debate_msg_2,
+        debate_msg_1=debate_msg_1,
+        debate_msg_2=debate_msg_2,
     )
-
-
-
-    ###################################
-    ###################################
-    ## CREATE PROMPT AND SETUP AGENT ##
-    ###################################
-    ###################################
-
-
-
 
     # create the prompt
     prompt = CustomPromptTemplate(
@@ -269,6 +247,7 @@ for _ in range(num_tasks):
         input_variables=["input", "intermediate_steps"]
     )
 
+    # choose the language model
     llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
 
     callbacks = None
@@ -279,33 +258,18 @@ for _ in range(num_tasks):
         prompt=prompt, 
         callbacks=callbacks
     )
-    tool_names = [tool.name for tool in tools]
-
     agent = LLMSingleActionAgent(
         llm_chain=llm_chain,
         output_parser=CustomOutputParser(),
         stop=[f"\n{OBSERVATION_PREFIX}"],
-        allowed_tools=tool_names
+        allowed_tools=[tool.name for tool in tools]
     )
 
     agent_executor = AgentExecutor.from_agent_and_tools(agent=agent, tools=tools, verbose=True, max_iterations=2*MAX_STEPS + 1)
-    # agent_iterator = AgentExecutorIterator(agent_executor=agent_executor, inputs=task)
     agent_iterator = agent_executor.iter(inputs=task)
 
-
-
-
-
-
-    ###############################
-    ###############################
-    ## RUN TASK AND SAVE RESULTS ##
-    ###############################
-    ###############################
-
-
     read_append_write_json(
-        generation_observation_history_filename,
+        context.generation_observation_history_filename,
         'Task: ' + task
     )
     result_dict = dict()
@@ -317,14 +281,17 @@ for _ in range(num_tasks):
         step_num += 1
         total_steps += 1
         print(f'Task={task_index}, Step={step_num}')
-        
-        prev_ob = step.get('intermediate_step') # intermediate_step is a list of (action, observation) pairs
+
+        # intermediate_step is a (action, observation) pair
+        prev_ob = step.get('intermediate_step')
         
         if prev_ob is not None and SUCCESS_OBSERVATION in prev_ob[-1][1]:
             result_dict['success'] = True
 
-    result_dict['total_steps'] = total_steps - 1 # -1 because we don't count final answer as a step
-    result_dict['total_actions'] = action_count # the number of times take_environment_action was called
+    # -1 because we don't count final answer as a step
+    result_dict['total_steps'] = total_steps - 1
+    # the number of times take_environment_action was called
+    result_dict['total_actions'] = action_count
     results.append(result_dict)
 
     # save the results every time so we don't lose anything
