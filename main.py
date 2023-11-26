@@ -16,7 +16,6 @@ from utils import *
 from tools import take_environment_action, final_answer
 from debate import view_debate_wrapper
 from langchain.callbacks import FileCallbackHandler
-from loguru import logger
 import logging
 from langchain.agents.agent_iterator import AgentExecutorIterator
 from datetime import datetime
@@ -145,7 +144,7 @@ class CustomPromptTemplate(StringPromptTemplate):
 class CustomOutputParser(AgentOutputParser):
 
     # Context for information
-    context: Context
+    # context: Context
 
     def __init__(self, *args, _context, **kwargs):
         self.context = _context
