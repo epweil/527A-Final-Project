@@ -1,6 +1,7 @@
 ##Ethan Weilheimer 
 ##CSE 527A LLM Agent Paper 
 ##Code adapted from Cobus Greyling (https://cobusgreyling.medium.com/two-llm-based-autonomous-agents-debate-each-other-e13e0a54429b)
+import time
 from typing import List, Dict, Callable
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import (
@@ -13,25 +14,19 @@ from utils import read_json_file, VIEW_DEBATE
 
 
 class DialogueAgent:
-    def __init__(self,name: str, system_message: SystemMessage, model: ChatOpenAI, stop: List[str]) -> None:
+    def __init__(self, name: str, system_message: SystemMessage, model: ChatOpenAI, stop: List[str]) -> None:
         self.name = name
         self.system_message = system_message
         self.model = model
         self.prefix = f"{self.name}: "
         self.stop = stop
-            
+
     def reset(self):
         self.message_history = ["Here is the conversation so far."]
 
     def send(self) -> str:
-        message = self.model(
-            [
-                self.system_message,
-                HumanMessage(content="\n".join(self.message_history + [self.prefix]))
-            ],
-            stop=self.stop
-        )
-        return message.content
+        message = self.model(self.system_message + '\n' + "\n".join(self.message_history + [self.prefix]))
+        return message
 
     def receive(self, name: str, message: str) -> None:
         if name is None:
@@ -41,8 +36,9 @@ class DialogueAgent:
 
 
 class DialogueSimulator:
-    
-    def __init__(self, agents: List[DialogueAgent], moderator_name:str, moderator_message:str, selection_function: Callable[[int, List[DialogueAgent]], int]) -> None:
+
+    def __init__(self, agents: List[DialogueAgent], moderator_name: str, moderator_message: str,
+                 selection_function: Callable[[int, List[DialogueAgent]], int]) -> None:
         self.agents = agents
         self._step = 0
         self.select_next_speaker = selection_function
@@ -67,14 +63,7 @@ class DialogueSimulator:
         self._step += 1
 
         return speaker.name, message
-        
-    def end(self) -> tuple[str, str]:
-        speaker = self.moderator
-        message = speaker.end()
 
-        self.moderator.receive(speaker.name, message)
-        return speaker.name, message
-    
 
 def generate_system_message(name, adj):
     return f"""
@@ -85,7 +74,7 @@ Your purpose is as follows: A human will present you with a "Problem" followed b
 
 If applicable, you should directly address the argument made by the other agent to show why it is not a strong argument. Provide rebuttals to their argument, or additional claims to your own.
 
-DO NOT use more than 1 paragraph of text.
+DO NOT use more than 3 sentences of text.
 DO NOT fabricate fake citations or claims.
 DO NOT restate the Problem or Proposed Solution. Get straight to the point.
 DO NOT add anything else.
@@ -99,39 +88,33 @@ def select_next_speaker(step: int, agents: List[DialogueAgent]) -> int:
 
 
 class ViewDebate(BaseModel):
-    problem: str = Field(description="The problem or goal you are trying to solve.")
-    proposed_solution: str = Field(description="Your proposed solution.")
+    problem_and_proposed_solution: str = Field(description="A description of the problem or goal you are trying to solve followed by your proposed solution to this problem or goal.")
 
-def view_debate_wrapper(_context):
 
+def view_debate_wrapper(context):
     @tool(VIEW_DEBATE, args_schema=ViewDebate)
-    def view_debate(problem, proposed_solution):
+    def view_debate(problem_and_proposed_solution):
         """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
 
-        context = _context
-
-        generation_observation_history_filename = 'generation_observation_history.json'
-        generation_observation_history = read_json_file(generation_observation_history_filename)
+        generation_observation_history = read_json_file(context.generation_observation_history_filename)
 
         previous_actions = '\n'.join(generation_observation_history)
         # return "Your action is not the best action."
-        situation = f"Previous Actions:{previous_actions}\nProblem: {problem}\nProposed Solution: {proposed_solution}"
+        situation = f"Previous Actions:{previous_actions}\nSituation: {problem_and_proposed_solution}"
 
-        print('IN DEBATE:\n' + situation + '\nEND SITUATION')
+        # print('IN DEBATE:\n' + situation + '\nEND SITUATION')
 
-        total_iters=2
-        temperature=0
+        total_iters = 2
+        temperature = 0
         negative_first = False
         names = {
-            "AI affirm": "gpt-3.5-turbo-16k",
-            "AI negative": "gpt-3.5-turbo-16k",
+            "AI affirm": "gpt-3.5-turbo-16k-0613",
+            "AI negative": "gpt-3.5-turbo-16k-0613",
         }
-        descriptions= {
+        descriptions = {
             "AI affirm": 'the best possible solution',
             "AI negative": 'NOT the best possible solution (i.e., there exists a better solution)',
         }
-
-        moderator_name = None
 
         agent_system_messages = {
             name: generate_system_message(name, descriptions[name])
@@ -140,26 +123,30 @@ def view_debate_wrapper(_context):
 
         stop = ['\n']
 
+        from langchain.llms import VertexAI
+
+        # llm = VertexAI(model_name='text-bison-32k', temperature=0)
+
         agents = [
             DialogueAgent(
                 name="AI affirm",
-                system_message=SystemMessage(content=agent_system_messages["AI affirm"]),
-                model=ChatOpenAI(model_name=names["AI affirm"], temperature=temperature),
+                system_message=agent_system_messages["AI affirm"],
+                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
                 stop=stop
             ),
             DialogueAgent(
                 name="AI negative",
-                system_message=SystemMessage(content=agent_system_messages["AI negative"]),
-                model=ChatOpenAI(model_name=names["AI negative"], temperature=temperature),
+                system_message=agent_system_messages["AI negative"],
+                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
                 stop=stop
             )
         ]
 
         simulator = DialogueSimulator(
             agents=agents,
-            moderator_name=moderator_name,
             moderator_message=situation,
-            selection_function=select_next_speaker
+            selection_function=select_next_speaker,
+            moderator_name='',
         )
         simulator.reset()
         # if moderator_name is None:
@@ -171,6 +158,7 @@ def view_debate_wrapper(_context):
 
         debate_history = []
         for _ in range(total_iters):
+            # time.sleep(5)
             print(_)
             name, message = simulator.step()
             debate_history.append(f"{name}: {message}".strip())
@@ -178,5 +166,4 @@ def view_debate_wrapper(_context):
         return "\n".join(debate_history)
 
     return view_debate
-    
 

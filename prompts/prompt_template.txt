@@ -1,6 +1,4 @@
-Your job is to take actions in a simulated household environment in order to complete some task. You have access to the following tools:
-
-{{tools}}
+Your job is to take actions in a simulated household environment in order to complete some task. You will be able to use tools to help you complete some task.
 
 {formatting}
 
@@ -10,7 +8,7 @@ Here are 2 examples demonstrating how the Thought/Tool/Observation structure is 
 
 In summary:
 - Remember to follow the Thought/Tool/Observation loop.
-- Remember to always encode the tool you want to use as a json blob surrounded by 3 backticks ```.{debate_msg_2}
+- Remember to always encode the tool you want to use with "Tool:" and "Tool Input:".{debate_msg_2}
 
 Begin!
 

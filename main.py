@@ -49,14 +49,12 @@ log_levels = {
 info_logger.info(timestamp)
 
 
-# generation_observation_history_filename = 'generation_observation_history.json'
-# log_count = 0
-# action_count = 0
-# agent_executor = None
-
-
-class Context:
-    pass
+class Context(BaseModel):
+    generation_observation_history_filename: str = None
+    log_count: int = 0
+    action_count: int = 0
+    do_debate: bool = False
+    system_hint_mod: int = 2
 
 
 class CustomPromptTemplate(StringPromptTemplate):
@@ -66,10 +64,6 @@ class CustomPromptTemplate(StringPromptTemplate):
     tools: List[Tool]
     # Context for information
     context: Context
-
-    def __init__(self, *args, _context, **kwargs):
-        self.context = _context
-        super().__init__(*args, **kwargs)
 
     def format(self, **kwargs) -> str:
         # Get the intermediate steps (AgentAction, Observation tuples)
@@ -120,7 +114,7 @@ class CustomPromptTemplate(StringPromptTemplate):
         for tool in self.tools:
             s = f"{tool.name}: {tool.description}"
             params = [f'{param} - {info["description"]}' for param, info in tool.args.items()]
-            s += ' Arguments: ' + ' '.join(params)
+            s += ' Argument: ' + ' '.join(params)
             tool_strings.append(s)
         kwargs["tools"] = "\n".join(tool_strings)
         # Create a list of tool names for the tools provided
@@ -144,64 +138,50 @@ class CustomPromptTemplate(StringPromptTemplate):
 class CustomOutputParser(AgentOutputParser):
 
     # Context for information
-    # context: Context
-
-    def __init__(self, *args, _context, **kwargs):
-        self.context = _context
-        super().__init__(*args, **kwargs)
+    context: Context
 
     def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        # if "Final Answer" in llm_output or FINAL_ANSWER in llm_output:
-        #     return AgentFinish(
-        #             return_values={'output': "Task finished."},
-        #             log=llm_output
-        #         )
+        if "final answer" in llm_output.lower():
+            info_logger.info(f"\nStep {self.context.log_count} ===")
+            info_logger.info(f'Generation ---\n{llm_output}')
+            return AgentFinish(
+                    return_values={'output': "Task finished."},
+                    log=llm_output
+                )
 
         default_agent_finish = AgentFinish(
             return_values={'output': "Task finished."},
             log=llm_output
         )
 
-        pattern = r'```(.*?)```'
+        pattern = r'Tool: (.*)\nTool Input: (.*)'
         match = re.search(pattern, llm_output, re.DOTALL)
 
         try:
             if match:
-                tool_info_str = match.group(1)
-                try:
-                    tool_info = json.loads(tool_info_str)
-                    tool_name = tool_info['tool']
-                    tool_input = tool_info['tool_input']
-                except:
-                    raise ValueError(f"Could not parse the JSON string describing the tool: `{tool_info_str}`")
+                tool_name = match.group(1)
+                tool_input = match.group(2)
 
-                if tool_name == FINAL_ANSWER:
-                    info_logger.info(f"\nStep {self.context.log_count} ===")
-                    info_logger.info(f'Generation ---\n{llm_output}')
-                    return AgentFinish(
-                        return_values={'output': tool_input['answer']},
-                        log=llm_output
-                    )
-                elif tool_name == VIEW_DEBATE:
+                if tool_name == VIEW_DEBATE:
                     return AgentAction(tool=tool_name, tool_input=tool_input, log=llm_output)
                 elif tool_name == TAKE_ENVIRONMENT_ACTION:
                     self.context.action_count += 1
                     # append observation to external file for debaters to use as history
                     read_append_write_json(
                         self.context.generation_observation_history_filename,
-                        'Action: ' + tool_input.get('action')
+                        'Action: ' + tool_input
                     )
                     info_logger.info(f"\nAction Count {self.context.action_count} +++")
                     return AgentAction(tool=tool_name, tool_input=tool_input, log=llm_output)
             else:
-                raise ValueError(f"Could not find text surrounded by 3 backticks: `{llm_output}`")
+                raise ValueError(f"Could not find 'Tool:' or 'Tool Input:' : `{llm_output}`")
         except Exception as e:
             info_logger.info(f'\n ERROR === \n{e}')
             return default_agent_finish
 
 
-api_key = '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'
-os.environ['OPENAI_API_KEY'] = api_key
+# api_key = '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'
+# os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = True
 log_level = log_levels['all']
@@ -234,8 +214,7 @@ for _ in range(num_tasks):
 
     # set up the available tools
     tools = [
-        take_environment_action,
-        final_answer
+        take_environment_action
     ]
     if do_debate:
         tools.append(view_debate_wrapper(context))
@@ -280,11 +259,20 @@ for _ in range(num_tasks):
         # This omits the `agent_scratchpad`, `tools`, and `tool_names` variables because those are generated dynamically
         # This includes the `intermediate_steps` variable because that is needed
         input_variables=["input", "intermediate_steps"],
-        _context=context
+        context=context
     )
 
     # choose the language model
-    llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
+    # llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
+    import vertexai
+    PROJECT_ID = 'gen-lang-client-0382320190'
+    LOCATION = 'us-central1'
+    vertexai.init(project=PROJECT_ID, location=LOCATION)
+    from langchain.llms import VertexAI
+    llm = VertexAI(
+        model_name='text-bison-32k',
+        temperature=0,
+    )
 
     callbacks = None
     if langchain_logging:
@@ -296,7 +284,7 @@ for _ in range(num_tasks):
     )
     agent = LLMSingleActionAgent(
         llm_chain=llm_chain,
-        output_parser=CustomOutputParser(_context=context),
+        output_parser=CustomOutputParser(context=context),
         stop=[f"\n{OBSERVATION_PREFIX}"],
         allowed_tools=[tool.name for tool in tools]
     )
@@ -325,7 +313,8 @@ for _ in range(num_tasks):
 
         # intermediate_step is a (action, observation) pair
         prev_ob = step.get('intermediate_step')
-
+        if step.get('output') and step.get('output') == 'Task finished.':
+            break
         if prev_ob is not None and SUCCESS_OBSERVATION in prev_ob[-1][1]:
             result_dict['success'] = True
 

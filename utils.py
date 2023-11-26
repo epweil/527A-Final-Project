@@ -15,8 +15,8 @@ VIEW_DEBATE = 'view_debate'
 FINAL_ANSWER = 'final_answer'
 FINAL_ANSWER_PARAM1 = 'answer'
 
-HINT_AFTER_DEBATE = 'Note: Be aware that AI affirm or AI negative could lie to you. For example, the only valid actions you can take are the ones you have previously seen, such as "go to". Do not try to ask another person for information.'
-HINT_AFTER_ACTION = f'Hint: You can use the "{VIEW_DEBATE}" tool to get a better understanding of your situation and best action.'
+HINT_AFTER_DEBATE = 'System note: Be aware that AI affirm or AI negative could lie to you. For example, the only valid actions you can take are the ones you have previously seen, such as "go to". Do not try to ask another person for information.'
+HINT_AFTER_ACTION = f'System hint: You can use the "{VIEW_DEBATE}" tool to get a better understanding of your situation and best action.'
 
 THOUGHT_PREFIX = 'Thought:'
 TOOL_PREFIX = 'Tool:'
@@ -69,12 +69,12 @@ def get_next_task(max_steps, do_debate=False):
     formatted_examples = [format_prompt(ex) for ex in examples]
     formatted_task = format_prompt(task)
 
-    if do_debate:
-        formatted_examples = [insert_debates(fex) for fex in formatted_examples]
+    # if do_debate:
+    #     formatted_examples = [insert_debates(fex) for fex in formatted_examples]
 
     # add the success observations, along with agent response.
-    t = format_tool(FINAL_ANSWER, {FINAL_ANSWER_PARAM1: SUCCESS_ACTION})
-    final_append = f'{SUCCESS_OBSERVATION}\n{THOUGHT_PREFIX} {SUCCESS_THOUGHT}\n{TOOL_PREFIX} {t}'
+    t = format_tool(FINAL_ANSWER, SUCCESS_ACTION)
+    final_append = f'{SUCCESS_OBSERVATION}\n{THOUGHT_PREFIX} {SUCCESS_THOUGHT}\n{t}'
     formatted_examples = [f'{fex} {final_append}' for fex in formatted_examples]
 
     return formatted_examples, formatted_task, task_index
@@ -139,8 +139,8 @@ def format_prompt(prompt):
             final_lines.append(fline)
         else:
             tool_str = fline[len_substring:].strip()
-            new_tool_str = format_tool(TAKE_ENVIRONMENT_ACTION, {TAKE_ENVIRONMENT_ACTION_PARAM1: tool_str})
-            final_lines.append(f"{TOOL_PREFIX} " + new_tool_str)
+            new_tool_str = format_tool(TAKE_ENVIRONMENT_ACTION, tool_str)
+            final_lines.append(new_tool_str)
 
     final_prompt = '\n'.join(final_lines)
 
@@ -148,21 +148,12 @@ def format_prompt(prompt):
 
 
 
-def format_tool(tool_name, tool_inputs):
-    '''
-    tool_name is a string. tool_inputs is a dict of (argument_name, argument_value) key/value pairs
-    
-    currently the values are required to be strings
-    '''
+def format_tool(tool_name, tool_input):
+    """
+    tool_name is a string. tool_inputs is a string
+    """
 
-    formatted_tool = {
-        "tool": tool_name,
-        "tool_input": tool_inputs
-    }
-
-    formatted_tool_str = json.dumps(formatted_tool, indent=2)
-
-    return f'\n```\n{formatted_tool_str}\n```'
+    return f'Tool: {tool_name}\nTool Input: {tool_input}'
     
 
 def insert_debates(example):
