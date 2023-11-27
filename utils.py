@@ -93,8 +93,8 @@ def get_next_task(max_steps, do_debate=False):
     formatted_examples = [format_prompt(ex) for ex in examples]
     formatted_task = format_prompt(task)
 
-    # if do_debate:
-    #     formatted_examples = [insert_debates(fex) for fex in formatted_examples]
+    if do_debate:
+        formatted_examples = [insert_debates(fex) for fex in formatted_examples]
 
     # add the success observations, along with agent response.
     t = 'Final Answer: ' + SUCCESS_ACTION

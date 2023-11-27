@@ -226,9 +226,9 @@ class CustomOutputParser(AgentOutputParser):
 langchain.debug = True
 log_level = log_levels['all']
 langchain_logging = False
-do_debate = False
+do_debate = True
 MAX_STEPS = 30
-MAX_VOTES = 7
+MAX_VOTES = 1
 temperature = 0 if MAX_VOTES == 1 else 0.7
 model = 'text-bison-32k'
 model_type = 'text'
@@ -246,10 +246,11 @@ if langchain_logging:
     handler = FileCallbackHandler(debug_filename)
 
 results = []
-num_tasks = 1  # 134
+num_tasks = 134  # 134
 
 
-run_title = f'no debate. Max steps: {MAX_STEPS}. Max votes: {MAX_VOTES}. model: {model}'
+run_title = f'do_debate={do_debate} Max steps: {MAX_STEPS}. Max votes: {MAX_VOTES}. model: {model}. Debate params: {debate_params}'
+print(f'run_title: {run_title}')
 for _ in range(num_tasks):
 
     # set up the context to pass around
@@ -279,7 +280,7 @@ for _ in range(num_tasks):
         tools.append(view_debate_wrapper(context, **debate_params))
 
     # load the examples and task from ALFWorld
-    examples, task, task_index = get_next_task(MAX_STEPS, do_debate=do_debate)
+    examples, task, task_index = get_next_task(MAX_STEPS, do_debate=False) # not inserting debates even if in debate mode
     print(f'Task index: {task_index}')
     examples_str = '\n\n'.join([f'Example {i + 1}:\n{ex}' for i, ex in enumerate(examples)])
     examples_str = examples_str.replace('{', '{{').replace('}', '}}')
@@ -296,7 +297,7 @@ for _ in range(num_tasks):
     debate_msg_1 = ''
     debate_msg_2 = ''
     if do_debate:
-        debate_msg_1 = f'. Note that the parameters and observations corresponding to the "{VIEW_DEBATE}" tool are simply placeholders. This merely shows when the "{VIEW_DEBATE}" tool is supposed to be used.'
+        # debate_msg_1 = f'. Note that the parameters and observations corresponding to the "{VIEW_DEBATE}" tool are simply placeholders. This merely shows when the "{VIEW_DEBATE}" tool is supposed to be used.'
         debate_msg_2 = f'\n- IMPORTANT: Remember to use the "{VIEW_DEBATE}" tool to get a better understanding about your problem and proposed action BEFORE using "{TAKE_ENVIRONMENT_ACTION}".'
         debate_examples_str = '\n\n' + read_text_file("./prompts/debate_examples.txt")
 
