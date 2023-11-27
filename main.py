@@ -215,8 +215,8 @@ class CustomOutputParser(AgentOutputParser):
 langchain.debug = True
 log_level = log_levels['all']
 langchain_logging = False
-do_debate = True
-MAX_STEPS = 6
+do_debate = False
+MAX_STEPS = 30
 MAX_VOTES = 1
 temperature = 0 if MAX_VOTES == 1 else 0.7
 model = 'text-bison-32k'
@@ -235,8 +235,10 @@ if langchain_logging:
     handler = FileCallbackHandler(debug_filename)
 
 results = []
-num_tasks = 1  # 134
+num_tasks = 134  # 134
 
+
+run_title = f'no debate no majority vote. Max steps: {MAX_STEPS}'
 for _ in range(num_tasks):
 
     # set up the context to pass around
@@ -350,6 +352,7 @@ for _ in range(num_tasks):
     result_dict['task'] = task
     result_dict['task_index'] = task_index
     result_dict['success'] = False
+    result_dict['run title'] = run_title
     total_steps = 0
     for step_num, step in enumerate(agent_iterator):
 
@@ -357,12 +360,15 @@ for _ in range(num_tasks):
         prev_ob = step.get('intermediate_step')
         if prev_ob:
             a, o = prev_ob[-1]
+            if not o:
+                break
             if FAIL_OBSERVATION in o:
                 total_steps += 1
                 break
             elif SUCCESS_OBSERVATION in o:
                 total_steps += 1
                 result_dict['success'] = True
+                break
             elif EMPTY_RESPONSE not in o:
                 total_steps += 1
         else:
