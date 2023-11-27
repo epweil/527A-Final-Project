@@ -202,6 +202,8 @@ class CustomOutputParser(AgentOutputParser):
                         self.context.generation_observation_history.append('Action: ' + majority_tool_input)
                         return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
                                            log=random_llm_output)
+                    else:
+                        raise ValueError(f"Could not find valid tool name: `{llm_output}`")
             else:
                 raise ValueError(f"Could not find 'Tool:' or 'Tool Input:' : `{llm_output}`")
         except Exception as e:
@@ -265,7 +267,7 @@ for _ in range(num_tasks):
         take_environment_action_wrapper(context)
     ]
     if do_debate:
-        tools.append(view_debate_wrapper(context))
+        tools.append(view_debate_wrapper(context, **debate_params))
 
     # load the examples and task from ALFWorld
     examples, task, task_index = get_next_task(MAX_STEPS, do_debate=do_debate)
