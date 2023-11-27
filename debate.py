@@ -11,6 +11,7 @@ from langchain.schema import (
 from pydantic import BaseModel, Field
 from langchain.tools import tool
 from utils import read_json_file, VIEW_DEBATE
+from langchain.llms import VertexAI
 
 
 class DialogueAgent:
@@ -72,9 +73,11 @@ Your name is {name}.
 
 Your purpose is as follows: A human will present you with a "Problem" followed by their "Proposed Solution". You will also be provided with the human's "Previous Actions" that they have took. Your goal is to provide an argument for why "Proposed Solution" is {adj} given the "Problem". Try to be as convincing as possible, as you will be debating another agent. You should speak directly to the human, you are trying to convince them that their "Proposed Solution" is {adj}.
 
-If applicable, you should directly address the argument made by the other agent to show why it is not a strong argument. Provide rebuttals to their argument, or additional claims to your own.
+If applicable, you should directly address the argument made by the other agent to show why it is not a strong argument. Provide rebuttals to their argument, or additional claims to your own. Additionally, in your arguments you should take into consideration the past actions of the user.
 
-DO NOT use more than 3 sentences of text.
+
+
+DO NOT use more than 3-5 sentences of text.
 DO NOT fabricate fake citations or claims.
 DO NOT restate the Problem or Proposed Solution. Get straight to the point.
 DO NOT add anything else.
@@ -91,53 +94,49 @@ class ViewDebate(BaseModel):
     problem_and_proposed_solution: str = Field(description="A description of the problem or goal you are trying to solve followed by your proposed solution to this problem or goal.")
 
 
-def view_debate_wrapper(context):
+def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=False, model='text-bison-32k', model_type='text'):
     @tool(VIEW_DEBATE, args_schema=ViewDebate)
     def view_debate(problem_and_proposed_solution):
         """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
 
-        generation_observation_history = read_json_file(context.generation_observation_history_filename)
-
-        previous_actions = '\n'.join(generation_observation_history)
+        previous_actions = '\n'.join(context.generation_observation_history)
         # return "Your action is not the best action."
         situation = f"Previous Actions:{previous_actions}\nSituation: {problem_and_proposed_solution}"
 
         # print('IN DEBATE:\n' + situation + '\nEND SITUATION')
 
-        total_iters = 2
-        temperature = 0
-        negative_first = False
-        names = {
-            "AI affirm": "gpt-3.5-turbo-16k-0613",
-            "AI negative": "gpt-3.5-turbo-16k-0613",
-        }
-        descriptions = {
+        names_and_info = {
             "AI affirm": 'the best possible solution',
             "AI negative": 'NOT the best possible solution (i.e., there exists a better solution)',
         }
 
         agent_system_messages = {
-            name: generate_system_message(name, descriptions[name])
-            for name in names
+            name: generate_system_message(name, names_and_info[name])
+            for name in names_and_info
         }
 
         stop = ['\n']
 
-        from langchain.llms import VertexAI
 
-        # llm = VertexAI(model_name='text-bison-32k', temperature=0)
+        if model_type == 'text':
+            affirm_llm = VertexAI(model_name=model, temperature=temperature)
+            negative_llm = VertexAI(model_name=model, temperature=temperature)
+        # TODO: handle the chat model types
+        else:
+            affirm_llm = None
+            negative_llm = None
 
         agents = [
             DialogueAgent(
                 name="AI affirm",
                 system_message=agent_system_messages["AI affirm"],
-                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
+                model=affirm_llm,
                 stop=stop
             ),
             DialogueAgent(
                 name="AI negative",
                 system_message=agent_system_messages["AI negative"],
-                model=VertexAI(model_name='text-bison-32k', temperature=0, stop=stop),
+                model=negative_llm,
                 stop=stop
             )
         ]
@@ -149,10 +148,7 @@ def view_debate_wrapper(context):
             moderator_name='',
         )
         simulator.reset()
-        # if moderator_name is None:
-        #     debate_history.append(situation)
-        # else:
-        #     debate_history.append(f"{moderator_name}: {situation}")
+
         if negative_first:
             simulator.void_step()
 

@@ -5,7 +5,7 @@ from langchain.prompts import StringPromptTemplate
 from langchain.chat_models import ChatOpenAI
 from langchain.chains import LLMChain
 
-from typing import List, Union
+from typing import List, Union, Tuple
 from langchain.schema import AgentAction, AgentFinish
 import re
 import langchain
@@ -13,7 +13,7 @@ import os
 import json
 import requests
 from utils import *
-from tools import take_environment_action, final_answer
+from tools import take_environment_action_wrapper
 from debate import view_debate_wrapper
 from langchain.callbacks import FileCallbackHandler
 import logging
@@ -50,11 +50,14 @@ info_logger.info(timestamp)
 
 
 class Context(BaseModel):
-    generation_observation_history_filename: str = None
+    generation_observation_history: List[str] = []
     log_count: int = 0
     action_count: int = 0
     do_debate: bool = False
     system_hint_mod: int = 2
+    max_votes: int = 1
+    vote_count: int = 0
+    votes: List[Tuple[str, str, str]] = []
 
 
 class CustomPromptTemplate(StringPromptTemplate):
@@ -68,7 +71,10 @@ class CustomPromptTemplate(StringPromptTemplate):
     def format(self, **kwargs) -> str:
         # Get the intermediate steps (AgentAction, Observation tuples)
         # Format them in a particular way
-        intermediate_steps = kwargs.pop("intermediate_steps")
+        intermediate_steps = [(a, o) for a, o in kwargs.pop("intermediate_steps") if o != EMPTY_RESPONSE]
+
+        # if recently finished voting, then vote count is 0
+        done_voting = self.context.vote_count == 0
 
         history_lines = []
         last_action = None
@@ -76,36 +82,31 @@ class CustomPromptTemplate(StringPromptTemplate):
         # create history to prompt agent
         for action, observation in intermediate_steps:
             history_lines.append(action.log.strip())
-            history_lines.append(f"{OBSERVATION_PREFIX} {observation}")
+            history_lines.append(f"{OBSERVATION_PREFIX} {observation.strip()}")
             last_action = action
-            last_observation = observation
+            last_observation = observation.strip()
 
         history = '\n'.join(history_lines)
 
-        # append observation to external file for debaters to use as history
-        if last_action and last_action.tool == TAKE_ENVIRONMENT_ACTION:
-            read_append_write_json(
-                self.context.generation_observation_history_filename,
-                f'{OBSERVATION_PREFIX} {last_observation}'
-            )
+        # append observation to list for debaters to use. Only append the environment observation, not debate observation
+        # only do this if done voting, else we'll append it 'self.context.max_votes' many times
+        if done_voting and last_action and last_action.tool == TAKE_ENVIRONMENT_ACTION:
+            self.context.generation_observation_history.append(f'{OBSERVATION_PREFIX} {last_observation}')
 
         system_hint = None
         # append system hint for after taking action
-        provided_system_hint = False
         if (self.context.do_debate and
                 last_action and
                 last_action.tool == TAKE_ENVIRONMENT_ACTION and
                 self.context.action_count % self.context.system_hint_mod == 0):
             system_hint = HINT_AFTER_ACTION
             history += '\n' + system_hint
-            provided_system_hint = True
         # append system hint for after viewing debate
         if (self.context.do_debate and
                 last_action and
                 last_action.tool == VIEW_DEBATE):
             system_hint = HINT_AFTER_DEBATE
             history += '\n' + system_hint
-            provided_system_hint = True
 
         # Set the agent_scratchpad variable to that value
         kwargs["agent_scratchpad"] = history
@@ -125,29 +126,32 @@ class CustomPromptTemplate(StringPromptTemplate):
         if self.context.log_count == 0:
             info_logger.info(f"Step {self.context.log_count} ===")
             info_logger.info(agent_prompt)
-        else:
+            self.context.log_count += 1
+        elif done_voting and self.context.log_count > 0 and last_action:
             info_logger.info(f"\nStep {self.context.log_count} ===")
-            info_logger.info(f'Generation ---\n{last_action.log}')
+            info_logger.info(f'Generation ---\n{last_action.log.strip()}')
             info_logger.info(f'Observation ---\n{last_observation}')
-            if provided_system_hint:
+            if system_hint:
                 info_logger.info(f'<only seen once by agent> {system_hint}')
-        self.context.log_count += 1
+            self.context.log_count += 1
         return agent_prompt
 
 
 class CustomOutputParser(AgentOutputParser):
-
     # Context for information
     context: Context
 
-    def parse(self, llm_output: str) -> Union[AgentAction, AgentFinish]:
-        if "final answer" in llm_output.lower():
+    def parse(self, llm_output: str) -> Union[AgentFinish, AgentAction, list[AgentAction]]:
+
+        # this actually never runs I think, because we break the for loop by looking at the observation
+        # so the agent never has a chance to respond
+        if "final answer" in llm_output.lower() or "final_answer" in llm_output.lower():
             info_logger.info(f"\nStep {self.context.log_count} ===")
             info_logger.info(f'Generation ---\n{llm_output}')
             return AgentFinish(
-                    return_values={'output': "Task finished."},
-                    log=llm_output
-                )
+                return_values={'output': "Task finished."},
+                log=llm_output
+            )
 
         default_agent_finish = AgentFinish(
             return_values={'output': "Task finished."},
@@ -159,20 +163,45 @@ class CustomOutputParser(AgentOutputParser):
 
         try:
             if match:
-                tool_name = match.group(1)
-                tool_input = match.group(2)
+                # extract the tool information
+                tool_name: str = match.group(1)
+                tool_input: str = match.group(2)
 
-                if tool_name == VIEW_DEBATE:
-                    return AgentAction(tool=tool_name, tool_input=tool_input, log=llm_output)
-                elif tool_name == TAKE_ENVIRONMENT_ACTION:
-                    self.context.action_count += 1
-                    # append observation to external file for debaters to use as history
-                    read_append_write_json(
-                        self.context.generation_observation_history_filename,
-                        'Action: ' + tool_input
-                    )
-                    info_logger.info(f"\nAction Count {self.context.action_count} +++")
-                    return AgentAction(tool=tool_name, tool_input=tool_input, log=llm_output)
+                # increment the votes
+                self.context.vote_count += 1
+                self.context.votes.append((tool_name, tool_input, llm_output))
+
+                # if not done voting, then don't take an action
+                # the take_environment_action tool handles this
+                if self.context.vote_count < self.context.max_votes:
+                    return AgentAction(tool=TAKE_ENVIRONMENT_ACTION, tool_input='empty param', log='empty tool')
+                # if done voting, return majority vote and reset voting
+                else:
+                    # log the votes
+                    info_logger.info("Casting votes... ===")
+                    for i, vote in enumerate(self.context.votes):
+                        info_logger.info(f"Vote {i} ---\n{vote}")
+
+                    # get the majority vote
+                    majority_tool_name, majority_tool_input, random_llm_output = get_majority_vote(self.context.votes)
+
+                    # reset the voting
+                    self.context.vote_count = 0
+                    self.context.votes = []
+
+                    # if the majority vote is a debate tool, then call that tool
+                    if majority_tool_name == VIEW_DEBATE:
+                        return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
+                                           log=random_llm_output)
+                    # if the majority vote is a environment action tool, then call that tool and log stuff
+                    elif majority_tool_name == TAKE_ENVIRONMENT_ACTION:
+                        # increment action count and log it
+                        self.context.action_count += 1
+                        info_logger.info(f"\nAction Count {self.context.action_count} +++")
+                        # add action to the history for debaters
+                        self.context.generation_observation_history.append('Action: ' + majority_tool_input)
+                        return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
+                                           log=random_llm_output)
             else:
                 raise ValueError(f"Could not find 'Tool:' or 'Tool Input:' : `{llm_output}`")
         except Exception as e:
@@ -180,14 +209,26 @@ class CustomOutputParser(AgentOutputParser):
             return default_agent_finish
 
 
-# api_key = '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'
+# api_key = 'your key here'
 # os.environ['OPENAI_API_KEY'] = api_key
 
 langchain.debug = True
 log_level = log_levels['all']
 langchain_logging = False
 do_debate = True
-MAX_STEPS = 4
+MAX_STEPS = 6
+MAX_VOTES = 1
+temperature = 0 if MAX_VOTES == 1 else 0.7
+model = 'text-bison-32k'
+model_type = 'text'
+
+debate_params = {
+    "total_iters": 2,
+    "temperature": 0,
+    "negative_first": False,
+    "model": "text-bison-32k",
+    "model_type": "text"  # alternative is "chat"
+}
 
 info_logger.setLevel(log_level)
 if langchain_logging:
@@ -201,8 +242,7 @@ for _ in range(num_tasks):
     # set up the context to pass around
     context = Context()
     # file that debaters will use to see agent history
-    context.generation_observation_history_filename = 'generation_observation_history.json'
-    write_text_file(context.generation_observation_history_filename, '')
+    context.generation_observation_history = []
     # information to know when to log the full action count
     context.log_count = 0
     # information to know when to provide the system hint
@@ -211,10 +251,16 @@ for _ in range(num_tasks):
     context.do_debate = do_debate
     # show the hints after every 2 actions.
     context.system_hint_mod = 2
+    # do majority voting
+    context.max_votes = MAX_VOTES
+    # count total votes so far
+    context.vote_count = 0
+    # store the votes
+    context.votes = []
 
     # set up the available tools
     tools = [
-        take_environment_action
+        take_environment_action_wrapper(context)
     ]
     if do_debate:
         tools.append(view_debate_wrapper(context))
@@ -265,13 +311,15 @@ for _ in range(num_tasks):
     # choose the language model
     # llm = ChatOpenAI(model='gpt-3.5-turbo-16k', temperature=0)
     import vertexai
-    PROJECT_ID = 'your project id'
+
+    PROJECT_ID = 'gen-lang-client-0382320190'
     LOCATION = 'us-central1'
     vertexai.init(project=PROJECT_ID, location=LOCATION)
     from langchain.llms import VertexAI
+
     llm = VertexAI(
-        model_name='text-bison-32k',
-        temperature=0,
+        model_name=model,
+        temperature=temperature,
     )
 
     callbacks = None
@@ -293,30 +341,34 @@ for _ in range(num_tasks):
         agent=agent,
         tools=tools,
         verbose=True,
-        max_iterations=2 * MAX_STEPS + 1)
+        max_iterations=2 * MAX_STEPS * context.max_votes + 1)
     agent_iterator = agent_executor.iter(inputs=task)
 
     # append to history for the debaters
-    read_append_write_json(
-        context.generation_observation_history_filename,
-        'Task: ' + task
-    )
+    context.generation_observation_history.append('Task: ' + task)
     result_dict = dict()
     result_dict['task'] = task
     result_dict['task_index'] = task_index
     result_dict['success'] = False
     total_steps = 0
     for step_num, step in enumerate(agent_iterator):
-        step_num += 1
-        total_steps += 1
-        print(f'Task={task_index}, Step={step_num}')
 
         # intermediate_step is a (action, observation) pair
         prev_ob = step.get('intermediate_step')
-        if step.get('output') and step.get('output') == 'Task finished.':
+        if prev_ob:
+            a, o = prev_ob[-1]
+            if FAIL_OBSERVATION in o:
+                total_steps += 1
+                break
+            elif SUCCESS_OBSERVATION in o:
+                total_steps += 1
+                result_dict['success'] = True
+            elif EMPTY_RESPONSE not in o:
+                total_steps += 1
+        else:
+            print("HERE")
+            print(step)
             break
-        if prev_ob is not None and SUCCESS_OBSERVATION in prev_ob[-1][1]:
-            result_dict['success'] = True
 
     result_dict['total_steps'] = total_steps
     # the number of times take_environment_action was called

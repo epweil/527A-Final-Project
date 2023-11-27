@@ -1,9 +1,11 @@
 import requests
 import json
+import random
+from collections import Counter
 
 
-SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer. Use the "final_answer" tool.'
-FAIL_OBSERVATION = 'You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer. Use the "final_answer" tool.'
+SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer.'
+FAIL_OBSERVATION = 'You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer.'
 SUCCESS_ACTION = 'I have successfully completed the task.'
 FAIL_ACTION = 'I have failed to complete the task.'
 SUCCESS_THOUGHT = SUCCESS_ACTION + ' I need to inform the user of this fact.'
@@ -22,6 +24,28 @@ THOUGHT_PREFIX = 'Thought:'
 TOOL_PREFIX = 'Tool:'
 OBSERVATION_PREFIX = 'Observation:'
 
+EMPTY_RESPONSE = 'empty response'
+
+
+def get_majority_vote(votes):
+
+    tool_votes = [(tool_name, tool_input) for tool_name, tool_input, llm_output in votes]
+
+    tool_counts = Counter(tool_votes)
+
+    # Find the maximum count
+    max_count = max(tool_counts.values())
+
+    # Find all strings with the maximum count
+    most_frequent_votes = [v for v, count in tool_counts.items() if count == max_count]
+
+    # If there's only one most frequent vote it will be chosen, else break the tie randomly
+    majority_vote = most_frequent_votes[0]
+
+    # get an llm_output at random for the majority vote (this may include the preceding Thought:)
+    llm_ouputs = [thought for tool_name, tool_input, thought in votes if (tool_name, tool_input) == majority_vote]
+    random_llm_output = random.choice(llm_ouputs)
+    return (majority_vote[0], majority_vote[1], random_llm_output)
 
 def read_text_file(filename):
     with open(filename, "r") as f:
@@ -73,7 +97,7 @@ def get_next_task(max_steps, do_debate=False):
     #     formatted_examples = [insert_debates(fex) for fex in formatted_examples]
 
     # add the success observations, along with agent response.
-    t = format_tool(FINAL_ANSWER, SUCCESS_ACTION)
+    t = 'Final Answer: ' + SUCCESS_ACTION
     final_append = f'{SUCCESS_OBSERVATION}\n{THOUGHT_PREFIX} {SUCCESS_THOUGHT}\n{t}'
     formatted_examples = [f'{fex} {final_append}' for fex in formatted_examples]
 
