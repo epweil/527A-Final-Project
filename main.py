@@ -143,26 +143,30 @@ class CustomOutputParser(AgentOutputParser):
 
     def parse(self, llm_output: str) -> Union[AgentFinish, AgentAction, list[AgentAction]]:
 
-        # this actually never runs I think, because we break the for loop by looking at the observation
-        # so the agent never has a chance to respond
-        if "final answer" in llm_output.lower() or "final_answer" in llm_output.lower():
-            info_logger.info(f"\nStep {self.context.log_count} ===")
-            info_logger.info(f'Generation ---\n{llm_output}')
-            return AgentFinish(
-                return_values={'output': "Task finished."},
-                log=llm_output
-            )
-
         default_agent_finish = AgentFinish(
             return_values={'output': "Task finished."},
             log=llm_output
         )
 
-        pattern = r'Tool: (.*)\nTool Input: (.*)'
-        match = re.search(pattern, llm_output, re.DOTALL)
-
+        # first, extract the answer and append it to the votes
+        # this includes final answers, and even treats errors as an answer
         try:
-            if match:
+
+            pattern = r'Tool: (.*)\nTool Input: (.*)'
+            match = re.search(pattern, llm_output, re.DOTALL)
+
+            # if the agent wants to do a final answer
+            if "final answer" in llm_output.lower() or "final_answer" in llm_output.lower():
+                self.context.vote_count += 1
+                self.context.votes.append(('final answer', 'final answer', llm_output))
+                # info_logger.info(f"\nStep {self.context.log_count} ===")
+                # info_logger.info(f'Generation ---\n{llm_output}')
+                # return AgentFinish(
+                #     return_values={'output': "Task finished."},
+                #     log=llm_output
+                # )
+            # else, look for a tool
+            elif match:
                 # extract the tool information
                 tool_name: str = match.group(1)
                 tool_input: str = match.group(2)
@@ -170,45 +174,50 @@ class CustomOutputParser(AgentOutputParser):
                 # increment the votes
                 self.context.vote_count += 1
                 self.context.votes.append((tool_name, tool_input, llm_output))
-
-                # if not done voting, then don't take an action
-                # the take_environment_action tool handles this
-                if self.context.vote_count < self.context.max_votes:
-                    return AgentAction(tool=TAKE_ENVIRONMENT_ACTION, tool_input='empty param', log='empty tool')
-                # if done voting, return majority vote and reset voting
-                else:
-                    # log the votes
-                    info_logger.info("Casting votes... ===")
-                    for i, vote in enumerate(self.context.votes):
-                        info_logger.info(f"Vote {i} ---\n{vote}")
-
-                    # get the majority vote
-                    majority_tool_name, majority_tool_input, random_llm_output = get_majority_vote(self.context.votes)
-
-                    # reset the voting
-                    self.context.vote_count = 0
-                    self.context.votes = []
-
-                    # if the majority vote is a debate tool, then call that tool
-                    if majority_tool_name == VIEW_DEBATE:
-                        return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
-                                           log=random_llm_output)
-                    # if the majority vote is a environment action tool, then call that tool and log stuff
-                    elif majority_tool_name == TAKE_ENVIRONMENT_ACTION:
-                        # increment action count and log it
-                        self.context.action_count += 1
-                        info_logger.info(f"\nAction Count {self.context.action_count} +++")
-                        # add action to the history for debaters
-                        self.context.generation_observation_history.append('Action: ' + majority_tool_input)
-                        return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
-                                           log=random_llm_output)
-                    else:
-                        raise ValueError(f"Could not find valid tool name: `{llm_output}`")
             else:
                 raise ValueError(f"Could not find 'Tool:' or 'Tool Input:' : `{llm_output}`")
         except Exception as e:
-            info_logger.info(f'\n ERROR === \n{e}')
-            return default_agent_finish
+            self.context.vote_count += 1
+            self.context.votes.append(('error', 'error', llm_output + f'\n ERROR === \n{e}'))
+            # info_logger.info(f'\n ERROR === \n{e}')
+            # return default_agent_finish
+
+        # if not done voting, then don't take an action
+        # the take_environment_action tool handles this
+        if self.context.vote_count < self.context.max_votes:
+            return AgentAction(tool=TAKE_ENVIRONMENT_ACTION, tool_input='empty param', log='empty tool')
+        # if done voting, return majority vote and reset voting
+        else:
+            # log the votes
+            info_logger.info("Casting votes... ===")
+            for i, vote in enumerate(self.context.votes):
+                info_logger.info(f"Vote {i} ---\n{vote}")
+
+            # get the majority vote
+            majority_tool_name, majority_tool_input, random_llm_output = get_majority_vote(self.context.votes)
+
+            # reset the voting
+            self.context.vote_count = 0
+            self.context.votes = []
+
+            # if the majority vote was a final answer or an error:
+            if majority_tool_name == 'final answer' or majority_tool_name == 'error':
+                return default_agent_finish
+            # if the majority vote is a debate tool, then call that tool
+            elif majority_tool_name == VIEW_DEBATE:
+                return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
+                                   log=random_llm_output)
+            # if the majority vote is a environment action tool, then call that tool and log stuff
+            elif majority_tool_name == TAKE_ENVIRONMENT_ACTION:
+                # increment action count and log it
+                self.context.action_count += 1
+                info_logger.info(f"\nAction Count {self.context.action_count} +++")
+                # add action to the history for debaters
+                self.context.generation_observation_history.append('Action: ' + majority_tool_input)
+                return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
+                                   log=random_llm_output)
+            else:
+                raise ValueError(f"An error occurred that should never occur: `{majority_tool_name}`")
 
 
 # api_key = 'your key here'
@@ -219,7 +228,7 @@ log_level = log_levels['all']
 langchain_logging = False
 do_debate = False
 MAX_STEPS = 30
-MAX_VOTES = 5
+MAX_VOTES = 7
 temperature = 0 if MAX_VOTES == 1 else 0.7
 model = 'text-bison-32k'
 model_type = 'text'
@@ -237,7 +246,7 @@ if langchain_logging:
     handler = FileCallbackHandler(debug_filename)
 
 results = []
-num_tasks = 134  # 134
+num_tasks = 1  # 134
 
 
 run_title = f'no debate. Max steps: {MAX_STEPS}. Max votes: {MAX_VOTES}. model: {model}'
