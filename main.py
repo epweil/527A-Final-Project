@@ -217,7 +217,7 @@ log_level = log_levels['all']
 langchain_logging = False
 do_debate = False
 MAX_STEPS = 30
-MAX_VOTES = 1
+MAX_VOTES = 5
 temperature = 0 if MAX_VOTES == 1 else 0.7
 model = 'text-bison-32k'
 model_type = 'text'
@@ -238,7 +238,7 @@ results = []
 num_tasks = 134  # 134
 
 
-run_title = f'no debate no majority vote. Max steps: {MAX_STEPS}'
+run_title = f'no debate. Max steps: {MAX_STEPS}. Max votes: {MAX_VOTES}. model: {model}'
 for _ in range(num_tasks):
 
     # set up the context to pass around
@@ -269,6 +269,7 @@ for _ in range(num_tasks):
 
     # load the examples and task from ALFWorld
     examples, task, task_index = get_next_task(MAX_STEPS, do_debate=do_debate)
+    print(f'Task index: {task_index}')
     examples_str = '\n\n'.join([f'Example {i + 1}:\n{ex}' for i, ex in enumerate(examples)])
     examples_str = examples_str.replace('{', '{{').replace('}', '}}')
     info_logger.info(f'\n\n\n\n\n\n\n\n\nTask index: {task_index}')
