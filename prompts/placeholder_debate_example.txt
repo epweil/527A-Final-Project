@@ -1,14 +1,6 @@
-Thought: I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.
-Tool:
-```
-{
-  "tool": "view_debate",
-  "tool_input": {
-    "problem": "The description of the problem",
-    "proposed_solution": "Your current proposed solution"
-  }
-}
-```
-Observation:AI affirm: An argument for why the proposed solution above is the best.
-AI negative: An argument for why the proposed solution is NOT the best.
-Thought: Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).
+Thought: <I have an action in mind, but I'm not sure if it's the best one. To get a better understanding of my situation, it would help to view a debate.>
+Tool: view_debate
+Tool Input: <The description of the problem followed by your current proposed solution.>
+Observation: <AI affirm: An argument for why the proposed solution above is the best.
+AI negative: An argument for why the proposed solution is NOT the best.>
+Thought: <Taking into consideration the arguments above, I have decided to (keep/change) my action because of (reasoning referencing the arguments given).>
