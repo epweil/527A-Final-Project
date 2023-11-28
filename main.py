@@ -53,6 +53,7 @@ class Context(BaseModel):
     generation_observation_history: List[str] = []
     log_count: int = 0
     action_count: int = 0
+    debate_count: int = 0
     do_debate: bool = False
     system_hint_mod: int = 2
     max_votes: int = 1
@@ -205,6 +206,7 @@ class CustomOutputParser(AgentOutputParser):
                 return default_agent_finish
             # if the majority vote is a debate tool, then call that tool
             elif majority_tool_name == VIEW_DEBATE:
+                self.context.debate_count += 1
                 return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
                                    log=random_llm_output)
             # if the majority vote is a environment action tool, then call that tool and log stuff
@@ -238,7 +240,8 @@ debate_params = {
     "temperature": 0,
     "negative_first": False,
     "model": "text-bison-32k",
-    "model_type": "text"  # alternative is "chat"
+    "model_type": "text",  # alternative is "chat"
+    "logger": info_logger
 }
 
 info_logger.setLevel(log_level)
@@ -261,10 +264,12 @@ for _ in range(num_tasks):
     context.log_count = 0
     # information to know when to provide the system hint
     context.action_count = 0
+    # count the number of debates
+    context.debate_count = 0
     # only display the system hints if do_debate is true
     context.do_debate = do_debate
-    # show the hints after every 2 actions.
-    context.system_hint_mod = 2
+    # show the hints after every x many actions.
+    context.system_hint_mod = 15
     # do majority voting
     context.max_votes = MAX_VOTES
     # count total votes so far

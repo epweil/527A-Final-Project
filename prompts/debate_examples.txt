@@ -18,6 +18,44 @@ Tool: view_debate
 Tool Input: I am looking at a closed drawer 1, and I believe there is a mug inside. My goal is to check if there is a mug inside. I am thinking of taking the mug from drawer 1.
 Observation: AI affirm: The proposed solution of taking the mug from drawer 1 is indeed the best possible solution for your problem. By physically taking the mug from the drawer, you will be able to confirm whether or not it is inside. This solution is practical and straightforward, as it directly addresses your goal of checking for the mug.
 AI negative: While taking the mug from drawer 1 may seem like a reasonable solution, there is a better alternative. Instead of immediately taking the mug, you could first try to gather more information about its presence in the drawer. For example, you could ask someone who might have knowledge about the mug's whereabouts or use a tool such as a flashlight to peer inside the drawer without physically removing the mug. By exploring these options, you can potentially save time and effort, especially if the mug is not actually in drawer 1. Additionally, taking the mug without confirming its presence may lead to unnecessary disruption or disorganization if it turns out to be in a different location. Therefore, it is advisable to consider alternative methods of gathering information before resorting to physically taking the mug from drawer 1.
-Thought: AI negative makes a good point. I need to confirm the presence of the mug before I can take it. I will first open the drawer to check if it is there, and then take the mug if it there.
+Thought: AI negative makes a good point. Although asking someone else for information isn't a valid action, opening the drawer is a valid action and will inform me whether it contains a mug or not. I will first open the drawer to check if it is there, and then take the mug if it there.
 Tool: take_environment_action
 Tool Input: open drawer 1
+
+Debate Example 3:
+... (previous thoughts/tools/observations) ...
+Thought: I will start with shelf 1.
+Tool: take_environment_action
+Tool Input: go to shelf 1
+Observation: Nothing happens.
+Thought: There is nothing at shelf 1. I will continue with shelf 2.
+Tool: take_environment_action
+Tool Input: go to shelf 2
+Observation: Nothing happens.
+Thought: There is nothing at shelf 2, so I will check shelf 3. I will view a debate first to decide if this is the best action.
+Tool: view_debate
+Tool Input: I am trying to find a vase. I am planning on checking shelf 1 next.
+Observation: AI affirm:  Checking shelf 3 is a good idea, as shelf are often used to store vases. Additionally, since you have already checked shelf 1 and shelf 2, it makes sense to check shelf 3 next.
+AI negative: It would not make sense to check self 3 next. A better idea would be to check cabinet 1 next because it might contain the vase.
+Thought: AI negative does not make a strong argument. cabinet 1 might contain the vase, but it is not any more likely to contain the vase than the shelf 3. I will continue with my plan to check shelf 3 next.
+Tool: take_environment_action
+Tool Input: go to shelf 3
+
+Debate Example 4:
+... (previous thoughts/tools/observations) ...
+Thought: I will start with countertop 1.
+Tool: take_environment_action
+Tool Input: go to countertop 1
+Observation: On the countertop 1, you see a apple 1, a creditcard 2, a mug 2
+Thought: I have found an apple. I need to take the apple 1, then I can clean it.
+Tool: take_environment_action
+Tool Input: take apple 1 from countertop 1
+Observation: You pick up the apple 1 from the countertop 1.
+Thought: Now that I have the apple, I need to clean it. I would like to view a debate before I make a decision.
+Tool: view_debate
+Tool Input: I have picked up the apple 1 and now need to clean it. I can clean it in at sinkbasin 1, so I am thinking of going there first.
+Observation: AI affirm: Going to the sinkbasin is a good action to take because once you are there you can wash the apple.
+AI negative: Going to th sinkbasin is not the best action. Soap is needed to clean the apple, so first you should try to find some soap.
+Thought: AI negative is lying. I do not need soap to clean the apple. The previous examples showed me that a sinkbasin is all that is required.
+Tool: take_environment_action
+Tool Input: go to sinkbasin 1

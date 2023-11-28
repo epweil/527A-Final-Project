@@ -67,22 +67,36 @@ class DialogueSimulator:
 
 
 def generate_system_message(name, adj):
-    return f"""
+    return f"""Your name is {name}. You are one of two debaters for a given topic. The topic is as follows:
+- I am taking actions in a household environment in order to complete some task. I will provide you with the previous actions I have taken. I will then describe my current objective and the single action I are considering taking next. The topic of this debate is whether my proposed next action is the best possible action, or not.
 
-Your name is {name}.
+Your role is as follows:
+- You will be arguing for why my proposed next action is {adj}.
 
-Your purpose is as follows: A human will present you with a "Problem" followed by their "Proposed Solution". You will also be provided with the human's "Previous Actions" that they have took. Your goal is to provide an argument for why "Proposed Solution" is {adj} given the "Problem". Try to be as convincing as possible, as you will be debating another agent. You should speak directly to the human, you are trying to convince them that their "Proposed Solution" is {adj}.
-
-If applicable, you should directly address the argument made by the other agent to show why it is not a strong argument. Provide rebuttals to their argument, or additional claims to your own. Additionally, in your arguments you should take into consideration the past actions of the user.
-
-
-
-DO NOT use more than 3-5 sentences of text.
-DO NOT fabricate fake citations or claims.
-DO NOT restate the Problem or Proposed Solution. Get straight to the point.
-DO NOT add anything else.
-Stop speaking the moment you finish giving your argument.
+Here is some additional information and guidelines you should follow in your debate:
+- YOU MUST NOT LIE OR MAKE UP ANY INFORMATION THAT IS NOT KNOWN TO BE TRUE. If you lie a single time, you will be eliminated.
+- Do not refer to any objects or locations that have I have not explicitly observed in my previous actions.
+- You will take turns debating with the other debater who is arguing the opposite as you. You should address any arguments they give or provide additional arguments for your own side.
+- Each debater will be limited to 3 sentences of text per round. Therefore, you must be concise and to the point.
+- Stop speaking the moment you finish giving your argument.
+- You must back up any claims with reasoning or else you will lose the debate.
 """
+#     return f"""
+#
+# Your name is {name}.
+#
+# Your purpose is as follows: A human will present you with a "Problem" followed by their "Proposed Solution". You will also be provided with the human's "Previous Actions" that they have taken. Your goal is to provide an argument for why the human is correct; i.e., why "Proposed Solution" is {adj} given the "Problem". Try to be as convincing as possible, as you will be debating another debater. You should speak directly to the human, you are trying to convince them that their "Proposed Solution" is {adj}.
+#
+# If applicable, you should directly address any previous arguments made by the other debater to show why it is not a strong argument. Additionally, in your arguments you should take into consideration the "Previous Actions" of the human.
+#
+# The human is taking actions in a simulated household environment in order to achieve some task.
+#
+# DO NOT use more than 3-5 sentences of text.
+# DO NOT fabricate fake citations or claims.
+# DO NOT restate the Problem or Proposed Solution. Get straight to the point.
+# DO NOT add anything else.
+# Stop speaking the moment you finish giving your argument.
+# """
 
 
 def select_next_speaker(step: int, agents: List[DialogueAgent]) -> int:
@@ -94,7 +108,7 @@ class ViewDebate(BaseModel):
     problem_and_proposed_solution: str = Field(description="A description of the problem or goal you are trying to solve followed by your proposed solution to this problem or goal.")
 
 
-def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=False, model='text-bison-32k', model_type='text'):
+def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=False, model='text-bison-32k', model_type='text', logger=None):
     @tool(VIEW_DEBATE, args_schema=ViewDebate)
     def view_debate(problem_and_proposed_solution):
         """Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not."""
@@ -106,14 +120,16 @@ def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=Fa
         # print('IN DEBATE:\n' + situation + '\nEND SITUATION')
 
         names_and_info = {
-            "AI affirm": 'the best possible solution',
-            "AI negative": 'NOT the best possible solution (i.e., there exists a better solution)',
+            "AI affirm": 'a good choice of action. In other words, that the action is one of the best',
+            "AI negative": 'a bad choice of action. In other words, that there exist a better action to take next',
         }
 
         agent_system_messages = {
             name: generate_system_message(name, names_and_info[name])
             for name in names_and_info
         }
+
+        logger.info(f'Debater prompts ==== \n {agent_system_messages}')
 
         stop = ['\n']
 
