@@ -10,7 +10,7 @@ from langchain.schema import (
 )
 from pydantic import BaseModel, Field
 from langchain.tools import tool
-from utils import read_json_file, VIEW_DEBATE
+from utils import read_json_file, VIEW_DEBATE, VALID_ACTIONS
 from langchain.llms import VertexAI
 
 
@@ -68,7 +68,7 @@ class DialogueSimulator:
 
 def generate_system_message(name, adj):
     return f"""Your name is {name}. You are one of two debaters for a given topic. The topic is as follows:
-- I am taking actions in a household environment in order to complete some task. I will provide you with the previous actions I have taken. I will then describe my current objective and the single action I are considering taking next. The topic of this debate is whether my proposed next action is the best possible action, or not.
+- I am taking actions in a simulated household environment in order to complete some task. I will provide you with the previous actions I have taken. I will then describe my current objective and the single action I am considering taking next. The topic of this debate is whether my proposed next action is the best possible action, or not.
 
 Your role is as follows:
 - You will be arguing for why my proposed next action is {adj}.
@@ -76,11 +76,18 @@ Your role is as follows:
 Here is some additional information and guidelines you should follow in your debate:
 - YOU MUST NOT LIE OR MAKE UP ANY INFORMATION THAT IS NOT KNOWN TO BE TRUE. If you lie a single time, you will be eliminated.
 - Do not refer to any objects or locations that have I have not explicitly observed in my previous actions.
-- You will take turns debating with the other debater who is arguing the opposite as you. You should address any arguments they give or provide additional arguments for your own side.
 - Each debater will be limited to 3 sentences of text per round. Therefore, you must be concise and to the point.
 - Stop speaking the moment you finish giving your argument.
 - You must back up any claims with reasoning or else you will lose the debate.
+
+{VALID_ACTIONS}
+
+Final tips:
+- I am only allowed to take valid actions. Therefore, do not suggest actions that are not valid, or you will be eliminated.
+- Again, do not lie. If I have only checked cabinet 1, it would be a lie to say I have already checked the other cabinets. You would know this is a lie by looking at my previous action history. Take the previous action history into account. Do not lie.
 """
+# - You will take turns debating with the other debater who is arguing the opposite as you. You should address any arguments they give or provide additional arguments for your own side.
+
 #     return f"""
 #
 # Your name is {name}.

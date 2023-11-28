@@ -26,7 +26,7 @@ OBSERVATION_PREFIX = 'Observation:'
 
 EMPTY_RESPONSE = 'empty response'
 
-VALID_ACTIONS = 'Recall: These are the only valid actions you can take in the environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
+VALID_ACTIONS = 'Recall: The following are the only valid actions allowed in the simulated household environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
 # go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X
 
 

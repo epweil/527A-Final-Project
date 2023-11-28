@@ -95,6 +95,7 @@ class CustomPromptTemplate(StringPromptTemplate):
             self.context.generation_observation_history.append(f'{OBSERVATION_PREFIX} {last_observation}')
 
         system_hint = None
+        valid_action_hint = None
         # append system hint for after taking action
         if (self.context.do_debate and
                 last_action and
@@ -108,6 +109,9 @@ class CustomPromptTemplate(StringPromptTemplate):
                 last_action.tool == VIEW_DEBATE):
             system_hint = HINT_AFTER_DEBATE
             history += '\n' + system_hint
+            # append system hint that reminds
+            valid_action_hint = VALID_ACTIONS
+            history += '\n' + valid_action_hint
 
         # Set the agent_scratchpad variable to that value
         kwargs["agent_scratchpad"] = history
@@ -134,6 +138,8 @@ class CustomPromptTemplate(StringPromptTemplate):
             info_logger.info(f'Observation ---\n{last_observation}')
             if system_hint:
                 info_logger.info(f'<only seen once by agent> {system_hint}')
+            if valid_action_hint:
+                info_logger.info(f'<only seen once by agent> {valid_action_hint}')
             self.context.log_count += 1
         return agent_prompt
 
