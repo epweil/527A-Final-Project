@@ -246,7 +246,12 @@ if langchain_logging:
     handler = FileCallbackHandler(debug_filename)
 
 results = []
-num_tasks = 134  # 134
+num_tasks = 1  # 134
+
+start_from_task = 134
+for _ in range(1, start_from_task):
+    print(_)
+    get_next_task(MAX_STEPS)
 
 
 run_title = f'do_debate={do_debate} Max steps: {MAX_STEPS}. Max votes: {MAX_VOTES}. model: {model}. Debate params: {debate_params}'
