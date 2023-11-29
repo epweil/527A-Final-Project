@@ -17,14 +17,17 @@ VIEW_DEBATE = 'view_debate'
 FINAL_ANSWER = 'final_answer'
 FINAL_ANSWER_PARAM1 = 'answer'
 
-HINT_AFTER_DEBATE = 'System note: Be aware that AI affirm or AI negative could lie to you. For example, the only valid actions you can take are the ones you have previously seen, such as "go to". Do not try to ask another person for information.'
-HINT_AFTER_ACTION = f'System hint: You can use the "{VIEW_DEBATE}" tool to get a better understanding of your situation and best action.'
+HINT_AFTER_DEBATE = 'System note: Be aware that AI affirm or AI negative may lie to you. For example, the only valid actions you can take are the ones you have previously seen, such as "go to", "open", etc. Do not try to ask another person for information. The debaters do not know what valid actions you have access to. You MUST refer to the Example 1 and Example 2 to determine what are valid actions you can take. '
+HINT_AFTER_ACTION = f'System hint: You can use the "{VIEW_DEBATE}" tool to get a better understanding of your situation and best action. You must output a "Thought:" first, then you can use the "{VIEW_DEBATE}" tool.'
 
 THOUGHT_PREFIX = 'Thought:'
 TOOL_PREFIX = 'Tool:'
 OBSERVATION_PREFIX = 'Observation:'
 
 EMPTY_RESPONSE = 'empty response'
+
+VALID_ACTIONS = 'Recall: These are the only valid actions you can take in the environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
+# go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X
 
 
 def get_majority_vote(votes):
