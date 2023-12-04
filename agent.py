@@ -68,6 +68,7 @@ class Context(BaseModel):
     vote_count: int = 0
     votes: List[Tuple[str, str, str]] = []
     info_logger: Any = None
+    token_count: int = 0
 
 
 class CustomPromptTemplate(StringPromptTemplate):
@@ -150,6 +151,7 @@ class CustomPromptTemplate(StringPromptTemplate):
             if valid_action_hint:
                 self.context.info_logger.info(f'<only seen once by agent> {valid_action_hint}')
             self.context.log_count += 1
+        self.context.token_count += tokens(agent_prompt)
         return agent_prompt
 
 
@@ -158,6 +160,8 @@ class CustomOutputParser(AgentOutputParser):
     context: Context
 
     def parse(self, llm_output: str) -> Union[AgentFinish, AgentAction, list[AgentAction]]:
+
+        self.context.token_count += tokens(llm_output)
 
         default_agent_finish = AgentFinish(
             return_values={'output': "Task finished."},
@@ -284,6 +288,8 @@ def run_experiment(exp):
         context.votes = []
         # expose the logger
         context.info_logger = info_logger
+        # count the tokens
+        context.token_count = 0
 
         # set up the available tools
         tools = [
@@ -379,6 +385,7 @@ def run_experiment(exp):
                 a, o = prev_ob[-1]
                 if not o:
                     break
+                c = llm.get_num_tokens(o)
                 if FAIL_OBSERVATION in o:
                     total_steps += 1
                     break
@@ -396,6 +403,7 @@ def run_experiment(exp):
         result_dict['total_steps'] = total_steps
         # the number of times take_environment_action was called
         result_dict['total_actions'] = context.action_count
+        result_dict['token_count'] = context.token_count
         results.append(result_dict)
 
         # save the results every time, so we don't lose anything

@@ -2,6 +2,7 @@ import requests
 import json
 import random
 from collections import Counter
+import tiktoken
 
 
 SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer.'
@@ -28,6 +29,10 @@ EMPTY_RESPONSE = 'empty response'
 
 VALID_ACTIONS = 'Recall: The following are the only valid actions allowed in the simulated household environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
 # go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X
+
+
+def tokens(text):
+    return len(tiktoken.get_encoding('cl100k_base').encode(text))
 
 
 def get_majority_vote(votes):

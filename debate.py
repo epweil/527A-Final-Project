@@ -10,23 +10,27 @@ from langchain.schema import (
 )
 from pydantic import BaseModel, Field
 from langchain.tools import tool
-from utils import read_json_file, VIEW_DEBATE, VALID_ACTIONS
+from utils import read_json_file, VIEW_DEBATE, VALID_ACTIONS, tokens
 from langchain.llms import VertexAI
 
 
 class DialogueAgent:
-    def __init__(self, name: str, system_message: SystemMessage, model: ChatOpenAI, stop: List[str]) -> None:
+    def __init__(self, name: str, system_message: SystemMessage, model, stop: List[str], context) -> None:
         self.name = name
         self.system_message = system_message
         self.model = model
         self.prefix = f"{self.name}: "
         self.stop = stop
+        self.context = context
 
     def reset(self):
         self.message_history = ["Here is the conversation so far."]
 
     def send(self) -> str:
-        message = self.model(self.system_message + '\n' + "\n".join(self.message_history + [self.prefix]))
+        input = self.system_message + '\n' + "\n".join(self.message_history + [self.prefix])
+        self.context.token_count += tokens(input)
+        message = self.model(input)
+        self.context.token_count += tokens(message)
         return message
 
     def receive(self, name: str, message: str) -> None:
@@ -153,13 +157,15 @@ def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=Fa
                 name="AI affirm",
                 system_message=agent_system_messages["AI affirm"],
                 model=affirm_llm,
-                stop=stop
+                stop=stop,
+                context=context
             ),
             DialogueAgent(
                 name="AI negative",
                 system_message=agent_system_messages["AI negative"],
                 model=negative_llm,
-                stop=stop
+                stop=stop,
+                context=context
             )
         ]
 

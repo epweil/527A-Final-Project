@@ -14,13 +14,13 @@ vertexai.init(project=PROJECT_ID, location=LOCATION)
 Define global parameters to use for all experiments
 """
 
-MAX_STEPS = 30
+MAX_STEPS = 3
 agent_model = 'text-bison-32k'
 debate_model = 'text-bison-32k'
 langchain_debug = False
 langchain_verbose = False
 start_task = 1
-num_tasks = 134 # 134 is maximum
+num_tasks = 2 # 134 is maximum
 
 
 """

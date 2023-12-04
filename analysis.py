@@ -9,8 +9,11 @@ def get_single_results_stats(results_filename):
     total_steps_when_success = 0
     total_tasks = 0
 
+    total_tokens = 0
+
     for res in results:
         total_tasks += 1
+        total_tokens += res['token_count']
         success = res['success']
         total_actions = res['total_actions']
         if success:
@@ -19,8 +22,9 @@ def get_single_results_stats(results_filename):
 
     acc = success_count / total_tasks
     avg_steps_when_success = -1 if success_count == 0 else total_steps_when_success / success_count
+    avg_tokens = total_tokens / total_tasks
 
-    return acc, avg_steps_when_success
+    return acc, avg_steps_when_success, total_tokens, avg_tokens, total_tasks, success_count
 
 
 helper_dict = {
@@ -94,30 +98,37 @@ if __name__ == '__main__':
     """
     Uncomment if you want to view stats on a single file
     """
-    # timestamp = '2023-12-04_06-22-23'
-    # filename = f'./results/{timestamp}/results_{timestamp}.json'
-    # accuracy, avg_steps = get_single_results_stats(filename)
-    # print('=====================================================')
-    # print(f'Accuracy - {accuracy}, Avg Steps - {avg_steps}')
+    timestamp = '2023-12-04_09-04-02'
+    filename = f'./results/{timestamp}/results_{timestamp}.json'
+    accuracy, avg_steps, total_tokens, avg_tokens, total_tasks, success_count = get_single_results_stats(filename)
+    print('=====================================================')
+    print(timestamp)
+    print(f'Accuracy - {accuracy}, Avg steps - {avg_steps}, Total tokens - {total_tokens}, Avg tokens - {avg_tokens}, Total tasks - {total_tasks}, Success count - {success_count}')
 
 
     """
     Uncomment if you want to view stats between 2 files
     """
-    # a_timestamp = '2023-12-04_06-22-23'
-    # b_timestamp = '2023-12-04_06-24-34'
-    # a_filename = f'./results/{a_timestamp}/results_{a_timestamp}.json'
-    # b_filename = f'./results/{b_timestamp}/results_{b_timestamp}.json'
-    # a_stats, b_stats, both_stats = get_pair_results_stats(a_filename, b_filename)
-    #
-    # print('=====================================================')
-    # print(f'(a) Description - {a_stats["description"]}')
-    # print(f'(a) Success count - {a_stats["success_count"]}, Failure count - {a_stats["failure_count"]}')
-    # print(f'(b) Description - {b_stats["description"]}')
-    # print(f'(b) Success count - {b_stats["success_count"]}, Failure count - {b_stats["failure_count"]}')
-    # print(f'(BOTH) ---')
-    # for v in helper_dict.values():
-    #     print(f'{v} - {both_stats[v]}')
+    a_timestamp = '2023-12-04_09-04-02'
+    b_timestamp = '2023-12-04_09-04-40'
+    a_filename = f'./results/{a_timestamp}/results_{a_timestamp}.json'
+    b_filename = f'./results/{b_timestamp}/results_{b_timestamp}.json'
+    a_accuracy, a_avg_steps, a_total_tokens, a_avg_tokens, a_total_tasks, _ = get_single_results_stats(a_filename)
+    b_accuracy, b_avg_steps, b_total_tokens, b_avg_tokens, b_total_tasks, _ = get_single_results_stats(b_filename)
+    a_stats, b_stats, both_stats = get_pair_results_stats(a_filename, b_filename)
+
+    print('=====================================================')
+    print(f'(a) {timestamp}')
+    print(f'(a) Description - {a_stats["description"]}')
+    print(f'(a) Success count - {a_stats["success_count"]}, Failure count - {a_stats["failure_count"]}')
+    print(f'(a) Accuracy - {a_accuracy}, Avg steps - {a_avg_steps}, Total tokens - {a_total_tokens}, Avg tokens - {a_avg_tokens}, Total tasks - {a_total_tasks}')
+    print(f'(b) {timestamp}')
+    print(f'(b) Description - {b_stats["description"]}')
+    print(f'(b) Success count - {b_stats["success_count"]}, Failure count - {b_stats["failure_count"]}')
+    print(f'(b) Accuracy - {b_accuracy}, Avg steps - {b_avg_steps}, Total tokens - {b_total_tokens}, Avg tokens - {b_avg_tokens}, Total tasks - {b_total_tasks}')
+    print(f'(BOTH) ---')
+    for v in helper_dict.values():
+        print(f'{v} - {both_stats[v]}')
 
 
 
