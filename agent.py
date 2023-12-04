@@ -230,6 +230,7 @@ class CustomOutputParser(AgentOutputParser):
 def run_experiment(exp):
     description = exp['description']
     langchain.debug = exp['langchain.debug']
+    langchain_verbose = exp['langchain_verbose']
     log_level = log_levels['all']
     langchain_logging = False
     do_debate = exp['do_debate']
@@ -356,7 +357,7 @@ def run_experiment(exp):
         agent_executor = AgentExecutor.from_agent_and_tools(
             agent=agent,
             tools=tools,
-            verbose=True,
+            verbose=langchain_verbose,
             max_iterations=2 * MAX_STEPS * context.max_votes + 1)
         agent_iterator = agent_executor.iter(inputs=task)
 
