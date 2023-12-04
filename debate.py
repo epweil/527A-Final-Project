@@ -185,4 +185,3 @@ def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=Fa
         return "\n".join(debate_history)
 
     return view_debate
-

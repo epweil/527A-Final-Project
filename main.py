@@ -236,7 +236,7 @@ log_level = log_levels['all']
 langchain_logging = False
 do_debate = True
 MAX_STEPS = 30
-MAX_VOTES = 1
+MAX_VOTES = 5
 temperature = 0 if MAX_VOTES == 1 else 0.7
 model = 'text-bison-32k'
 model_type = 'text'
