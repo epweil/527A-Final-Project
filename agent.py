@@ -229,80 +229,6 @@ class CustomOutputParser(AgentOutputParser):
                 raise ValueError(f"An error occurred that should never occur: `{majority_tool_name}`")
 
 
-class CustomCallbackHandler(BaseCallbackHandler):
-    def on_llm_start(
-        self, serialized: Dict[str, Any], prompts: List[str], **kwargs: Any
-    ) -> Any:
-        """Run when LLM starts running."""
-        print("HERE55")
-
-    def on_chat_model_start(
-        self, serialized: Dict[str, Any], messages: List[List[BaseMessage]], **kwargs: Any
-    ) -> Any:
-        """Run when Chat Model starts running."""
-        print("HERE44")
-
-    def on_llm_new_token(self, token: str, **kwargs: Any) -> Any:
-        """Run on new LLM token. Only available when streaming is enabled."""
-        print("HERE33")
-
-    def on_llm_end(self, response: LLMResult, **kwargs: Any) -> Any:
-        """Run when LLM ends running."""
-        print("HERE22")
-
-    def on_llm_error(
-        self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
-    ) -> Any:
-        """Run when LLM errors."""
-        print("HERE11")
-
-    def on_chain_start(
-        self, serialized: Dict[str, Any], inputs: Dict[str, Any], **kwargs: Any
-    ) -> Any:
-        """Run when chain starts running."""
-        print("HERE9")
-
-    def on_chain_end(self, outputs: Dict[str, Any], **kwargs: Any) -> Any:
-        """Run when chain ends running."""
-        print("HERE8")
-
-    def on_chain_error(
-        self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
-    ) -> Any:
-        """Run when chain errors."""
-        print("HERE7")
-
-    def on_tool_start(
-        self, serialized: Dict[str, Any], input_str: str, **kwargs: Any
-    ) -> Any:
-        """Run when tool starts running."""
-        print("HERE6")
-
-    def on_tool_end(self, output: str, **kwargs: Any) -> Any:
-        """Run when tool ends running."""
-        print("HERE5")
-
-    def on_tool_error(
-        self, error: Union[Exception, KeyboardInterrupt], **kwargs: Any
-    ) -> Any:
-        """Run when tool errors."""
-        print("HERE4")
-
-    def on_text(self, text: str, **kwargs: Any) -> Any:
-        """Run on arbitrary text."""
-        print("HERE3")
-
-    def on_agent_action(self, action: AgentAction, **kwargs: Any) -> Any:
-        """Run on agent action."""
-        print("HERE2")
-
-    def on_agent_finish(self, finish: AgentFinish, **kwargs: Any) -> Any:
-        """Run on agent end."""
-        print("HERE1")
-
-
-
-
 def run_experiment(exp):
     description = exp['description']
     langchain.debug = exp['langchain.debug']
@@ -408,17 +334,15 @@ def run_experiment(exp):
             # This includes the `intermediate_steps` variable because that is needed
             input_variables=["input", "intermediate_steps"],
             context=context,
-            callbacks=[CustomCallbackHandler()]
         )
 
         llm = VertexAI(
             model_name=model,
             temperature=temperature,
-            callbacks=[CustomCallbackHandler()],
             max_output_tokens=256,
         )
 
-        callbacks = [CustomCallbackHandler()]
+        callbacks = []
         if langchain_logging:
             callbacks.append(handler)
         llm_chain = LLMChain(
@@ -431,16 +355,14 @@ def run_experiment(exp):
             output_parser=CustomOutputParser(context=context),
             stop=[f"\n{OBSERVATION_PREFIX}"],
             allowed_tools=[tool.name for tool in tools],
-            callbacks=[CustomCallbackHandler()]
         )
 
         agent_executor = AgentExecutor.from_agent_and_tools(
             agent=agent,
             tools=tools,
             verbose=langchain_verbose,
-            max_iterations=2 * MAX_STEPS * context.max_votes + 1,
-            callbacks=[CustomCallbackHandler()])
-        agent_iterator = agent_executor.iter(inputs=task, callbacks=[CustomCallbackHandler()])
+            max_iterations=2 * MAX_STEPS * context.max_votes + 1)
+        agent_iterator = agent_executor.iter(inputs=task)
 
         # append to history for the debaters
         context.generation_observation_history.append('Task: ' + task)
