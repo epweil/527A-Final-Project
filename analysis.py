@@ -8,7 +8,6 @@ def get_single_results_stats(results_filename):
     success_count = 0
     total_steps_when_success = 0
     total_tasks = 0
-
     total_tokens = 0
 
     for res in results:

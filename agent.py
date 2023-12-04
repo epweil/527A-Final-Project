@@ -385,7 +385,6 @@ def run_experiment(exp):
                 a, o = prev_ob[-1]
                 if not o:
                     break
-                c = llm.get_num_tokens(o)
                 if FAIL_OBSERVATION in o:
                     total_steps += 1
                     break
