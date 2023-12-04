@@ -1,0 +1,29 @@
+{
+  "description": "The baseline majority vote agent.",
+  "params": {
+    "description": "The baseline majority vote agent.",
+    "do_debate": false,
+    "MAX_VOTES": 5,
+    "MAX_STEPS": 3,
+    "agent_model": "text-bison-32k",
+    "num_tasks": 2,
+    "start_task": 1,
+    "langchain.debug": true
+  },
+  "results": [
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put some vase on safe.",
+      "task_index": 1,
+      "success": false,
+      "total_steps": 3,
+      "total_actions": 3
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool mug in coffeemachine.",
+      "task_index": 2,
+      "success": false,
+      "total_steps": 3,
+      "total_actions": 3
+    }
+  ]
+}

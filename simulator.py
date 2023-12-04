@@ -152,6 +152,12 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(response_data.encode('utf-8'))
 
             print(f'Task: {task}')
+        elif parsed_url.path == '/reset_tasks':
+            Handler.simulator.init_env()
+            print('Reset tasks!')
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
         else:
             self.send_response(404)
             self.send_header('Content-type', 'text/plain')

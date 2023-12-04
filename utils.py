@@ -107,6 +107,9 @@ def get_next_task(max_steps, do_debate=False):
     return formatted_examples, formatted_task, task_index
 
 
+def reset_tasks():
+    url = 'http://localhost:8000/reset_tasks'
+    requests.get(url)
 
 
 def format_prompt(prompt):

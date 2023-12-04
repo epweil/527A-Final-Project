@@ -1,7 +1,6 @@
 Use "Tool:" and "Tool Input:" to specify a tool by providing a tool (tool name) and the tool's argument. Here are the valid tool names you are able to use: {tool_names}. Their descriptions and arguments are listed below:
 
-take_environment_action: take_environment_action(action: str) -> float - Useful for when you want to take an action in the household environment. Argument: action - The action to take.
-view_debate: view_debate(problem_and_proposed_solution) - Use this tool to view a debate on whether your action is the best or not. You should use this tool to get a better understanding about the best solution to your problem. You will receive a dialogue between 2 debaters who are arguing whether your proposed action is best or not. Argument: problem_and_proposed_solution - A description of the problem or goal you are trying to solve followed by your proposed solution to this problem or goal.
+{tools}
 
 To use one of the tools listed above, you must specify them using the following format:
 
@@ -27,7 +26,3 @@ Observation: <an observation>
 Final Answer: <your final answer to the user>
 
 In summary, you will respond with "Thought:" followed by your thoughts about what tool to use and what argument to pass in. Next, you will respond with "Tool:" followed by a tool name, then "Tool Input:" followed by the argument you want to use. Finally, you will get back "Observation:" followed by the output of the tool. You MUST follow this exact format at all times. Thought/Tool/Observation.
-
-
-
-

@@ -140,7 +140,6 @@ def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=Fa
 
         stop = ['\n']
 
-
         if model_type == 'text':
             affirm_llm = VertexAI(model_name=model, temperature=temperature)
             negative_llm = VertexAI(model_name=model, temperature=temperature)
@@ -178,7 +177,7 @@ def view_debate_wrapper(context, total_iters=2, temperature=0, negative_first=Fa
         debate_history = []
         for _ in range(total_iters):
             # time.sleep(5)
-            print(_)
+            # print(_)
             name, message = simulator.step()
             debate_history.append(f"{name}: {message}".strip())
 
