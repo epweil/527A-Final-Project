@@ -81,35 +81,43 @@ def get_pair_results_stats(fna, fnb):
 
     return a_stats, b_stats, both_stats
 
+
+
+
+"""
+ENTER YOUR TIMESTAMPS IN THE CODE BELOW
+"""
+
+
 if __name__ == '__main__':
 
     """
     Uncomment if you want to view stats on a single file
     """
-    timestamp = '2023-12-04_06-22-23'
-    filename = f'./results/{timestamp}/results_{timestamp}.json'
-    accuracy, avg_steps = get_single_results_stats(filename)
-    print('=====================================================')
-    print(f'Accuracy - {accuracy}, Avg Steps - {avg_steps}')
+    # timestamp = '2023-12-04_06-22-23'
+    # filename = f'./results/{timestamp}/results_{timestamp}.json'
+    # accuracy, avg_steps = get_single_results_stats(filename)
+    # print('=====================================================')
+    # print(f'Accuracy - {accuracy}, Avg Steps - {avg_steps}')
 
 
     """
     Uncomment if you want to view stats between 2 files
     """
-    a_timestamp = '2023-12-04_06-22-23'
-    b_timestamp = '2023-12-04_06-24-34'
-    a_filename = f'./results/{a_timestamp}/results_{a_timestamp}.json'
-    b_filename = f'./results/{b_timestamp}/results_{b_timestamp}.json'
-    a_stats, b_stats, both_stats = get_pair_results_stats(a_filename, b_filename)
-
-    print('=====================================================')
-    print(f'(a) Description - {a_stats["description"]}')
-    print(f'(a) Success count - {a_stats["success_count"]}, Failure count - {a_stats["failure_count"]}')
-    print(f'(b) Description - {b_stats["description"]}')
-    print(f'(b) Success count - {b_stats["success_count"]}, Failure count - {b_stats["failure_count"]}')
-    print(f'(BOTH) ---')
-    for v in helper_dict.values():
-        print(f'{v} - {both_stats[v]}')
+    # a_timestamp = '2023-12-04_06-22-23'
+    # b_timestamp = '2023-12-04_06-24-34'
+    # a_filename = f'./results/{a_timestamp}/results_{a_timestamp}.json'
+    # b_filename = f'./results/{b_timestamp}/results_{b_timestamp}.json'
+    # a_stats, b_stats, both_stats = get_pair_results_stats(a_filename, b_filename)
+    #
+    # print('=====================================================')
+    # print(f'(a) Description - {a_stats["description"]}')
+    # print(f'(a) Success count - {a_stats["success_count"]}, Failure count - {a_stats["failure_count"]}')
+    # print(f'(b) Description - {b_stats["description"]}')
+    # print(f'(b) Success count - {b_stats["success_count"]}, Failure count - {b_stats["failure_count"]}')
+    # print(f'(BOTH) ---')
+    # for v in helper_dict.values():
+    #     print(f'{v} - {both_stats[v]}')
 
 
 
