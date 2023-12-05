@@ -274,7 +274,6 @@ def run_experiment(exp):
         context.log_count = 0
         # information to know when to provide the system hint
         context.action_count = 0
-        # for statistics
         # count the number of debates
         context.debate_count = 0
         # only display the system hints if do_debate is true
