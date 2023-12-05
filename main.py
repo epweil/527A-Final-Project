@@ -54,7 +54,7 @@ experiments = [
     },
 
     {
-        'description': 'A debate agent, nothing special. Default settings.',
+        'description': 'A debate agent. 2 iters. affirm start. hint_mod=15.',
         'do_debate': True,
         'MAX_VOTES': 1,
         'MAX_STEPS': MAX_STEPS,
@@ -68,6 +68,168 @@ experiments = [
             "negative_first": False,
             "model": debate_model,
             "system_hint_mod": 15,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 2 iters. negative start. hint_mod=15.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 2,
+            "negative_first": True,
+            "model": debate_model,
+            "system_hint_mod": 15,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 2 iters. affirm start. hint_mod=5.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 2,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 5,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 2 iters. negative start. hint_mod=5.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 2,
+            "negative_first": True,
+            "model": debate_model,
+            "system_hint_mod": 5,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 3 iters. affirm start. hint_mod=15.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 3,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 15,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 4 iters. affirm start. hint_mod=15.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 4,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 15,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 5 iters. affirm start. hint_mod=15.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 5,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 15,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 3 iters. affirm start. hint_mod=5.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 3,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 5,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 4 iters. affirm start. hint_mod=5.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 4,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 5,
+        }
+    },
+
+    {
+        'description': 'A debate agent. 5 iters. affirm start. hint_mod=5.',
+        'do_debate': True,
+        'MAX_VOTES': 1,
+        'MAX_STEPS': MAX_STEPS,
+        'agent_model': agent_model,
+        'num_tasks': num_tasks,
+        'start_task': start_task,
+        'langchain.debug': langchain_debug,
+        'langchain_verbose': langchain_verbose,
+        'debate_params': {
+            "total_iters": 5,
+            "negative_first": False,
+            "model": debate_model,
+            "system_hint_mod": 5,
         }
     },
 
