@@ -230,7 +230,9 @@ class CustomOutputParser(AgentOutputParser):
                 return AgentAction(tool=majority_tool_name, tool_input=majority_tool_input,
                                    log=random_llm_output)
             else:
-                raise ValueError(f"An error occurred that should never occur: `{majority_tool_name}`")
+                print('This happened!')
+                return default_agent_finish
+                # raise ValueError(f"An error occurred that should never occur: `{majority_tool_name}`")
 
 
 def run_experiment(exp):
@@ -411,6 +413,9 @@ def run_experiment(exp):
         filename = f"{results_dir}results_{timestamp}.json"
         if not os.path.exists(results_dir):
             os.makedirs(results_dir)
+        # put back system hint mod because we popped it
+        if 'debate_params' in exp:
+            exp['debate_params']['system_hint_mod'] = system_hint_mod
         extended_results = {
             'description': description,
             'params': exp,
@@ -418,6 +423,9 @@ def run_experiment(exp):
             'results': results
         }
         write_json_file(filename, extended_results)
+        # pop it again
+        if 'debate_params' in exp:
+            exp['debate_params'].pop('system_hint_mod')
 
     return timestamp, filename
 

@@ -1,0 +1,1229 @@
+{
+  "description": "A debate agent. 2 iters. negative start. hint_mod=15.",
+  "params": {
+    "description": "A debate agent. 2 iters. negative start. hint_mod=15.",
+    "do_debate": true,
+    "MAX_VOTES": 1,
+    "MAX_STEPS": 30,
+    "agent_model": "text-bison-32k",
+    "num_tasks": 134,
+    "start_task": 1,
+    "langchain.debug": false,
+    "langchain_verbose": false,
+    "debate_params": {
+      "total_iters": 2,
+      "negative_first": true,
+      "model": "text-bison-32k",
+      "system_hint_mod": 15
+    }
+  },
+  "timestamp": "2023-12-05_14-38-26",
+  "results": [
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put some vase on safe.",
+      "task_index": 1,
+      "success": false,
+      "total_steps": 27,
+      "total_actions": 22,
+      "total_debates": 5,
+      "token_count": 141221
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool mug in coffeemachine.",
+      "task_index": 2,
+      "success": true,
+      "total_steps": 5,
+      "total_actions": 5,
+      "total_debates": 0,
+      "token_count": 23299
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the book with the desklamp.",
+      "task_index": 3,
+      "success": false,
+      "total_steps": 18,
+      "total_actions": 17,
+      "total_debates": 1,
+      "token_count": 95158
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a peppershaker in drawer.",
+      "task_index": 4,
+      "success": false,
+      "total_steps": 32,
+      "total_actions": 30,
+      "total_debates": 2,
+      "token_count": 158389
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot mug in cabinet.",
+      "task_index": 5,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 40283
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: find two soapbar and put them in cabinet.",
+      "task_index": 6,
+      "success": true,
+      "total_steps": 18,
+      "total_actions": 18,
+      "total_debates": 0,
+      "token_count": 83956
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot cup in cabinet.",
+      "task_index": 7,
+      "success": false,
+      "total_steps": 19,
+      "total_actions": 17,
+      "total_debates": 2,
+      "token_count": 99074
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some peppershaker on drawer.",
+      "task_index": 8,
+      "success": true,
+      "total_steps": 5,
+      "total_actions": 5,
+      "total_debates": 0,
+      "token_count": 20714
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put two peppershaker in drawer.",
+      "task_index": 9,
+      "success": true,
+      "total_steps": 17,
+      "total_actions": 16,
+      "total_debates": 1,
+      "token_count": 85839
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some bowl and put it in cabinet.",
+      "task_index": 10,
+      "success": true,
+      "total_steps": 17,
+      "total_actions": 17,
+      "total_debates": 0,
+      "token_count": 83682
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some egg and put it in garbagecan.",
+      "task_index": 11,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 45554
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a saltshaker in drawer.",
+      "task_index": 12,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 29143
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the alarmclock with the desklamp.",
+      "task_index": 13,
+      "success": true,
+      "total_steps": 13,
+      "total_actions": 13,
+      "total_debates": 0,
+      "token_count": 60063
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some mug and put it in cabinet.",
+      "task_index": 14,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 38142
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put a pencil in shelf.",
+      "task_index": 15,
+      "success": true,
+      "total_steps": 4,
+      "total_actions": 4,
+      "total_debates": 0,
+      "token_count": 16094
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some mug and put it in cabinet.",
+      "task_index": 16,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 37914
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean mug in coffeemachine.",
+      "task_index": 17,
+      "success": false,
+      "total_steps": 32,
+      "total_actions": 30,
+      "total_debates": 2,
+      "token_count": 177580
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot cup in cabinet.",
+      "task_index": 18,
+      "success": true,
+      "total_steps": 12,
+      "total_actions": 12,
+      "total_debates": 0,
+      "token_count": 54393
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some pan and put it in countertop.",
+      "task_index": 19,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 37721
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean mug in coffeemachine.",
+      "task_index": 20,
+      "success": false,
+      "total_steps": 48,
+      "total_actions": 30,
+      "total_debates": 18,
+      "token_count": 361299
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at bowl under the desklamp.",
+      "task_index": 21,
+      "success": false,
+      "total_steps": 18,
+      "total_actions": 17,
+      "total_debates": 1,
+      "token_count": 91628
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put two soapbar in garbagecan.",
+      "task_index": 22,
+      "success": false,
+      "total_steps": 24,
+      "total_actions": 22,
+      "total_debates": 2,
+      "token_count": 127089
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put a vase in safe.",
+      "task_index": 23,
+      "success": false,
+      "total_steps": 21,
+      "total_actions": 17,
+      "total_debates": 4,
+      "token_count": 107682
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the bowl with the desklamp.",
+      "task_index": 24,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 63532
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put a soapbottle in toilet.",
+      "task_index": 25,
+      "success": true,
+      "total_steps": 11,
+      "total_actions": 11,
+      "total_debates": 0,
+      "token_count": 46029
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put some soapbottle on toilet.",
+      "task_index": 26,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 37278
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a saltshaker in drawer.",
+      "task_index": 27,
+      "success": true,
+      "total_steps": 5,
+      "total_actions": 5,
+      "total_debates": 0,
+      "token_count": 20607
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some soapbar and put it in cabinet.",
+      "task_index": 28,
+      "success": false,
+      "total_steps": 13,
+      "total_actions": 12,
+      "total_debates": 1,
+      "token_count": 68627
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some pan and put it in countertop.",
+      "task_index": 29,
+      "success": false,
+      "total_steps": 34,
+      "total_actions": 30,
+      "total_debates": 4,
+      "token_count": 195998
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: find two soapbar and put them in cabinet.",
+      "task_index": 30,
+      "success": false,
+      "total_steps": 22,
+      "total_actions": 21,
+      "total_debates": 1,
+      "token_count": 113000
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some egg and put it in garbagecan.",
+      "task_index": 31,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 35499
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: find two cd and put them in safe.",
+      "task_index": 32,
+      "success": true,
+      "total_steps": 19,
+      "total_actions": 19,
+      "total_debates": 0,
+      "token_count": 90504
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put two cd in safe.",
+      "task_index": 33,
+      "success": true,
+      "total_steps": 16,
+      "total_actions": 16,
+      "total_debates": 0,
+      "token_count": 74688
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot apple in fridge.",
+      "task_index": 34,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 63863
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some lettuce and put it in countertop.",
+      "task_index": 35,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 38104
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put some watch on safe.",
+      "task_index": 36,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 59062
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean mug in coffeemachine.",
+      "task_index": 37,
+      "success": false,
+      "total_steps": 35,
+      "total_actions": 30,
+      "total_debates": 5,
+      "token_count": 209224
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some bread and put it in countertop.",
+      "task_index": 38,
+      "success": false,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 53498
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some mug and put it in coffeemachine.",
+      "task_index": 39,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 40235
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool mug in cabinet.",
+      "task_index": 40,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 32888
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at mug under the desklamp.",
+      "task_index": 41,
+      "success": true,
+      "total_steps": 13,
+      "total_actions": 13,
+      "total_debates": 0,
+      "token_count": 59136
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the pencil with the desklamp.",
+      "task_index": 42,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 63537
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean knife in countertop.",
+      "task_index": 43,
+      "success": false,
+      "total_steps": 33,
+      "total_actions": 30,
+      "total_debates": 3,
+      "token_count": 184275
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean knife in countertop.",
+      "task_index": 44,
+      "success": true,
+      "total_steps": 29,
+      "total_actions": 27,
+      "total_debates": 2,
+      "token_count": 157087
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some lettuce and put it in countertop.",
+      "task_index": 45,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 38299
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: find two toiletpaper and put them in cabinet.",
+      "task_index": 46,
+      "success": false,
+      "total_steps": 14,
+      "total_actions": 12,
+      "total_debates": 2,
+      "token_count": 72980
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some bowl and put it in cabinet.",
+      "task_index": 47,
+      "success": false,
+      "total_steps": 33,
+      "total_actions": 30,
+      "total_debates": 3,
+      "token_count": 183564
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some cloth and put it in countertop.",
+      "task_index": 48,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 32145
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool pan in countertop.",
+      "task_index": 49,
+      "success": true,
+      "total_steps": 5,
+      "total_actions": 5,
+      "total_debates": 0,
+      "token_count": 23224
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put a pencil in shelf.",
+      "task_index": 50,
+      "success": true,
+      "total_steps": 4,
+      "total_actions": 4,
+      "total_debates": 0,
+      "token_count": 16127
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at alarmclock under the desklamp.",
+      "task_index": 51,
+      "success": false,
+      "total_steps": 47,
+      "total_actions": 30,
+      "total_debates": 17,
+      "token_count": 336845
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: find two pillow and put them in sofa.",
+      "task_index": 52,
+      "success": false,
+      "total_steps": 28,
+      "total_actions": 25,
+      "total_debates": 3,
+      "token_count": 154932
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put a mug in desk.",
+      "task_index": 53,
+      "success": false,
+      "total_steps": 19,
+      "total_actions": 17,
+      "total_debates": 2,
+      "token_count": 93758
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some saltshaker on cabinet.",
+      "task_index": 54,
+      "success": false,
+      "total_steps": 6,
+      "total_actions": 6,
+      "total_debates": 0,
+      "token_count": 29044
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean plate in countertop.",
+      "task_index": 55,
+      "success": true,
+      "total_steps": 6,
+      "total_actions": 6,
+      "total_debates": 0,
+      "token_count": 27765
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put some watch on safe.",
+      "task_index": 56,
+      "success": true,
+      "total_steps": 15,
+      "total_actions": 15,
+      "total_debates": 0,
+      "token_count": 63691
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some bread and put it in countertop.",
+      "task_index": 57,
+      "success": false,
+      "total_steps": 20,
+      "total_actions": 19,
+      "total_debates": 1,
+      "token_count": 110239
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean pan in countertop.",
+      "task_index": 58,
+      "success": true,
+      "total_steps": 22,
+      "total_actions": 21,
+      "total_debates": 1,
+      "token_count": 112873
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some potato and put it in microwave.",
+      "task_index": 59,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 43223
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the cd with the desklamp.",
+      "task_index": 60,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 64930
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some apple and put it in garbagecan.",
+      "task_index": 61,
+      "success": false,
+      "total_steps": 47,
+      "total_actions": 30,
+      "total_debates": 17,
+      "token_count": 314243
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the alarmclock with the desklamp.",
+      "task_index": 62,
+      "success": false,
+      "total_steps": 22,
+      "total_actions": 20,
+      "total_debates": 2,
+      "token_count": 119575
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some apple and put it in fridge.",
+      "task_index": 63,
+      "success": false,
+      "total_steps": 38,
+      "total_actions": 30,
+      "total_debates": 8,
+      "token_count": 229374
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put two peppershaker in drawer.",
+      "task_index": 64,
+      "success": false,
+      "total_steps": 21,
+      "total_actions": 21,
+      "total_debates": 0,
+      "token_count": 107673
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the pencil with the desklamp.",
+      "task_index": 65,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 63955
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot mug in cabinet.",
+      "task_index": 66,
+      "success": false,
+      "total_steps": 32,
+      "total_actions": 30,
+      "total_debates": 2,
+      "token_count": 169040
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean plate in countertop.",
+      "task_index": 67,
+      "success": true,
+      "total_steps": 6,
+      "total_actions": 6,
+      "total_debates": 0,
+      "token_count": 27792
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some apple and put it in garbagecan.",
+      "task_index": 68,
+      "success": false,
+      "total_steps": 21,
+      "total_actions": 18,
+      "total_debates": 3,
+      "token_count": 113438
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean spatula in drawer.",
+      "task_index": 69,
+      "success": true,
+      "total_steps": 25,
+      "total_actions": 25,
+      "total_debates": 0,
+      "token_count": 128675
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put a vase in safe.",
+      "task_index": 70,
+      "success": true,
+      "total_steps": 13,
+      "total_actions": 11,
+      "total_debates": 2,
+      "token_count": 59330
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put some watch on safe.",
+      "task_index": 71,
+      "success": true,
+      "total_steps": 6,
+      "total_actions": 6,
+      "total_debates": 0,
+      "token_count": 24592
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: find two peppershaker and put them in drawer.",
+      "task_index": 72,
+      "success": true,
+      "total_steps": 11,
+      "total_actions": 11,
+      "total_debates": 0,
+      "token_count": 51764
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the book with the desklamp.",
+      "task_index": 73,
+      "success": false,
+      "total_steps": 18,
+      "total_actions": 17,
+      "total_debates": 1,
+      "token_count": 93140
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put two pillow in sofa.",
+      "task_index": 74,
+      "success": false,
+      "total_steps": 18,
+      "total_actions": 17,
+      "total_debates": 1,
+      "token_count": 92906
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some cloth and put it in cabinet.",
+      "task_index": 75,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 41688
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put some mug on desk.",
+      "task_index": 76,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 41574
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean egg in microwave.",
+      "task_index": 77,
+      "success": false,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 47827
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot tomato in garbagecan.",
+      "task_index": 78,
+      "success": true,
+      "total_steps": 28,
+      "total_actions": 25,
+      "total_debates": 3,
+      "token_count": 149909
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot potato in garbagecan.",
+      "task_index": 79,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 40505
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool bread in countertop.",
+      "task_index": 80,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 42820
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put a clean soapbar in countertop.",
+      "task_index": 81,
+      "success": false,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 52022
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some egg and put it in garbagecan.",
+      "task_index": 82,
+      "success": false,
+      "total_steps": 9,
+      "total_actions": 8,
+      "total_debates": 1,
+      "token_count": 47691
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at pencil under the desklamp.",
+      "task_index": 83,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 44903
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some egg and put it in microwave.",
+      "task_index": 84,
+      "success": false,
+      "total_steps": 31,
+      "total_actions": 23,
+      "total_debates": 8,
+      "token_count": 211741
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean bowl in cabinet.",
+      "task_index": 85,
+      "success": true,
+      "total_steps": 6,
+      "total_actions": 6,
+      "total_debates": 0,
+      "token_count": 27751
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at cd under the desklamp.",
+      "task_index": 86,
+      "success": true,
+      "total_steps": 11,
+      "total_actions": 11,
+      "total_debates": 0,
+      "token_count": 50287
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put two cd in safe.",
+      "task_index": 87,
+      "success": true,
+      "total_steps": 22,
+      "total_actions": 22,
+      "total_debates": 0,
+      "token_count": 106356
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool tomato in microwave.",
+      "task_index": 88,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 37846
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool lettuce in countertop.",
+      "task_index": 89,
+      "success": false,
+      "total_steps": 10,
+      "total_actions": 8,
+      "total_debates": 2,
+      "token_count": 57785
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some plate and put it in countertop.",
+      "task_index": 90,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 42319
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some soapbar and put it in cabinet.",
+      "task_index": 91,
+      "success": true,
+      "total_steps": 27,
+      "total_actions": 22,
+      "total_debates": 5,
+      "token_count": 155912
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put two soapbar in garbagecan.",
+      "task_index": 92,
+      "success": false,
+      "total_steps": 37,
+      "total_actions": 28,
+      "total_debates": 9,
+      "token_count": 233199
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some peppershaker on drawer.",
+      "task_index": 93,
+      "success": true,
+      "total_steps": 17,
+      "total_actions": 16,
+      "total_debates": 1,
+      "token_count": 78909
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some soapbar and put it in countertop.",
+      "task_index": 94,
+      "success": false,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 52140
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool tomato in microwave.",
+      "task_index": 95,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 42953
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot tomato in garbagecan.",
+      "task_index": 96,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 30818
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some spatula and put it in drawer.",
+      "task_index": 97,
+      "success": false,
+      "total_steps": 47,
+      "total_actions": 30,
+      "total_debates": 17,
+      "token_count": 341052
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some pan and put it in countertop.",
+      "task_index": 98,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 37721
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a cool tomato in microwave.",
+      "task_index": 99,
+      "success": false,
+      "total_steps": 19,
+      "total_actions": 18,
+      "total_debates": 1,
+      "token_count": 103615
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put two pillow in sofa.",
+      "task_index": 100,
+      "success": false,
+      "total_steps": 23,
+      "total_actions": 23,
+      "total_debates": 0,
+      "token_count": 117151
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some mug and put it in coffeemachine.",
+      "task_index": 101,
+      "success": false,
+      "total_steps": 29,
+      "total_actions": 20,
+      "total_debates": 9,
+      "token_count": 175933
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some apple and put it in garbagecan.",
+      "task_index": 102,
+      "success": false,
+      "total_steps": 30,
+      "total_actions": 25,
+      "total_debates": 5,
+      "token_count": 171069
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some saltshaker on cabinet.",
+      "task_index": 103,
+      "success": false,
+      "total_steps": 42,
+      "total_actions": 30,
+      "total_debates": 12,
+      "token_count": 271593
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the mug with the desklamp.",
+      "task_index": 104,
+      "success": true,
+      "total_steps": 15,
+      "total_actions": 15,
+      "total_debates": 0,
+      "token_count": 69184
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot mug in coffeemachine.",
+      "task_index": 105,
+      "success": false,
+      "total_steps": 38,
+      "total_actions": 30,
+      "total_debates": 8,
+      "token_count": 232158
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some apple and put it in fridge.",
+      "task_index": 106,
+      "success": false,
+      "total_steps": 32,
+      "total_actions": 30,
+      "total_debates": 2,
+      "token_count": 165558
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put a pencil in shelf.",
+      "task_index": 107,
+      "success": true,
+      "total_steps": 4,
+      "total_actions": 4,
+      "total_debates": 0,
+      "token_count": 16116
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some mug and put it in cabinet.",
+      "task_index": 108,
+      "success": false,
+      "total_steps": 20,
+      "total_actions": 19,
+      "total_debates": 1,
+      "token_count": 102827
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some mug and put it in coffeemachine.",
+      "task_index": 109,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 33029
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some saltshaker on drawer.",
+      "task_index": 110,
+      "success": true,
+      "total_steps": 15,
+      "total_actions": 15,
+      "total_debates": 0,
+      "token_count": 64946
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some potato and put it in microwave.",
+      "task_index": 111,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 37875
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the mug with the desklamp.",
+      "task_index": 112,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 64237
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put two keychain in safe.",
+      "task_index": 113,
+      "success": false,
+      "total_steps": 31,
+      "total_actions": 30,
+      "total_debates": 1,
+      "token_count": 158812
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some cloth and put it in cabinet.",
+      "task_index": 114,
+      "success": true,
+      "total_steps": 13,
+      "total_actions": 13,
+      "total_debates": 0,
+      "token_count": 61226
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some mug and put it in coffeemachine.",
+      "task_index": 115,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 32974
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put a clean soapbar in countertop.",
+      "task_index": 116,
+      "success": false,
+      "total_steps": 55,
+      "total_actions": 30,
+      "total_debates": 25,
+      "token_count": 462078
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some tomato and put it in garbagecan.",
+      "task_index": 117,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 45279
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: heat some potato and put it in garbagecan.",
+      "task_index": 118,
+      "success": true,
+      "total_steps": 8,
+      "total_actions": 8,
+      "total_debates": 0,
+      "token_count": 35562
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the book with the desklamp.",
+      "task_index": 119,
+      "success": true,
+      "total_steps": 12,
+      "total_actions": 12,
+      "total_debates": 0,
+      "token_count": 55746
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: put a mug in desk.",
+      "task_index": 120,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 41600
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some knife and put it in countertop.",
+      "task_index": 121,
+      "success": true,
+      "total_steps": 13,
+      "total_actions": 13,
+      "total_debates": 0,
+      "token_count": 62288
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a hot cup in cabinet.",
+      "task_index": 122,
+      "success": true,
+      "total_steps": 14,
+      "total_actions": 14,
+      "total_debates": 0,
+      "token_count": 63971
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a armchair 1, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a dresser 1, a garbagecan 1, a safe 1, a shelf 12, a shelf 11, a shelf 10, a shelf 9, a shelf 8, a shelf 7, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, a shelf 1, a sidetable 1, and a sofa 1.\nYour task is to: put two keychain in safe.",
+      "task_index": 123,
+      "success": false,
+      "total_steps": 30,
+      "total_actions": 30,
+      "total_debates": 0,
+      "token_count": 147055
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some pan and put it in countertop.",
+      "task_index": 124,
+      "success": false,
+      "total_steps": 36,
+      "total_actions": 30,
+      "total_debates": 6,
+      "token_count": 216131
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put a clean cloth in countertop.",
+      "task_index": 125,
+      "success": true,
+      "total_steps": 7,
+      "total_actions": 7,
+      "total_debates": 0,
+      "token_count": 32043
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: clean some spatula and put it in drawer.",
+      "task_index": 126,
+      "success": false,
+      "total_steps": 12,
+      "total_actions": 11,
+      "total_debates": 1,
+      "token_count": 64777
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put some saltshaker on cabinet.",
+      "task_index": 127,
+      "success": false,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 46360
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: put a clean egg in microwave.",
+      "task_index": 128,
+      "success": false,
+      "total_steps": 44,
+      "total_actions": 30,
+      "total_debates": 14,
+      "token_count": 311810
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: clean some soapbar and put it in cabinet.",
+      "task_index": 129,
+      "success": true,
+      "total_steps": 10,
+      "total_actions": 10,
+      "total_debates": 0,
+      "token_count": 46912
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put a soapbottle in toilet.",
+      "task_index": 130,
+      "success": false,
+      "total_steps": 11,
+      "total_actions": 11,
+      "total_debates": 0,
+      "token_count": 50565
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: examine the cd with the desklamp.",
+      "task_index": 131,
+      "success": true,
+      "total_steps": 11,
+      "total_actions": 11,
+      "total_debates": 0,
+      "token_count": 49421
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a bed 1, a desk 2, a desk 1, a drawer 6, a drawer 5, a drawer 4, a drawer 3, a drawer 2, a drawer 1, a garbagecan 1, a laundryhamper 1, a safe 1, a shelf 6, a shelf 5, a shelf 4, a shelf 3, a shelf 2, and a shelf 1.\nYour task is to: look at bowl under the desklamp.",
+      "task_index": 132,
+      "success": false,
+      "total_steps": 22,
+      "total_actions": 19,
+      "total_debates": 3,
+      "token_count": 118338
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 6, a cabinet 5, a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a coffeemachine 1, a countertop 3, a countertop 2, a countertop 1, a drawer 3, a drawer 2, a drawer 1, a fridge 1, a garbagecan 1, a microwave 1, a shelf 3, a shelf 2, a shelf 1, a sinkbasin 1, a stoveburner 4, a stoveburner 3, a stoveburner 2, a stoveburner 1, and a toaster 1.\nYour task is to: cool some potato and put it in microwave.",
+      "task_index": 133,
+      "success": true,
+      "total_steps": 9,
+      "total_actions": 9,
+      "total_debates": 0,
+      "token_count": 43072
+    },
+    {
+      "task": "You are in the middle of a room. Looking quickly around you, you see a cabinet 4, a cabinet 3, a cabinet 2, a cabinet 1, a countertop 1, a garbagecan 1, a handtowelholder 2, a handtowelholder 1, a sinkbasin 2, a sinkbasin 1, a toilet 1, a toiletpaperhanger 1, and a towelholder 1.\nYour task is to: put two soapbar in garbagecan.",
+      "task_index": 134,
+      "success": false,
+      "total_steps": 11,
+      "total_actions": 10,
+      "total_debates": 1,
+      "token_count": 55647
+    }
+  ]
+}

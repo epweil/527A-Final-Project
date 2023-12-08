@@ -29,7 +29,13 @@ class DialogueAgent:
     def send(self) -> str:
         input = self.system_message + '\n' + "\n".join(self.message_history + [self.prefix])
         self.context.token_count += tokens(input)
-        message = self.model(input)
+        while True:
+            try:
+                message = self.model(input)
+                break
+            except Exception as e:
+                print("ERROR OCCURRED IN DEBATE")
+                print(e)
         self.context.token_count += tokens(message)
         return message
 

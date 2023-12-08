@@ -2,8 +2,9 @@ import requests
 import json
 import random
 from collections import Counter
-import tiktoken
-
+import google.auth
+import google.auth.transport.requests
+from time import sleep
 
 SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer.'
 FAIL_OBSERVATION = 'You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer.'
@@ -30,9 +31,49 @@ EMPTY_RESPONSE = 'empty response'
 VALID_ACTIONS = 'Recall: The following are the only valid actions allowed in the simulated household environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
 # go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X
 
+# https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
+creds, project = google.auth.default()
+auth_req = google.auth.transport.requests.Request()
+creds.refresh(auth_req)
+
+PROJECT_ID = 'gen-lang-client-0382320190' # insert your own project id here
+LOCATION = 'us-central1'
+MODEL_ID = 'text-bison'
 
 def tokens(text):
-    return len(tiktoken.get_encoding('cl100k_base').encode(text))
+    # return len(tiktoken.get_encoding('cl100k_base').encode(text))
+    url = f'https://us-central1-aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}/publishers/google/models/{MODEL_ID}:countTokens'
+
+    headers = {
+        "Authorization": f"Bearer {creds.token}",
+        "Content-Type": "application/json",
+    }
+
+    body = {
+        "instances": [
+            {
+                "prompt": text
+            }
+        ]
+    }
+
+    retry_limit = 10
+    total_tokens = None
+    for i in range(retry_limit, 0, -1):
+
+        try:
+            response = requests.post(url, json=body, headers=headers)
+            total_tokens = response.json().get('totalTokens')
+            break
+        except Exception as e:
+            total_tokens = None
+            print(f'countTokens failed. `{e}`')
+            print('Retrying in 10 seconds...')
+
+    if not total_tokens:
+        raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
+
+    return total_tokens
 
 
 def get_majority_vote(votes):
