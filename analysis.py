@@ -1,10 +1,15 @@
 from utils import read_json_file
-import json
 
 def get_single_results_stats(results_filename):
 
     extended_results = read_json_file(results_filename)
     results = extended_results['results']
+
+    system_hint_mod = 1000000000
+    if 'debate_params' in extended_results['params']:
+        system_hint_mod = extended_results['params']['debate_params']['system_hint_mod']
+
+    description = extended_results['description']
 
     success_count = 0
     total_tasks = 0
@@ -18,6 +23,9 @@ def get_single_results_stats(results_filename):
     total_debates = 0
     total_debates_when_success = 0
 
+    number_of_tasks_that_used_debate = 0
+    number_of_tasks_that_used_debate_without_hint = 0
+
     for res in results:
         total_tasks += 1
 
@@ -29,6 +37,11 @@ def get_single_results_stats(results_filename):
         total_tokens += token_count
         total_steps += action_count
         total_debates += debate_count
+
+        if debate_count > 0:
+            number_of_tasks_that_used_debate += 1
+            if action_count < system_hint_mod:
+                number_of_tasks_that_used_debate_without_hint += 1
 
         if success:
             success_count += 1
@@ -48,6 +61,7 @@ def get_single_results_stats(results_filename):
     avg_debates_when_success = -1 if success_count == 0 else total_debates_when_success / success_count
 
     res = {
+        'Description': description,
         'Accuracy': acc,
         'Total steps': total_steps,
         'Avg steps': avg_steps,
@@ -60,7 +74,9 @@ def get_single_results_stats(results_filename):
         'Total tokens': total_tokens,
         'Avg tokens': avg_tokens,
         'Total tokens when success': total_tokens_when_success,
-        'Avg tokens when success': avg_tokens_when_success
+        'Avg tokens when success': avg_tokens_when_success,
+        'Number tasks that used debate': number_of_tasks_that_used_debate,
+        'Number tasks that used debate without hint': number_of_tasks_that_used_debate_without_hint
     }
 
     return res
@@ -84,6 +100,7 @@ def get_pair_results_stats(fna, fnb):
 
     for v in helper_dict.values():
         both_stats[v] = 0
+        both_stats[v + '_and_debate'] = 0
 
     both_stats['task_index_to_a_b'] = dict()
 
@@ -108,6 +125,8 @@ def get_pair_results_stats(fna, fnb):
         a_success = ar['success']
         b_success = br['success']
 
+        b_debate_count = br['total_debates']
+
         if a_success:
             a_stats['success_count'] += 1
         else:
@@ -120,6 +139,9 @@ def get_pair_results_stats(fna, fnb):
 
         both_stats['task_index_to_a_b'][a_task_index] = (a_success, b_success)
         both_stats[helper_dict[(a_success, b_success)]] += 1
+
+        if b_debate_count > 0:
+            both_stats[helper_dict[(a_success, b_success)] + '_and_debate'] += 1
 
     return a_stats, b_stats, both_stats
 
@@ -136,11 +158,12 @@ if __name__ == '__main__':
     """
     Uncomment if you want to view stats on a single file
     """
-    timestamp = '2023-12-04_17-52-56'
+    timestamp = '2023-12-07_11-23-32'
     filename = f'./results/{timestamp}/results_{timestamp}.json'
     res_dict = get_single_results_stats(filename)
     print('=====================================================')
     print(timestamp)
+    print(res_dict.pop('Description'))
     print('Stats ---')
     for k, v in res_dict.items():
         print(f'  {k} - {v}')
@@ -149,8 +172,8 @@ if __name__ == '__main__':
     """
     Uncomment if you want to view stats between 2 files
     """
-    a_timestamp = '2023-12-04_17-52-56'
-    b_timestamp = '2023-12-04_17-53-12'
+    a_timestamp = '2023-12-04_19-52-21'
+    b_timestamp = '2023-12-05_10-59-54'
     a_filename = f'./results/{a_timestamp}/results_{a_timestamp}.json'
     b_filename = f'./results/{b_timestamp}/results_{b_timestamp}.json'
     a_res_dict = get_single_results_stats(a_filename)
@@ -158,21 +181,25 @@ if __name__ == '__main__':
     a_stats, b_stats, both_stats = get_pair_results_stats(a_filename, b_filename)
 
     print('=====================================================')
-    print(f'(a) {timestamp}')
+    print(f'(a) {a_timestamp}')
     print(f'(a) Description - {a_stats["description"]}')
     print(f'(a) Success count - {a_stats["success_count"]}, Failure count - {a_stats["failure_count"]}')
     print('(a) Stats ---')
     for k, v in a_res_dict.items():
         print(f'  {k} - {v}')
-    print(f'(b) {timestamp}')
+    print(f'(b) {b_timestamp}')
     print(f'(b) Description - {b_stats["description"]}')
     print(f'(b) Success count - {b_stats["success_count"]}, Failure count - {b_stats["failure_count"]}')
     print('(b) Stats ---')
     for k, v in b_res_dict.items():
         print(f'  {k} - {v}')
     print(f'(BOTH) ---')
+    print(f'(a) {a_timestamp}')
+    print(f'(b) {b_timestamp}')
     for v in helper_dict.values():
         print(f'{v} - {both_stats[v]}')
+    for v in helper_dict.values():
+        print(f'{v + "_and_debate"} - {both_stats[v + "_and_debate"]}')
 
 
 
