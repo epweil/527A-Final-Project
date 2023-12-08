@@ -31,17 +31,17 @@ EMPTY_RESPONSE = 'empty response'
 VALID_ACTIONS = 'Recall: The following are the only valid actions allowed in the simulated household environment - go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X'
 # go to X, open X, take X from Y, put X in/on Y, clean X with Y, heat X with Y, cool X with Y, use X
 
-# https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
-creds, project = google.auth.default()
-auth_req = google.auth.transport.requests.Request()
-creds.refresh(auth_req)
-
 PROJECT_ID = 'gen-lang-client-0382320190' # insert your own project id here
 LOCATION = 'us-central1'
 MODEL_ID = 'text-bison'
 
 def tokens(text):
     # return len(tiktoken.get_encoding('cl100k_base').encode(text))
+
+    # https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
+    creds, project = google.auth.default()
+    auth_req = google.auth.transport.requests.Request()
+    creds.refresh(auth_req)
 
     if len(text) == 0:
         return 0
@@ -61,7 +61,7 @@ def tokens(text):
         ]
     }
 
-    retry_limit = 10
+    retry_limit = 100
     total_tokens = None
     for i in range(retry_limit, 0, -1):
 
