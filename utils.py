@@ -38,14 +38,11 @@ MODEL_ID = 'text-bison'
 def tokens(text):
     # return len(tiktoken.get_encoding('cl100k_base').encode(text))
 
-<<<<<<< HEAD
-=======
     # https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
     creds, project = google.auth.default()
     auth_req = google.auth.transport.requests.Request()
     creds.refresh(auth_req)
 
->>>>>>> master
     if len(text) == 0:
         return 0
 
@@ -78,11 +75,8 @@ def tokens(text):
             sleep(10)
 
     if total_tokens is None:
-<<<<<<< HEAD
         print("HERE token")
         print(text)
-=======
->>>>>>> master
         raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
 
     return total_tokens
