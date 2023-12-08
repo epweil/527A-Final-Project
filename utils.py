@@ -42,6 +42,10 @@ MODEL_ID = 'text-bison'
 
 def tokens(text):
     # return len(tiktoken.get_encoding('cl100k_base').encode(text))
+
+    if len(text) == 0:
+        return 0
+
     url = f'https://us-central1-aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}/publishers/google/models/{MODEL_ID}:countTokens'
 
     headers = {
