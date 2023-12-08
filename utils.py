@@ -73,8 +73,9 @@ def tokens(text):
             total_tokens = None
             print(f'countTokens failed. `{e}`')
             print('Retrying in 10 seconds...')
+            sleep(10)
 
-    if not total_tokens:
+    if total_tokens is None:
         print("HERE token")
         print(text)
         raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
