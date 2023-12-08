@@ -32,7 +32,7 @@ experiments = [
 
 
     # {
-    #     'description': 'The baseline ReAct agent.',
+    #     'description': 'The baseline ReAct agent. palm tokenizer',
     #     'do_debate': False,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -42,9 +42,9 @@ experiments = [
     #     'langchain.debug': langchain_debug,
     #     'langchain_verbose': langchain_verbose,
     # },
-    # 
+    #
     # {
-    #     'description': 'The baseline majority vote agent.',
+    #     'description': 'The baseline majority vote agent. palm tokenizer',
     #     'do_debate': False,
     #     'MAX_VOTES': 5,
     #     'MAX_STEPS': MAX_STEPS,
@@ -54,9 +54,9 @@ experiments = [
     #     'langchain.debug': langchain_debug,
     #     'langchain_verbose': langchain_verbose,
     # },
-    # 
+    #
     # {
-    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=15.',
+    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -72,9 +72,9 @@ experiments = [
     #         "system_hint_mod": 15,
     #     }
     # },
-    # 
+    #
     # {
-    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=15.',
+    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -90,9 +90,9 @@ experiments = [
     #         "system_hint_mod": 15,
     #     }
     # },
-    # 
+    #
     # {
-    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=5.',
+    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=5. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -108,9 +108,9 @@ experiments = [
     #         "system_hint_mod": 5,
     #     }
     # },
-    # 
+    #
     # {
-    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=5.',
+    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=5. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -132,7 +132,7 @@ experiments = [
 
 
     # {
-    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=1000.',
+    #     'description': 'A debate agent. 2 iters. affirm start. hint_mod=1000. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -150,7 +150,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 3 iters. affirm start. hint_mod=15.',
+    #     'description': 'A debate agent. 3 iters. affirm start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -168,7 +168,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 4 iters. affirm start. hint_mod=15.',
+    #     'description': 'A debate agent. 4 iters. affirm start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -186,7 +186,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 5 iters. affirm start. hint_mod=15.',
+    #     'description': 'A debate agent. 5 iters. affirm start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -207,7 +207,7 @@ experiments = [
     # ZHUOBING RUN BELOW
 
     # {
-    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=1000.',
+    #     'description': 'A debate agent. 2 iters. negative start. hint_mod=1000. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -225,7 +225,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 3 iters. negative start. hint_mod=15.',
+    #     'description': 'A debate agent. 3 iters. negative start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -243,7 +243,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 4 iters. negative start. hint_mod=15.',
+    #     'description': 'A debate agent. 4 iters. negative start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
@@ -261,7 +261,7 @@ experiments = [
     # },
     # 
     # {
-    #     'description': 'A debate agent. 5 iters. negative start. hint_mod=15.',
+    #     'description': 'A debate agent. 5 iters. negative start. hint_mod=15. palm tokenizer',
     #     'do_debate': True,
     #     'MAX_VOTES': 1,
     #     'MAX_STEPS': MAX_STEPS,
