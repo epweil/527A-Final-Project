@@ -42,6 +42,10 @@ MODEL_ID = 'text-bison'
 
 def tokens(text):
     # return len(tiktoken.get_encoding('cl100k_base').encode(text))
+
+    if len(text) == 0:
+        return 0
+
     url = f'https://us-central1-aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}/publishers/google/models/{MODEL_ID}:countTokens'
 
     headers = {
@@ -71,6 +75,8 @@ def tokens(text):
             print('Retrying in 10 seconds...')
 
     if not total_tokens:
+        print("HERE token")
+        print(text)
         raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
 
     return total_tokens
