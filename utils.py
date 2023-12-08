@@ -61,10 +61,9 @@ def tokens(text):
         ]
     }
 
-    retry_limit = 10
+    retry_limit = 100
     total_tokens = None
     for i in range(retry_limit, 0, -1):
-
         try:
             response = requests.post(url, json=body, headers=headers)
             total_tokens = response.json().get('totalTokens')

@@ -7,8 +7,8 @@ def get_single_results_stats(results_filename):
 
     system_hint_mod = 1000000000
     if 'debate_params' in extended_results['params']:
-        system_hint_mod = extended_results['params']['debate_params']['system_hint_mod']
-
+        # system_hint_mod = extended_results['params']['debate_params']['system_hint_mod']
+        pass
     description = extended_results['description']
 
     success_count = 0
@@ -158,7 +158,7 @@ if __name__ == '__main__':
     """
     Uncomment if you want to view stats on a single file
     """
-    timestamp = '2023-12-07_11-23-32'
+    timestamp = '2023-12-05_21-41-19'
     filename = f'./results/{timestamp}/results_{timestamp}.json'
     res_dict = get_single_results_stats(filename)
     print('=====================================================')
