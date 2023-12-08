@@ -75,7 +75,7 @@ def tokens(text):
             print('Retrying in 10 seconds...')
             sleep(10)
 
-    if not total_tokens:
+    if total_tokens is None:
         raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
 
     return total_tokens
