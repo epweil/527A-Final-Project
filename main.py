@@ -31,29 +31,29 @@ experiments = [
     # JAKE RUN BELOW
 
 
-    {
-        'description': 'The baseline ReAct agent. palm tokenizer',
-        'do_debate': False,
-        'MAX_VOTES': 1,
-        'MAX_STEPS': MAX_STEPS,
-        'agent_model': agent_model,
-        'num_tasks': num_tasks - 85 + 1,
-        'start_task': 85,
-        'langchain.debug': langchain_debug,
-        'langchain_verbose': langchain_verbose,
-    },
+    # {
+    #     'description': 'The baseline ReAct agent. palm tokenizer',
+    #     'do_debate': False,
+    #     'MAX_VOTES': 1,
+    #     'MAX_STEPS': MAX_STEPS,
+    #     'agent_model': agent_model,
+    #     'num_tasks': num_tasks,
+    #     'start_task': start_task,
+    #     'langchain.debug': langchain_debug,
+    #     'langchain_verbose': langchain_verbose,
+    # },
 
-    {
-        'description': 'The baseline majority vote agent. palm tokenizer',
-        'do_debate': False,
-        'MAX_VOTES': 5,
-        'MAX_STEPS': MAX_STEPS,
-        'agent_model': agent_model,
-        'num_tasks': num_tasks,
-        'start_task': start_task,
-        'langchain.debug': langchain_debug,
-        'langchain_verbose': langchain_verbose,
-    },
+    # {
+    #     'description': 'The baseline majority vote agent. palm tokenizer',
+    #     'do_debate': False,
+    #     'MAX_VOTES': 5,
+    #     'MAX_STEPS': MAX_STEPS,
+    #     'agent_model': agent_model,
+    #     'num_tasks': num_tasks - 56 + 1,
+    #     'start_task': 56,
+    #     'langchain.debug': langchain_debug,
+    #     'langchain_verbose': langchain_verbose,
+    # },
 
     {
         'description': 'A debate agent. 2 iters. affirm start. hint_mod=15. palm tokenizer',

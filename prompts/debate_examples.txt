@@ -1,4 +1,4 @@
-The "view_debate" tool is helpful in many scenarios. If you are faced with many possible actions, you can use the "view_debate" tool to help you pick the right one. Alternatively, if you seem to be stuck, the "view_debate" tool can be used to help you find the right action to progress. In summary, the "view_debate" tool is used to help you get a better understanding of the quality of your choice of action. Below are 4 in-depth examples of how the "view_debate" tool can be used:
+The "view_debate" tool is helpful in many scenarios. If you are faced with many possible actions, you can use the "view_debate" tool to help you pick the right one. Alternatively, if you seem to be stuck, the "view_debate" tool can be used to help you find the right action to progress. In summary, the "view_debate" tool is used to help you get a better understanding of the quality of your choice of action. Below are 2 in-depth examples of how the "view_debate" tool can be used:
 
 Debate Example 1:
 ... (previous thoughts/tools/observations) ...
