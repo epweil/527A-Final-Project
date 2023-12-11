@@ -157,7 +157,7 @@ if __name__ == '__main__':
     """
     Uncomment if you want to view stats on a single file
     """
-    timestamp = '2023-12-08_02-56-59'
+    timestamp = '2023-12-10_07-09-20'
     filename = f'./results/{timestamp}/results_{timestamp}.json'
     res_dict = get_single_results_stats(filename)
     print('=====================================================')

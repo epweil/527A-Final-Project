@@ -5,6 +5,7 @@ from collections import Counter
 import google.auth
 import google.auth.transport.requests
 from time import sleep
+import tiktoken
 
 SUCCESS_OBSERVATION = 'You have successfully completed the task. Please inform the user of this as your Final Answer.'
 FAIL_OBSERVATION = 'You have ran out of moves and are no longer able to complete the task. You failed. Please inform the user of this as your Final Answer.'
@@ -36,50 +37,50 @@ LOCATION = 'us-central1'
 MODEL_ID = 'text-bison'
 
 def tokens(text):
-    # return len(tiktoken.get_encoding('cl100k_base').encode(text))
-
-    # https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
-    creds, project = google.auth.default()
-    auth_req = google.auth.transport.requests.Request()
-    creds.refresh(auth_req)
-
-    if len(text) == 0:
-        return 0
-
-    url = f'https://us-central1-aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}/publishers/google/models/{MODEL_ID}:countTokens'
-
-    headers = {
-        "Authorization": f"Bearer {creds.token}",
-        "Content-Type": "application/json",
-    }
-
-    body = {
-        "instances": [
-            {
-                "prompt": text
-            }
-        ]
-    }
-
-    retry_limit = 100
-    total_tokens = None
-    for i in range(retry_limit, 0, -1):
-        try:
-            response = requests.post(url, json=body, headers=headers)
-            total_tokens = response.json().get('totalTokens')
-            break
-        except Exception as e:
-            total_tokens = None
-            print(f'countTokens failed. `{e}`')
-            print('Retrying in 10 seconds...')
-            sleep(10)
-
-    if total_tokens is None:
-        print("HERE token")
-        print(text)
-        raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
-
-    return total_tokens
+    return len(tiktoken.get_encoding('cl100k_base').encode(text))
+    #
+    # # https://stackoverflow.com/questions/53472429/how-to-get-a-gcp-bearer-token-programmatically-with-python
+    # creds, project = google.auth.default()
+    # auth_req = google.auth.transport.requests.Request()
+    # creds.refresh(auth_req)
+    #
+    # if len(text) == 0:
+    #     return 0
+    #
+    # url = f'https://us-central1-aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}/publishers/google/models/{MODEL_ID}:countTokens'
+    #
+    # headers = {
+    #     "Authorization": f"Bearer {creds.token}",
+    #     "Content-Type": "application/json",
+    # }
+    #
+    # body = {
+    #     "instances": [
+    #         {
+    #             "prompt": text
+    #         }
+    #     ]
+    # }
+    #
+    # retry_limit = 100
+    # total_tokens = None
+    # for i in range(retry_limit, 0, -1):
+    #     try:
+    #         response = requests.post(url, json=body, headers=headers)
+    #         total_tokens = response.json().get('totalTokens')
+    #         break
+    #     except Exception as e:
+    #         total_tokens = None
+    #         print(f'countTokens failed. `{e}`')
+    #         print('Retrying in 10 seconds...')
+    #         sleep(10)
+    #
+    # if total_tokens is None:
+    #     print("HERE token")
+    #     print(text)
+    #     raise Exception(f'Request failed {retry_limit} times to countToken endpoint. Cannot continue.')
+    #
+    # return total_tokens
 
 
 def get_majority_vote(votes):

@@ -13,7 +13,8 @@
     "debate_params": {
       "total_iters": 3,
       "negative_first": true,
-      "model": "text-bison-32k"
+      "model": "text-bison-32k",
+      "system_hint_mod": 15
     }
   },
   "timestamp": "2023-12-05_16-48-15",
