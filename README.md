@@ -1,24 +1,49 @@
 # 527A-Final-Project
 
-## TODOs
+This repo implements a ReAct agent, a debate tool, and self-consistency on the ALFWorld dataset.
 
-1. API
+This repo was used to generate results for our CSE 527A Final Project Paper.
 
-    - Make an endpoint to modify the MAX_STEPS. 
+Replicating the results in the paper is very simple, they are already defined for you in `main.py`.
 
-    - Maybe also return more information about what task number it is and step number (i.e., return total_resets and total_steps)
+Defining new experiments is also very simple. Please read the below sections to learn how to set up ALFWorld, connect to PaLM 2, and run the experiments!
 
-    - Test the API
 
-        - edge cases, like calling /get_next_task more than 134 times
-        
-        - making sure you can't take more actions after completing the task or going over the max action limit
+## Running the experiments
 
-        -etc
 
-2. Test debate
+1. Create an Anaconda environment and install everything in environment.yml
+   - If you are in the root of this directory, simply run `conda env create -f environment.yml`, then `conda activate 527_debate_env`
 
-3. Test the other agent types (reflexion will be a lot of work, rest should be fairly straightforward)
+
+2. To use PaLM 2 you will need to create a project on Google Cloud Platform (GCP). Copy the associated Project ID associated to it, as you'll need this to connect to PaLM 2.
+
+
+3. Next, download the gcloud CLI https://cloud.google.com/sdk/docs/install. Keep the default options when running it for the first time. I believe this sets up Google cloud authentication automatically. But if you find out later it doesn't follow guides here https://cloud.google.com/vertex-ai/docs/workbench/reference/authentication to set up authentication. 
+
+
+4. At this point you should be able to successfully connect to PaLM 2. However, if you use the PaLM tokenizer, you will need to request an increase in that limit. The category this falls under is "LlmUtilityAPIRequestPerMinutePerProjectPerRegion". If you don't want to do this you can just use the OpenAI tokenizer by uncommenting that part in the `tokens()` function in `utils.py`.
+
+
+5. The final step is to set up and run the Docker container to run ALFWorld. Basically, the agent uses a tool to take actions in the environment. But because ALFWorld doesn't run on Windows, we have to run it in a Docker container and connect to it by wrapping it in an API.
+   - Please follow the instructions in "Docker setup" to set up and run the container.
+
+6. After the container is running, simply run `main.py` to generate the results! Read the "analyzing results" section below to know how to get the statistics from the saved results you just made.
+
+
+## Creating new experiments
+
+All of the parameters you can modify are already given in the experiments defined. Just copy and modify those to run what you want.
+
+
+## Analyzing results
+
+Results are stored in `./results/<timestamp>/results_<timestamp>.json` and log files are stored in `./results/<timestamp>/info_<timestamp>.log`.
+
+To analyze these results, you just need to copy the timestamp (this is a field stored in the results themselves to make it easy to copy it).
+
+The file `analysis.py` has functionality for getting statistics on a single results file or statistics on comparing two results. Please read the comments in that function. All you'll need to do is paste in the timestamp of the result and run the file.
+
 
 
 ## Docker setup
@@ -65,6 +90,8 @@ In the project root, run `conda env create -f environment.yml`, then run `conda 
 
 ## Simulator API
 
+NOTE: the below documentation is slightly out of date, but I don't have time to update it right now. Basically some of the responses have extra fields, and there's also an endpoint you can use to reset the ALFWorld environment to start from the first task again.
+
 The docker container runs the simulator API. The simulator API has some endpoints that allows anyone to interact with ALFWorld. 
 
 ### Endpoints:
@@ -106,4 +133,3 @@ The docker container runs the simulator API. The simulator API has some endpoint
 
 - There are 134 tasks. So if you call /get_next_task more than 134 times, it just wraps around to the first task again
 
-## Agents
